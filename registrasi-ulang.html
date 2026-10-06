@@ -1,42 +1,183 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Ulang</title><style>
-:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
-header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
-button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
-.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
-.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
-table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
-.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
-</style></head><body>
-<header><h1>REGISTRASI ULANG PESERTA</h1><p>Scan QR satu kali. Status pembayaran hanya dibaca dari data admin.</p></header><main>
-<div class="card center"><h2>SCAN QR PESERTA</h2><div id="reader" style="max-width:430px;margin:auto"></div><p class="muted">Setelah berhasil HADIR, QR yang sama tidak dapat digunakan lagi.</p></div>
-<div id="hasil" class="card" style="display:none"><h2 id="judulHasil">DATA PESERTA</h2><div class="grid">
-<div><b>Kode Registrasi</b><p id="kode"></p></div><div><b>Nama Peserta</b><p id="nama"></p></div><div><b>Nama Toko</b><p id="toko"></p></div><div><b>Alamat</b><p id="alamat"></p></div>
-<div><b>No. WhatsApp</b><p id="wa"></p></div><div><b>Email</b><p id="email"></p></div><div><b>Ukuran Kaos</b><p id="kaos"></p></div>
-<div><b>Status Pembayaran</b><p id="bayar"></p></div><div><b>Nominal Pembayaran</b><p id="nominal"></p></div>
-<div><b>Status Kehadiran</b><p id="hadir"></p></div><div><b>Jam Check-in</b><p id="jam"></p></div>
-</div><br><button id="checkin">KONFIRMASI HADIR</button></div>
-</main>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registrasi Ulang - DPD TESPOIN Majalengka</title>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f3f3;font-family:Arial,sans-serif;color:#222}
+.wrap{max-width:720px;margin:auto;padding:16px}
+.header{background:#111;color:#fff;border-radius:18px;padding:20px;text-align:center}
+.header h1{margin:0;color:#f5c400;font-size:22px}
+.header p{margin:6px 0 0;color:#ddd;font-size:13px}
+.card{background:#fff;border-radius:16px;padding:18px;margin-top:15px;box-shadow:0 3px 15px rgba(0,0,0,.07)}
+#reader{width:100%;max-width:520px;margin:auto}
+.scan-note{text-align:center;color:#777;font-size:12px;margin-top:10px}
+.manual{display:flex;gap:8px;margin-top:15px}
+.manual input{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px}
+button{border:0;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer}
+.btn{background:#f5c400;color:#111}
+.result{display:none;margin-top:16px}
+.ok{background:#e9f8ed;border:1px solid #b9e5c3}
+.warn{background:#fff3cd;border:1px solid #f0d98a}
+.err{background:#ffe6e6;color:#9b0000}
+.result{padding:15px;border-radius:12px}
+.title{font-size:18px;font-weight:900;margin-bottom:10px}
+.row{display:flex;justify-content:space-between;gap:15px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.08);font-size:13px}
+.row:last-child{border-bottom:0}
+.row span{color:#666}
+.row b{text-align:right;word-break:break-word}
+.status{display:inline-block;padding:5px 9px;border-radius:15px;font-size:11px;font-weight:900}
+.lunas{background:#dff5e4;color:#087b25}
+.belum{background:#fff3cd;color:#856404}
+.hadir{background:#dff5e4;color:#087b25}
+.belumhadir{background:#eee;color:#555}
+.back{display:block;text-align:center;margin-top:14px;color:#666;text-decoration:none;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>REGISTRASI ULANG</h1>
+    <p>DPD TESPOIN MAJALENGKA</p>
+  </div>
+
+  <div class="card">
+    <div id="reader"></div>
+    <div class="scan-note">Arahkan kamera ke QR peserta.</div>
+
+    <div class="manual">
+      <input id="kodeManual" placeholder="Atau masukkan REG-0001">
+      <button class="btn" onclick="prosesKode(document.getElementById('kodeManual').value)">CEK</button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <a class="back" href="index-admin.html">← Kembali ke Dashboard Admin</a>
+</div>
+
 <script>
-let sudahScan=false, peserta=null;
-function tampil(p){
- peserta=p; document.getElementById('hasil').style.display='block';
- ['kode','nama','toko','alamat','wa','email','kaos','nominal','jam'].forEach(k=>document.getElementById(k).textContent=p[k]||'-');
- let b=document.getElementById('bayar'); b.textContent=p.statusPembayaran||'BELUM LUNAS'; b.className='status '+(p.statusPembayaran==='LUNAS'?'lunas':'belum');
- let h=document.getElementById('hadir'); h.textContent=p.statusKehadiran||'BELUM HADIR'; h.className='status '+(p.statusKehadiran==='HADIR'?'hadir':'belum');
- let btn=document.getElementById('checkin');
- if(p.statusKehadiran==='HADIR'){document.getElementById('judulHasil').textContent='⚠️ SUDAH REGISTRASI ULANG';btn.style.display='none';}
+const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+let sedangProses = false;
+
+async function apiGet(url){
+  const r = await fetch(url);
+  const raw = await r.text();
+  try{return JSON.parse(raw.trim())}
+  catch(e){throw new Error('Respons API tidak dapat dibaca.')}
 }
-document.getElementById('checkin').onclick=function(){
- if(!peserta)return;
- if(peserta.statusKehadiran==='HADIR'){alert('QR ini sudah digunakan.');return;}
- alert('Nanti tombol ini mengirim CHECK-IN ke Google Apps Script. Status pembayaran tidak disentuh.');
-};
-(function(){let s=document.createElement('script');s.src='https://unpkg.com/html5-qrcode';s.onload=function(){
- let scanner=new Html5QrcodeScanner('reader',{fps:10,qrbox:{width:250,height:250}},false);
- scanner.render(function(text){if(sudahScan)return;sudahScan=true;scanner.clear();tampil({kode:text,nama:'Data akan diambil dari Spreadsheet',statusPembayaran:'BELUM LUNAS',statusKehadiran:'BELUM HADIR'});},function(){});};document.head.appendChild(s);})();
-</script></body></html>
+
+async function apiPost(data){
+  const r = await fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(data)
+  });
+  const raw=await r.text();
+  try{return JSON.parse(raw.trim())}
+  catch(e){throw new Error('Respons API tidak dapat dibaca.')}
+}
+
+async function prosesKode(kode){
+  if(sedangProses)return;
+  kode=String(kode||'').trim().toUpperCase();
+  if(!kode){tampil('Masukkan atau scan kode registrasi.', 'warn');return}
+
+  sedangProses=true;
+  try{
+    // Cek dulu data dan status saat ini.
+    const cari=await apiGet(API_URL+'?action=cari&kode='+encodeURIComponent(kode)+'&_='+Date.now());
+    if(!cari.ok)throw new Error(cari.message||'Peserta tidak ditemukan.');
+
+    const p=cari.peserta;
+
+    // Jika sudah hadir, jangan kirim check-in kedua kali.
+    if(String(p.statusKehadiran||'').toUpperCase()==='HADIR'){
+      tampilData(p,'sudah');
+      return;
+    }
+
+    // Check-in hanya mengubah kehadiran, bukan pembayaran.
+    const check=await apiPost({action:'checkin',kode:kode});
+
+    if(!check.ok){
+      if(check.alreadyCheckin && check.peserta){
+        tampilData(check.peserta,'sudah');
+        return;
+      }
+      throw new Error(check.message||'Registrasi ulang gagal.');
+    }
+
+    tampilData(check.peserta,'berhasil');
+
+  }catch(e){
+    tampil('<div class="title">GAGAL</div><div>'+esc(e.message)+'</div>','err');
+  }finally{
+    sedangProses=false;
+  }
+}
+
+function tampilData(p,mode){
+  const bayar=String(p.statusPembayaran||'BELUM LUNAS').toUpperCase();
+  const hadir=String(p.statusKehadiran||'BELUM HADIR').toUpperCase();
+
+  let cls='ok', title='✓ REGISTRASI ULANG BERHASIL';
+  if(mode==='sudah'){
+    cls='warn';
+    title='⚠ SUDAH REGISTRASI ULANG';
+  }
+
+  tampil(`
+    <div class="title">${title}</div>
+    <div class="row"><span>Kode Registrasi</span><b>${esc(p.kode)}</b></div>
+    <div class="row"><span>Nama Peserta</span><b>${esc(p.nama)}</b></div>
+    <div class="row"><span>Nama Toko</span><b>${esc(p.toko)}</b></div>
+    <div class="row"><span>Alamat</span><b>${esc(p.alamat)}</b></div>
+    <div class="row"><span>No. WhatsApp</span><b>${esc(p.wa)}</b></div>
+    <div class="row"><span>Email</span><b>${esc(p.email)}</b></div>
+    <div class="row"><span>Ukuran Kaos</span><b>${esc(p.ukuran)}</b></div>
+    <div class="row"><span>Status Pembayaran</span><b><span class="status ${bayar==='LUNAS'?'lunas':'belum'}">${esc(bayar)}</span></b></div>
+    <div class="row"><span>Nominal Pembayaran</span><b>${p.nominalPembayaran?rupiah(p.nominalPembayaran):'-'}</b></div>
+    <div class="row"><span>Status Kehadiran</span><b><span class="status ${hadir==='HADIR'?'hadir':'belumhadir'}">${esc(hadir)}</span></b></div>
+    <div class="row"><span>Jam Check-in</span><b>${esc(p.jamCheckin||'-')}</b></div>
+  `,cls);
+}
+
+function tampil(html,cls){
+  const el=document.getElementById('result');
+  el.className='result '+cls;
+  el.innerHTML=html;
+  el.style.display='block';
+}
+
+function rupiah(v){
+  const n=Number(String(v).replace(/[^0-9.-]/g,''));
+  return isNaN(n)?esc(v):'Rp '+n.toLocaleString('id-ID');
+}
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function onScanSuccess(decodedText){
+  if(sedangProses)return;
+  prosesKode(decodedText);
+}
+
+function onScanFailure(){}
+
+const scanner=new Html5QrcodeScanner(
+  "reader",
+  {
+    fps:10,
+    qrbox:{width:250,height:250},
+    rememberLastUsedCamera:true
+  },
+  false
+);
+scanner.render(onScanSuccess,onScanFailure);
+</script>
+</body>
+</html>
