@@ -1,0 +1,12 @@
+
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8;color:#222}
+header{background:#111;color:#fff;padding:16px;text-align:center}main{max-width:1100px;margin:auto;padding:20px}
+.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px}
+button{border:0;border-radius:9px;padding:12px 18px;font-weight:700;cursor:pointer;background:#ffc107;color:#111}
+.btn-dark{background:#111;color:#fff}.status{display:inline-block;padding:7px 12px;border-radius:20px;font-weight:700}
+.lunas{background:#d9f7df;color:#137333}.belum{background:#ffe0e0;color:#b42318}.hadir{background:#dbeafe;color:#175cd3}
+nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:#222;padding:10px}nav a{color:#fff;text-decoration:none;padding:7px 10px}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+.center{text-align:center}.hidden{display:none}.big-code{font-size:28px;font-weight:800;letter-spacing:2px}

@@ -1,0 +1,22 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Ulang</title><link rel="stylesheet" href="style.css"><script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script></head><body><header><h1>REGISTRASI ULANG PESERTA</h1><p>Scan QR hanya untuk identifikasi. Status pembayaran dibaca dari data admin.</p></header><main>
+<div class="card center"><h2>SCAN QR PESERTA</h2><div id="reader" style="max-width:420px;margin:auto"></div><p>Setelah berhasil check-in, QR yang sama tidak dapat digunakan kembali.</p></div>
+<div id="hasil" class="card hidden"><h2 id="judulHasil"></h2><div class="grid">
+<p><b>Kode Registrasi</b><br><span id="kode"></span></p><p><b>Nama Peserta</b><br><span id="nama"></span></p><p><b>Nama Toko</b><br><span id="toko"></span></p><p><b>Alamat</b><br><span id="alamat"></span></p><p><b>No. WhatsApp</b><br><span id="wa"></span></p><p><b>Email</b><br><span id="email"></span></p><p><b>Ukuran Kaos</b><br><span id="kaos"></span></p><p><b>Status Pembayaran</b><br><span id="bayar" class="status"></span></p><p><b>Nominal Pembayaran</b><br><span id="nominal"></span></p><p><b>Status Kehadiran</b><br><span id="hadir" class="status"></span></p><p><b>Jam Check-in</b><br><span id="jam"></span></p>
+</div><div id="aksi" style="margin-top:20px"><button id="btnCheckin">KONFIRMASI HADIR</button></div></div>
+</main><script>
+let sudahScan=false, peserta=null;
+function tampil(p){
+ peserta=p; document.getElementById("hasil").classList.remove("hidden");
+ const m={kode:p.kode,nama:p.nama,toko:p.toko,alamat:p.alamat,wa:p.wa,email:p.email,kaos:p.kaos,nominal:p.nominal};
+ for(const k in m) document.getElementById(k).textContent=m[k]||"-";
+ const bayar=document.getElementById("bayar"); bayar.textContent=p.statusPembayaran||"BELUM LUNAS"; bayar.className="status "+((p.statusPembayaran||"")=="LUNAS"?"lunas":"belum");
+ const hadir=document.getElementById("hadir"); hadir.textContent=p.statusKehadiran||"BELUM HADIR"; hadir.className="status "+((p.statusKehadiran||"")=="HADIR"?"hadir":"belum");
+ document.getElementById("jam").textContent=p.jamCheckin||"-";
+ const btn=document.getElementById("btnCheckin");
+ if((p.statusKehadiran||"")=="HADIR"){document.getElementById("judulHasil").textContent="⚠️ SUDAH REGISTRASI ULANG";btn.style.display="none";}
+ else {document.getElementById("judulHasil").textContent="DATA PESERTA";btn.style.display="inline-block";}
+}
+document.getElementById("btnCheckin").onclick=()=>{alert("Akan mengirim check-in ke Google Apps Script. Status pembayaran tidak diubah.");};
+const scanner=new Html5QrcodeScanner("reader",{fps:10,qrbox:{width:250,height:250}},false);
+scanner.render((text)=>{if(sudahScan)return;sudahScan=true;scanner.clear();document.getElementById("kode").textContent=text; /* backend lookup akan dipasang */ tampil({kode:text,statusPembayaran:"BELUM LUNAS",statusKehadiran:"BELUM HADIR"});},()=>{});
+</script></body></html>
