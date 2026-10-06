@@ -77,6 +77,112 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .small{font-size:12px;color:#777;margin-top:8px}
 .error{color:#c00}
 .success{color:#087b25}
+
+#hasil{
+  display:none;
+  margin-top:22px;
+  border-top:2px dashed #ddd;
+  padding-top:22px;
+}
+.proof-head{text-align:center}
+.proof-head h2{font-size:19px;margin:8px 0 5px}
+.proof-head p{font-size:13px;color:#666;margin:0 0 15px}
+.success-badge{
+  display:inline-block;
+  background:#e9f8ed;
+  color:#087b25;
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:800;
+}
+.qr-box{
+  margin:18px auto;
+  padding:16px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:14px;
+  text-align:center;
+  width:max-content;
+  max-width:100%;
+}
+#qrcode{
+  width:220px;
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+}
+#qrcode img,#qrcode canvas{
+  max-width:220px;
+  height:auto;
+}
+.qr-label{
+  margin-top:10px;
+  font-size:11px;
+  font-weight:800;
+  color:#555;
+  max-width:220px;
+}
+.detail-box{
+  margin-top:16px;
+  border:1px solid #ddd;
+  border-radius:13px;
+  overflow:hidden;
+}
+.detail-title{
+  background:#111;
+  color:#f5c400;
+  padding:12px;
+  text-align:center;
+  font-weight:900;
+}
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:10px 12px;
+  border-bottom:1px solid #eee;
+  font-size:13px;
+}
+.detail-row:last-child{border-bottom:0}
+.detail-row span{color:#666}
+.detail-row b{text-align:right;word-break:break-word}
+.save-note{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#fff8d8;
+  font-size:12px;
+  line-height:1.5;
+}
+.proof-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.proof-actions button{margin-top:0}
+.btn-secondary{background:#222;color:#fff}
+.btn-print{background:#f5c400;color:#111}
+
+@media(max-width:480px){
+  .proof-actions{grid-template-columns:1fr}
+  .detail-row{align-items:flex-start}
+}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .card{box-shadow:none;padding:10px}
+  #formRegistrasi,.info,.header,#pesan,.proof-actions{
+    display:none !important;
+  }
+  #hasil{display:block !important;border:0;padding-top:0}
+  .detail-row{font-size:12px}
+  .save-note{font-size:10px}
+}
 </style>
 </head>
 
@@ -129,16 +235,49 @@ button:disabled{opacity:.6;cursor:not-allowed}
     </form>
 
     <div id="hasil">
+      <div class="proof-head">
+        <div class="success-badge">✓ REGISTRASI BERHASIL</div>
+        <h2>BUKTI REGISTRASI PESERTA</h2>
+        <p>Simpan halaman ini. QR Code digunakan untuk registrasi ulang saat acara.</p>
+      </div>
+
       <div class="kode" id="kodeHasil"></div>
-      <div class="status success">REGISTRASI BERHASIL</div>
-      <p style="text-align:center">
-        Simpan kode registrasi ini untuk bukti pendaftaran dan registrasi ulang.
-      </p>
+
+      <div class="qr-box">
+        <div id="qrcode"></div>
+        <div class="qr-label">SCAN QR CODE INI SAAT REGISTRASI ULANG</div>
+      </div>
+
+      <div class="detail-box">
+        <div class="detail-title">RINCIAN LENGKAP PESERTA</div>
+
+        <div class="detail-row"><span>Nama Peserta</span><b id="rNama">-</b></div>
+        <div class="detail-row"><span>Nama Toko</span><b id="rToko">-</b></div>
+        <div class="detail-row"><span>No. WhatsApp</span><b id="rWa">-</b></div>
+        <div class="detail-row"><span>Alamat</span><b id="rAlamat">-</b></div>
+        <div class="detail-row"><span>Email</span><b id="rEmail">-</b></div>
+        <div class="detail-row"><span>Ukuran Kaos</span><b id="rUkuran">-</b></div>
+        <div class="detail-row"><span>Status Pembayaran</span><b id="rBayar">BELUM LUNAS</b></div>
+        <div class="detail-row"><span>Nominal Pembayaran</span><b id="rNominal">-</b></div>
+        <div class="detail-row"><span>Status Kehadiran</span><b id="rHadir">BELUM HADIR</b></div>
+      </div>
+
+      <div class="save-note">
+        <b>PENTING:</b> Screenshot atau simpan bukti registrasi ini.
+        QR Code jangan dihapus karena akan digunakan saat registrasi ulang.
+      </div>
+
+      <div class="proof-actions">
+        <button type="button" class="btn-secondary" id="btnSimpanQR">SIMPAN QR CODE</button>
+        <button type="button" class="btn-print" onclick="window.print()">CETAK / SIMPAN PDF</button>
+      </div>
     </div>
 
     <div id="pesan" class="status"></div>
   </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
 /*
@@ -146,7 +285,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
   Contoh:
   https://script.google.com/macros/s/XXXXXXXX/exec
 */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+const API_URL = 'ISI_URL_WEB_APP_APPS_SCRIPT_DI_SINI';
 
 const form = document.getElementById('formRegistrasi');
 const btn = document.getElementById('btnDaftar');
@@ -206,7 +345,7 @@ form.addEventListener('submit', async function(e){
       throw new Error(result.message || 'Registrasi gagal.');
     }
 
-    document.getElementById('kodeHasil').textContent = result.kode;
+    tampilkanBukti(result.peserta);
     hasil.style.display = 'block';
 
     form.reset();
@@ -234,6 +373,63 @@ function fileToBase64(file){
 
     reader.readAsDataURL(file);
   });
+}
+
+function tampilkanBukti(p){
+  document.getElementById('kodeHasil').textContent = p.kode || '-';
+
+  document.getElementById('rNama').textContent = p.nama || '-';
+  document.getElementById('rToko').textContent = p.toko || '-';
+  document.getElementById('rWa').textContent = p.wa || '-';
+  document.getElementById('rAlamat').textContent = p.alamat || '-';
+  document.getElementById('rEmail').textContent = p.email || '-';
+  document.getElementById('rUkuran').textContent = p.ukuran || '-';
+  document.getElementById('rBayar').textContent = p.statusPembayaran || 'BELUM LUNAS';
+  document.getElementById('rNominal').textContent =
+    p.nominalPembayaran ? formatRupiah(p.nominalPembayaran) : '-';
+  document.getElementById('rHadir').textContent = p.statusKehadiran || 'BELUM HADIR';
+
+  const qr = document.getElementById('qrcode');
+  qr.innerHTML = '';
+
+  new QRCode(qr, {
+    text: p.kode,
+    width: 220,
+    height: 220,
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  document.getElementById('btnSimpanQR').onclick = function(){
+    const img = qr.querySelector('img');
+    const canvas = qr.querySelector('canvas');
+
+    if (img && img.src) {
+      downloadDataUrl(img.src, p.kode + '-QR.png');
+      return;
+    }
+
+    if (canvas) {
+      downloadDataUrl(canvas.toDataURL('image/png'), p.kode + '-QR.png');
+      return;
+    }
+
+    alert('QR Code belum siap. Coba lagi.');
+  };
+}
+
+function formatRupiah(value){
+  const n = Number(String(value).replace(/[^0-9.-]/g, ''));
+  if (isNaN(n)) return value;
+  return 'Rp ' + n.toLocaleString('id-ID');
+}
+
+function downloadDataUrl(dataUrl, filename){
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 function tampilPesan(text, error){
