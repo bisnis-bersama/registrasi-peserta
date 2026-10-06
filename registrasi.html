@@ -171,28 +171,16 @@ button:disabled{opacity:.6;cursor:not-allowed}
 }
 .proof-actions button{margin-top:0}
 .btn-secondary{background:#222;color:#fff}
-.btn-print{background:#f5c400;color:#111}
-
 @media(max-width:480px){
   .proof-actions{grid-template-columns:1fr}
   .detail-row{align-items:flex-start}
 }
 
-@media print{
-  body{background:#fff}
-  .wrap{max-width:none;padding:0}
-  .card{box-shadow:none;padding:10px}
-  #formRegistrasi,.info,.header,#pesan,.proof-actions{
-    display:none !important;
-  }
-  #hasil{display:block !important;border:0;padding-top:0}
-  .detail-row{font-size:12px}
-  .save-note{font-size:10px}
-}
+
 </style>
 </head>
 
-<body>
+<body data-version="FINAL-JPG-QR-2026-10-06">
 <div class="wrap">
   <div class="card">
     <div class="header">
@@ -265,13 +253,12 @@ button:disabled{opacity:.6;cursor:not-allowed}
       </div>
 
       <div class="save-note">
-        <b>PENTING:</b> Screenshot atau simpan bukti registrasi ini.
+        <b>PENTING:</b> Simpan bukti registrasi dalam bentuk JPG.
         QR Code jangan dihapus karena akan digunakan saat registrasi ulang.
       </div>
 
       <div class="proof-actions">
         <button type="button" class="btn-secondary" id="btnSimpanQR">SIMPAN BUKTI JPG</button>
-        <button type="button" class="btn-print" onclick="window.print()">CETAK / SIMPAN PDF</button>
       </div>
     </div>
 
@@ -342,7 +329,17 @@ form.addEventListener('submit', async function(e){
       body: JSON.stringify(data)
     });
 
-    const result = await response.json();
+    const raw = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch (parseError) {
+      console.error('Respons API bukan JSON:', raw);
+      throw new Error(
+        'API tidak mengirim JSON. Pastikan deployment Apps Script sudah versi terbaru dan aksesnya "Anyone".'
+      );
+    }
 
     if (!result.ok) {
       throw new Error(result.message || 'Registrasi gagal.');
