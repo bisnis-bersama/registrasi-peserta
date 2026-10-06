@@ -1,22 +1,151 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pengaturan Acara</title><style>
-:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
-header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
-button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
-.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
-.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
-table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
-.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
-</style></head><body>
-<header><h1>PENGATURAN ACARA</h1><p>Hanya admin yang mengubah informasi acara.</p></header><main><div class="card"><div class="grid">
-<label>Judul Acara<input id="judul"></label><label>Deskripsi<textarea id="deskripsi"></textarea></label>
-<label>Tanggal<input id="tanggal" type="date"></label><label>Waktu<input id="waktu"></label><label>Lokasi<input id="lokasi"></label>
-<label>Harga Tiket<input id="harga"></label><label>Kuota<input id="kuota" type="number" max="1000"></label>
-<label>Nomor WA Panitia<input id="wa"></label><label>Benefit<textarea id="benefit"></textarea></label>
-<label>Link Pamflet<input id="pamflet"></label><label>Status Pendaftaran<select id="status"><option>DIBUKA</option><option>DITUTUP</option></select></label>
-</div><br><button id="simpan">SIMPAN PENGATURAN</button></div></main>
-<script>document.getElementById('simpan').onclick=()=>alert('Form siap dihubungkan ke Google Apps Script.');</script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pengaturan Acara - DPD TESPOIN Majalengka</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f3f3;color:#222;font-family:Arial,sans-serif}
+.wrap{max-width:800px;margin:auto;padding:18px}
+.header{background:#111;color:#fff;border-radius:18px;padding:20px;text-align:center}
+.header h1{margin:0;color:#f5c400;font-size:22px}
+.header p{margin:7px 0 0;color:#ddd;font-size:13px}
+.card{background:#fff;margin-top:16px;padding:18px;border-radius:16px;box-shadow:0 3px 15px rgba(0,0,0,.07)}
+label{display:block;font-weight:800;font-size:13px;margin:13px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #d8d8d8;border-radius:9px;font-size:14px;background:#fff}
+textarea{min-height:100px;resize:vertical}
+button{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:#f5c400;color:#111;font-size:15px;font-weight:900;cursor:pointer}
+.msg{display:none;margin-top:14px;padding:12px;border-radius:10px;font-weight:700;font-size:13px}
+.ok{display:block;background:#dff5e4;color:#087b25}
+.err{display:block;background:#ffe1e1;color:#a00000}
+.back{display:block;text-align:center;margin-top:15px;color:#666;text-decoration:none;font-size:13px}
+.note{font-size:12px;color:#777;line-height:1.5;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>PENGATURAN ACARA</h1>
+    <p>DPD TESPOIN MAJALENGKA</p>
+  </div>
+
+  <div class="card">
+    <form id="form">
+      <label>Judul Acara</label>
+      <input id="judul" required>
+
+      <label>Deskripsi</label>
+      <textarea id="deskripsi"></textarea>
+
+      <label>Tanggal</label>
+      <input id="tanggal" type="date">
+
+      <label>Waktu</label>
+      <input id="waktu" placeholder="10.00 WIB - selesai">
+
+      <label>Lokasi</label>
+      <input id="lokasi">
+
+      <label>Harga Tiket</label>
+      <input id="harga" type="number" min="0" placeholder="150000">
+
+      <label>Kuota</label>
+      <input id="kuota" type="number" min="0" placeholder="300">
+
+      <label>Nomor WhatsApp Panitia</label>
+      <input id="wa" type="tel" placeholder="08xxxxxxxxxx">
+
+      <label>Benefit Peserta</label>
+      <textarea id="benefit" placeholder="Kaos, makan, coffee break, sertifikat, doorprize, dll."></textarea>
+
+      <label>Link Pamflet</label>
+      <input id="pamflet" type="url" placeholder="https://...">
+
+      <label>Status Pendaftaran</label>
+      <select id="status">
+        <option value="DIBUKA">DIBUKA</option>
+        <option value="DITUTUP">DITUTUP</option>
+      </select>
+
+      <button type="submit">SIMPAN PENGATURAN</button>
+      <div id="msg" class="msg"></div>
+      <div class="note">Pengaturan ini disimpan ke sheet PENGATURAN dan dapat dipakai oleh halaman depan/registrasi.</div>
+    </form>
+  </div>
+
+  <a href="index-admin.html" class="back">← Kembali ke Dashboard Admin</a>
+</div>
+
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+function setVal(id,v){document.getElementById(id).value=v??''}
+
+async function parseResponse(r){
+  const raw=await r.text();
+  try{return JSON.parse(raw.trim())}
+  catch(e){throw new Error('Respons API tidak dapat dibaca. Pastikan Web App Apps Script sudah di-deploy versi terbaru.')}
+}
+
+async function load(){
+  try{
+    const r=await fetch(API_URL+'?action=pengaturan&_='+Date.now());
+    const d=await parseResponse(r);
+    if(!d.ok)throw new Error(d.message||'Gagal mengambil pengaturan.');
+    const p=d.pengaturan||d.data||d;
+    setVal('judul',p.judulAcara||p.judul||'');
+    setVal('deskripsi',p.deskripsi||'');
+    setVal('tanggal',p.tanggal||'');
+    setVal('waktu',p.waktu||'');
+    setVal('lokasi',p.lokasi||'');
+    setVal('harga',p.hargaTiket??p.harga??'');
+    setVal('kuota',p.kuota??'');
+    setVal('wa',p.nomorWa??p.wa??'');
+    setVal('benefit',p.benefit||'');
+    setVal('pamflet',p.pamflet||'');
+    setVal('status',p.statusPendaftaran||p.status||'DIBUKA');
+  }catch(e){
+    show(e.message,false);
+  }
+}
+
+document.getElementById('form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=e.target.querySelector('button');
+  btn.disabled=true;btn.textContent='MENYIMPAN...';
+  try{
+    const body={
+      action:'simpanPengaturan',
+      judulAcara:document.getElementById('judul').value.trim(),
+      deskripsi:document.getElementById('deskripsi').value.trim(),
+      tanggal:document.getElementById('tanggal').value,
+      waktu:document.getElementById('waktu').value.trim(),
+      lokasi:document.getElementById('lokasi').value.trim(),
+      hargaTiket:document.getElementById('harga').value,
+      kuota:document.getElementById('kuota').value,
+      nomorWa:document.getElementById('wa').value.trim(),
+      benefit:document.getElementById('benefit').value.trim(),
+      pamflet:document.getElementById('pamflet').value.trim(),
+      statusPendaftaran:document.getElementById('status').value
+    };
+    const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
+    const d=await parseResponse(r);
+    if(!d.ok)throw new Error(d.message||'Gagal menyimpan.');
+    show('Pengaturan berhasil disimpan.',true);
+  }catch(e){
+    show(e.message,false);
+  }finally{
+    btn.disabled=false;btn.textContent='SIMPAN PENGATURAN';
+  }
+});
+
+function show(t,ok){
+  const e=document.getElementById('msg');
+  e.textContent=t;e.className='msg '+(ok?'ok':'err');e.style.display='block';
+}
+
+load();
+</script>
+</body>
+</html>
