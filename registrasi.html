@@ -333,12 +333,11 @@ form.addEventListener('submit', async function(e){
     let result;
 
     try {
-      result = JSON.parse(raw);
+      // Code.gs mengirim JSON sebagai body HTML polos.
+      result = JSON.parse(raw.trim());
     } catch (parseError) {
-      console.error('Respons API bukan JSON:', raw);
-      throw new Error(
-        'API tidak mengirim JSON. Pastikan deployment Apps Script sudah versi terbaru dan aksesnya "Anyone".'
-      );
+      console.error('Respons API:', raw);
+      throw new Error('Data tersimpan, tetapi jawaban API tidak terbaca. Silakan deploy versi Code.gs terbaru.');
     }
 
     if (!result.ok) {
