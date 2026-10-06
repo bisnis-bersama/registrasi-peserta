@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Registrasi Ulang - DPD TESPOIN Majalengka</title>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f3f3f3;font-family:Arial,sans-serif;color:#222}
@@ -13,16 +13,20 @@ body{margin:0;background:#f3f3f3;font-family:Arial,sans-serif;color:#222}
 .header h1{margin:0;color:#f5c400;font-size:22px}
 .header p{margin:6px 0 0;color:#ddd;font-size:13px}
 .card{background:#fff;border-radius:16px;padding:18px;margin-top:15px;box-shadow:0 3px 15px rgba(0,0,0,.07)}
-#reader{width:100%;max-width:520px;margin:auto}
+#reader{width:100%;max-width:520px;margin:auto;overflow:hidden;border-radius:12px}
+.camera-status{text-align:center;padding:10px;font-size:13px;color:#666}
+.camera-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+button{border:0;border-radius:10px;padding:13px 15px;font-weight:800;cursor:pointer}
+.btn{background:#f5c400;color:#111}
+.btn-dark{background:#111;color:#fff}
+.btn-red{background:#d90000;color:#fff}
 .scan-note{text-align:center;color:#777;font-size:12px;margin-top:10px}
 .manual{display:flex;gap:8px;margin-top:15px}
-.manual input{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px}
-button{border:0;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer}
-.btn{background:#f5c400;color:#111}
+.manual input{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:15px}
 .result{display:none;margin-top:16px}
 .ok{background:#e9f8ed;border:1px solid #b9e5c3}
 .warn{background:#fff3cd;border:1px solid #f0d98a}
-.err{background:#ffe6e6;color:#9b0000}
+.err{background:#ffe6e6;color:#9b0000;border:1px solid #f0bcbc}
 .result{padding:15px;border-radius:12px}
 .title{font-size:18px;font-weight:900;margin-bottom:10px}
 .row{display:flex;justify-content:space-between;gap:15px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.08);font-size:13px}
@@ -35,6 +39,11 @@ button{border:0;border-radius:10px;padding:12px 15px;font-weight:800;cursor:poin
 .hadir{background:#dff5e4;color:#087b25}
 .belumhadir{background:#eee;color:#555}
 .back{display:block;text-align:center;margin-top:14px;color:#666;text-decoration:none;font-size:13px}
+@media(max-width:520px){
+  .manual{display:block}
+  .manual button{width:100%;margin-top:8px}
+  .camera-actions{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -46,7 +55,17 @@ button{border:0;border-radius:10px;padding:12px 15px;font-weight:800;cursor:poin
 
   <div class="card">
     <div id="reader"></div>
-    <div class="scan-note">Arahkan kamera ke QR peserta.</div>
+
+    <div id="cameraStatus" class="camera-status">
+      Kamera belum aktif. Tekan <b>BUKA KAMERA</b>.
+    </div>
+
+    <div class="camera-actions">
+      <button class="btn" id="btnCamera" onclick="bukaKamera()">📷 BUKA KAMERA</button>
+      <button class="btn-dark" id="btnStop" onclick="tutupKamera()" disabled>■ TUTUP KAMERA</button>
+    </div>
+
+    <div class="scan-note">Setelah kamera terbuka, arahkan kamera belakang ke QR peserta.</div>
 
     <div class="manual">
       <input id="kodeManual" placeholder="Atau masukkan REG-0001">
@@ -62,16 +81,98 @@ button{border:0;border-radius:10px;padding:12px 15px;font-weight:800;cursor:poin
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
 let sedangProses = false;
+let scanner = null;
+let kameraAktif = false;
+
+function setCameraStatus(text, error=false){
+  const el=document.getElementById('cameraStatus');
+  el.innerHTML=text;
+  el.style.color=error?'#b00000':'#666';
+}
+
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+async function bukaKamera(){
+  if(kameraAktif) return;
+
+  if(!window.isSecureContext){
+    setCameraStatus('Kamera membutuhkan koneksi HTTPS.',true);
+    return;
+  }
+
+  try{
+    document.getElementById('btnCamera').disabled=true;
+    setCameraStatus('Meminta izin kamera...');
+
+    // Minta izin kamera secara langsung. Ini membuat Android menampilkan
+    // dialog izin kamera bila sebelumnya belum diberikan.
+    const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
+    stream.getTracks().forEach(t=>t.stop());
+
+    scanner = new Html5Qrcode('reader');
+
+    await scanner.start(
+      {facingMode:'environment'},
+      {
+        fps:10,
+        qrbox:{width:250,height:250},
+        aspectRatio:1.0
+      },
+      onScanSuccess,
+      onScanFailure
+    );
+
+    kameraAktif=true;
+    document.getElementById('btnStop').disabled=false;
+    setCameraStatus('✓ Kamera aktif. Arahkan kamera belakang ke QR peserta.');
+  }catch(e){
+    console.error(e);
+    document.getElementById('btnCamera').disabled=false;
+
+    let pesan='Kamera tidak dapat dibuka.';
+    if(e.name==='NotAllowedError') pesan='Izin kamera ditolak. Tekan ikon 🔒/pengaturan situs di Chrome lalu izinkan Kamera, kemudian tekan BUKA KAMERA lagi.';
+    else if(e.name==='NotFoundError') pesan='Kamera tidak ditemukan pada perangkat.';
+    else if(e.name==='NotReadableError') pesan='Kamera sedang dipakai aplikasi lain. Tutup aplikasi kamera/WhatsApp lalu coba lagi.';
+    else if(e.message) pesan+=' '+e.message;
+
+    setCameraStatus(pesan,true);
+  }
+}
+
+async function tutupKamera(){
+  try{
+    if(scanner){
+      if(kameraAktif) await scanner.stop();
+      await scanner.clear();
+    }
+  }catch(e){console.warn(e)}
+
+  kameraAktif=false;
+  document.getElementById('btnStop').disabled=true;
+  document.getElementById('btnCamera').disabled=false;
+  setCameraStatus('Kamera ditutup. Tekan BUKA KAMERA untuk memulai lagi.');
+}
+
+function onScanSuccess(decodedText){
+  if(sedangProses)return;
+
+  // Setelah QR terbaca, hentikan kamera supaya tidak check-in dua kali.
+  prosesKode(decodedText);
+}
+
+function onScanFailure(errorMessage){}
 
 async function apiGet(url){
-  const r = await fetch(url);
-  const raw = await r.text();
+  const r=await fetch(url);
+  const raw=await r.text();
   try{return JSON.parse(raw.trim())}
   catch(e){throw new Error('Respons API tidak dapat dibaca.')}
 }
 
 async function apiPost(data){
-  const r = await fetch(API_URL,{
+  const r=await fetch(API_URL,{
     method:'POST',
     headers:{'Content-Type':'text/plain;charset=utf-8'},
     body:JSON.stringify(data)
@@ -83,24 +184,23 @@ async function apiPost(data){
 
 async function prosesKode(kode){
   if(sedangProses)return;
+
   kode=String(kode||'').trim().toUpperCase();
-  if(!kode){tampil('Masukkan atau scan kode registrasi.', 'warn');return}
+  if(!kode){tampil('Masukkan atau scan kode registrasi.','warn');return}
 
   sedangProses=true;
+
   try{
-    // Cek dulu data dan status saat ini.
     const cari=await apiGet(API_URL+'?action=cari&kode='+encodeURIComponent(kode)+'&_='+Date.now());
     if(!cari.ok)throw new Error(cari.message||'Peserta tidak ditemukan.');
 
     const p=cari.peserta;
 
-    // Jika sudah hadir, jangan kirim check-in kedua kali.
     if(String(p.statusKehadiran||'').toUpperCase()==='HADIR'){
       tampilData(p,'sudah');
       return;
     }
 
-    // Check-in hanya mengubah kehadiran, bukan pembayaran.
     const check=await apiPost({action:'checkin',kode:kode});
 
     if(!check.ok){
@@ -111,6 +211,7 @@ async function prosesKode(kode){
       throw new Error(check.message||'Registrasi ulang gagal.');
     }
 
+    await tutupKamera();
     tampilData(check.peserta,'berhasil');
 
   }catch(e){
@@ -124,7 +225,9 @@ function tampilData(p,mode){
   const bayar=String(p.statusPembayaran||'BELUM LUNAS').toUpperCase();
   const hadir=String(p.statusKehadiran||'BELUM HADIR').toUpperCase();
 
-  let cls='ok', title='✓ REGISTRASI ULANG BERHASIL';
+  let cls='ok';
+  let title='✓ REGISTRASI ULANG BERHASIL';
+
   if(mode==='sudah'){
     cls='warn';
     title='⚠ SUDAH REGISTRASI ULANG';
@@ -157,27 +260,10 @@ function rupiah(v){
   const n=Number(String(v).replace(/[^0-9.-]/g,''));
   return isNaN(n)?esc(v):'Rp '+n.toLocaleString('id-ID');
 }
-function esc(v){
-  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
 
-function onScanSuccess(decodedText){
-  if(sedangProses)return;
-  prosesKode(decodedText);
-}
-
-function onScanFailure(){}
-
-const scanner=new Html5QrcodeScanner(
-  "reader",
-  {
-    fps:10,
-    qrbox:{width:250,height:250},
-    rememberLastUsedCamera:true
-  },
-  false
-);
-scanner.render(onScanSuccess,onScanFailure);
+// Jika halaman dibuka dan browser pernah memberikan izin,
+// jangan otomatis meminta kamera. Pengguna tetap menekan BUKA KAMERA
+// agar Android menganggapnya sebagai tindakan pengguna.
 </script>
 </body>
 </html>
