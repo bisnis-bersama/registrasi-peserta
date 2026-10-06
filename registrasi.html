@@ -1,2 +1,24 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Peserta</title><link rel="stylesheet" href="style.css"></head><body><header><h1>REGISTRASI PESERTA</h1></header><main><div class="card"><div class="grid">
-<label>Nama Peserta<input id="nama"></label><label>Nama Toko<input id="toko"></label><label>No. WhatsApp<input id="wa"></label><label>Alamat<textarea id="alamat"></textarea></label><label>Email<input id="email" type="email"></label><label>Ukuran Kaos<select id="kaos"><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></label><label>Bukti Transfer<input id="bukti" type="file" accept="image/*,.pdf"></label></div><br><button>Daftar</button></div></main></body></html>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Peserta</title><style>
+:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
+header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
+button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
+.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
+.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
+.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
+</style></head><body>
+<header><h1>REGISTRASI PESERTA</h1></header><main><div class="card"><div class="grid">
+<label>Nama Peserta<input id="nama" required></label>
+<label>Nama Toko<input id="toko" required></label>
+<label>No. WhatsApp<input id="wa" required></label>
+<label>Alamat<textarea id="alamat" required></textarea></label>
+<label>Email<input id="email" type="email"></label>
+<label>Ukuran Kaos<select id="kaos"><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></label>
+<label>Bukti Transfer<input id="bukti" type="file" accept="image/*,.pdf"></label>
+</div><br><button id="daftar">DAFTAR PESERTA</button><p class="muted">Kode REG-XXXX dibuat otomatis dan tidak digunakan ulang.</p></div></main>
+<script>document.getElementById('daftar').onclick=()=>alert('Form siap disambungkan ke Google Spreadsheet + Google Drive.');</script></body></html>

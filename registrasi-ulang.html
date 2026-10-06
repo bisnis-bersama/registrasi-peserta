@@ -1,22 +1,42 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Ulang</title><link rel="stylesheet" href="style.css"><script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script></head><body><header><h1>REGISTRASI ULANG PESERTA</h1><p>Scan QR hanya untuk identifikasi. Status pembayaran dibaca dari data admin.</p></header><main>
-<div class="card center"><h2>SCAN QR PESERTA</h2><div id="reader" style="max-width:420px;margin:auto"></div><p>Setelah berhasil check-in, QR yang sama tidak dapat digunakan kembali.</p></div>
-<div id="hasil" class="card hidden"><h2 id="judulHasil"></h2><div class="grid">
-<p><b>Kode Registrasi</b><br><span id="kode"></span></p><p><b>Nama Peserta</b><br><span id="nama"></span></p><p><b>Nama Toko</b><br><span id="toko"></span></p><p><b>Alamat</b><br><span id="alamat"></span></p><p><b>No. WhatsApp</b><br><span id="wa"></span></p><p><b>Email</b><br><span id="email"></span></p><p><b>Ukuran Kaos</b><br><span id="kaos"></span></p><p><b>Status Pembayaran</b><br><span id="bayar" class="status"></span></p><p><b>Nominal Pembayaran</b><br><span id="nominal"></span></p><p><b>Status Kehadiran</b><br><span id="hadir" class="status"></span></p><p><b>Jam Check-in</b><br><span id="jam"></span></p>
-</div><div id="aksi" style="margin-top:20px"><button id="btnCheckin">KONFIRMASI HADIR</button></div></div>
-</main><script>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Ulang</title><style>
+:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
+header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
+button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
+.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
+.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
+.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
+</style></head><body>
+<header><h1>REGISTRASI ULANG PESERTA</h1><p>Scan QR satu kali. Status pembayaran hanya dibaca dari data admin.</p></header><main>
+<div class="card center"><h2>SCAN QR PESERTA</h2><div id="reader" style="max-width:430px;margin:auto"></div><p class="muted">Setelah berhasil HADIR, QR yang sama tidak dapat digunakan lagi.</p></div>
+<div id="hasil" class="card" style="display:none"><h2 id="judulHasil">DATA PESERTA</h2><div class="grid">
+<div><b>Kode Registrasi</b><p id="kode"></p></div><div><b>Nama Peserta</b><p id="nama"></p></div><div><b>Nama Toko</b><p id="toko"></p></div><div><b>Alamat</b><p id="alamat"></p></div>
+<div><b>No. WhatsApp</b><p id="wa"></p></div><div><b>Email</b><p id="email"></p></div><div><b>Ukuran Kaos</b><p id="kaos"></p></div>
+<div><b>Status Pembayaran</b><p id="bayar"></p></div><div><b>Nominal Pembayaran</b><p id="nominal"></p></div>
+<div><b>Status Kehadiran</b><p id="hadir"></p></div><div><b>Jam Check-in</b><p id="jam"></p></div>
+</div><br><button id="checkin">KONFIRMASI HADIR</button></div>
+</main>
+<script>
 let sudahScan=false, peserta=null;
 function tampil(p){
- peserta=p; document.getElementById("hasil").classList.remove("hidden");
- const m={kode:p.kode,nama:p.nama,toko:p.toko,alamat:p.alamat,wa:p.wa,email:p.email,kaos:p.kaos,nominal:p.nominal};
- for(const k in m) document.getElementById(k).textContent=m[k]||"-";
- const bayar=document.getElementById("bayar"); bayar.textContent=p.statusPembayaran||"BELUM LUNAS"; bayar.className="status "+((p.statusPembayaran||"")=="LUNAS"?"lunas":"belum");
- const hadir=document.getElementById("hadir"); hadir.textContent=p.statusKehadiran||"BELUM HADIR"; hadir.className="status "+((p.statusKehadiran||"")=="HADIR"?"hadir":"belum");
- document.getElementById("jam").textContent=p.jamCheckin||"-";
- const btn=document.getElementById("btnCheckin");
- if((p.statusKehadiran||"")=="HADIR"){document.getElementById("judulHasil").textContent="⚠️ SUDAH REGISTRASI ULANG";btn.style.display="none";}
- else {document.getElementById("judulHasil").textContent="DATA PESERTA";btn.style.display="inline-block";}
+ peserta=p; document.getElementById('hasil').style.display='block';
+ ['kode','nama','toko','alamat','wa','email','kaos','nominal','jam'].forEach(k=>document.getElementById(k).textContent=p[k]||'-');
+ let b=document.getElementById('bayar'); b.textContent=p.statusPembayaran||'BELUM LUNAS'; b.className='status '+(p.statusPembayaran==='LUNAS'?'lunas':'belum');
+ let h=document.getElementById('hadir'); h.textContent=p.statusKehadiran||'BELUM HADIR'; h.className='status '+(p.statusKehadiran==='HADIR'?'hadir':'belum');
+ let btn=document.getElementById('checkin');
+ if(p.statusKehadiran==='HADIR'){document.getElementById('judulHasil').textContent='⚠️ SUDAH REGISTRASI ULANG';btn.style.display='none';}
 }
-document.getElementById("btnCheckin").onclick=()=>{alert("Akan mengirim check-in ke Google Apps Script. Status pembayaran tidak diubah.");};
-const scanner=new Html5QrcodeScanner("reader",{fps:10,qrbox:{width:250,height:250}},false);
-scanner.render((text)=>{if(sudahScan)return;sudahScan=true;scanner.clear();document.getElementById("kode").textContent=text; /* backend lookup akan dipasang */ tampil({kode:text,statusPembayaran:"BELUM LUNAS",statusKehadiran:"BELUM HADIR"});},()=>{});
+document.getElementById('checkin').onclick=function(){
+ if(!peserta)return;
+ if(peserta.statusKehadiran==='HADIR'){alert('QR ini sudah digunakan.');return;}
+ alert('Nanti tombol ini mengirim CHECK-IN ke Google Apps Script. Status pembayaran tidak disentuh.');
+};
+(function(){let s=document.createElement('script');s.src='https://unpkg.com/html5-qrcode';s.onload=function(){
+ let scanner=new Html5QrcodeScanner('reader',{fps:10,qrbox:{width:250,height:250}},false);
+ scanner.render(function(text){if(sudahScan)return;sudahScan=true;scanner.clear();tampil({kode:text,nama:'Data akan diambil dari Spreadsheet',statusPembayaran:'BELUM LUNAS',statusKehadiran:'BELUM HADIR'});},function(){});};document.head.appendChild(s);})();
 </script></body></html>

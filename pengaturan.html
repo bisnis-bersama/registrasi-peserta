@@ -1,3 +1,22 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pengaturan</title><link rel="stylesheet" href="style.css"></head><body><header><h1>PENGATURAN ACARA</h1></header><main><div class="card"><div class="grid">
-<label>Judul Acara<input id="judul"></label><label>Deskripsi<textarea id="deskripsi"></textarea></label><label>Tanggal<input id="tanggal" type="date"></label><label>Waktu<input id="waktu"></label><label>Lokasi<input id="lokasi"></label><label>Harga Tiket<input id="harga"></label><label>Kuota<input id="kuota" type="number"></label><label>No. WA Panitia<input id="wa"></label><label>Benefit<textarea id="benefit"></textarea></label><label>Link Pamflet<input id="pamflet"></label><label>Status Pendaftaran<select id="status"><option>DIBUKA</option><option>DITUTUP</option></select></label>
-</div><br><button>Simpan Pengaturan</button></div></main></body></html>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pengaturan Acara</title><style>
+:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
+header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
+button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
+.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
+.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
+nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
+.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
+</style></head><body>
+<header><h1>PENGATURAN ACARA</h1><p>Hanya admin yang mengubah informasi acara.</p></header><main><div class="card"><div class="grid">
+<label>Judul Acara<input id="judul"></label><label>Deskripsi<textarea id="deskripsi"></textarea></label>
+<label>Tanggal<input id="tanggal" type="date"></label><label>Waktu<input id="waktu"></label><label>Lokasi<input id="lokasi"></label>
+<label>Harga Tiket<input id="harga"></label><label>Kuota<input id="kuota" type="number" max="1000"></label>
+<label>Nomor WA Panitia<input id="wa"></label><label>Benefit<textarea id="benefit"></textarea></label>
+<label>Link Pamflet<input id="pamflet"></label><label>Status Pendaftaran<select id="status"><option>DIBUKA</option><option>DITUTUP</option></select></label>
+</div><br><button id="simpan">SIMPAN PENGATURAN</button></div></main>
+<script>document.getElementById('simpan').onclick=()=>alert('Form siap dihubungkan ke Google Apps Script.');</script></body></html>
