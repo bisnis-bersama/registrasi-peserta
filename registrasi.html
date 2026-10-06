@@ -1,24 +1,245 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrasi Peserta</title><style>
-:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
-header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
-button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
-.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
-.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
-table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
-.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
-</style></head><body>
-<header><h1>REGISTRASI PESERTA</h1></header><main><div class="card"><div class="grid">
-<label>Nama Peserta<input id="nama" required></label>
-<label>Nama Toko<input id="toko" required></label>
-<label>No. WhatsApp<input id="wa" required></label>
-<label>Alamat<textarea id="alamat" required></textarea></label>
-<label>Email<input id="email" type="email"></label>
-<label>Ukuran Kaos<select id="kaos"><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></label>
-<label>Bukti Transfer<input id="bukti" type="file" accept="image/*,.pdf"></label>
-</div><br><button id="daftar">DAFTAR PESERTA</button><p class="muted">Kode REG-XXXX dibuat otomatis dan tidak digunakan ulang.</p></div></main>
-<script>document.getElementById('daftar').onclick=()=>alert('Form siap disambungkan ke Google Spreadsheet + Google Drive.');</script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registrasi Peserta - DPD TESPOIN Majalengka</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f4f4;
+  color:#222;
+}
+.wrap{max-width:620px;margin:0 auto;padding:20px}
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 5px 25px rgba(0,0,0,.08);
+}
+.header{text-align:center;margin-bottom:22px}
+.logo{
+  width:90px;height:90px;object-fit:contain;
+  margin-bottom:8px;
+}
+h1{font-size:22px;margin:4px 0}
+.sub{color:#777;font-size:14px}
+label{display:block;font-weight:700;margin:15px 0 7px}
+input,textarea,select{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:15px;
+  outline:none;
+}
+input:focus,textarea:focus,select:focus{border-color:#f5c400}
+textarea{min-height:90px;resize:vertical}
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  margin-top:20px;
+  background:#f5c400;
+  color:#111;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+.info{
+  background:#fff8d8;
+  border-left:4px solid #f5c400;
+  padding:12px;
+  border-radius:8px;
+  margin-bottom:18px;
+  font-size:14px;
+}
+#hasil{display:none;margin-top:18px}
+.kode{
+  font-size:30px;
+  font-weight:900;
+  text-align:center;
+  padding:15px;
+  background:#111;
+  color:#f5c400;
+  border-radius:12px;
+  letter-spacing:2px;
+}
+.status{
+  text-align:center;
+  margin-top:12px;
+  font-weight:700;
+}
+.small{font-size:12px;color:#777;margin-top:8px}
+.error{color:#c00}
+.success{color:#087b25}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="header">
+      <img src="logo.png" class="logo" onerror="this.style.display='none'">
+      <h1>DPD TESPOIN MAJALENGKA</h1>
+      <div class="sub">REGISTRASI PESERTA</div>
+    </div>
+
+    <div class="info">
+      Silakan isi data dengan benar. Setelah berhasil, sistem akan memberikan
+      <b>Kode Registrasi</b> seperti <b>REG-0001</b>.
+    </div>
+
+    <form id="formRegistrasi">
+      <label>Nama Peserta *</label>
+      <input id="nama" required autocomplete="name">
+
+      <label>Nama Toko</label>
+      <input id="toko">
+
+      <label>No. WhatsApp *</label>
+      <input id="wa" type="tel" required placeholder="08xxxxxxxxxx">
+
+      <label>Alamat *</label>
+      <textarea id="alamat" required></textarea>
+
+      <label>Email</label>
+      <input id="email" type="email">
+
+      <label>Ukuran Kaos *</label>
+      <select id="ukuran" required>
+        <option value="">-- Pilih Ukuran --</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>XXL</option>
+        <option>XXXL</option>
+      </select>
+
+      <label>Bukti Transfer</label>
+      <input id="bukti" type="file" accept="image/*,.pdf">
+      <div class="small">Opsional. Jika diaktifkan di Apps Script, file akan disimpan ke Google Drive.</div>
+
+      <button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
+    </form>
+
+    <div id="hasil">
+      <div class="kode" id="kodeHasil"></div>
+      <div class="status success">REGISTRASI BERHASIL</div>
+      <p style="text-align:center">
+        Simpan kode registrasi ini untuk bukti pendaftaran dan registrasi ulang.
+      </p>
+    </div>
+
+    <div id="pesan" class="status"></div>
+  </div>
+</div>
+
+<script>
+/*
+  GANTI dengan URL Web App Google Apps Script setelah deployment.
+  Contoh:
+  https://script.google.com/macros/s/XXXXXXXX/exec
+*/
+const API_URL = 'ISI_URL_WEB_APP_APPS_SCRIPT_DI_SINI';
+
+const form = document.getElementById('formRegistrasi');
+const btn = document.getElementById('btnDaftar');
+const pesan = document.getElementById('pesan');
+const hasil = document.getElementById('hasil');
+
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  if (!API_URL || API_URL.includes('ISI_URL')) {
+    tampilPesan('URL Apps Script belum dipasang.', true);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'MENYIMPAN...';
+  tampilPesan('');
+
+  try {
+    const file = document.getElementById('bukti').files[0];
+    let buktiBase64 = '';
+    let buktiNama = '';
+
+    if (file) {
+      // Batasi agar upload dari browser tidak terlalu besar.
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error('Ukuran bukti transfer maksimal 5 MB.');
+      }
+
+      buktiNama = file.name;
+      buktiBase64 = await fileToBase64(file);
+    }
+
+    const data = {
+      action: 'registrasi',
+      nama: document.getElementById('nama').value.trim(),
+      toko: document.getElementById('toko').value.trim(),
+      wa: document.getElementById('wa').value.trim(),
+      alamat: document.getElementById('alamat').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      ukuran: document.getElementById('ukuran').value,
+      buktiBase64: buktiBase64,
+      buktiNama: buktiNama
+    };
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      throw new Error(result.message || 'Registrasi gagal.');
+    }
+
+    document.getElementById('kodeHasil').textContent = result.kode;
+    hasil.style.display = 'block';
+
+    form.reset();
+    tampilPesan('Data peserta sudah tersimpan ke Google Sheet.', false);
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+
+  } catch(err) {
+    tampilPesan(err.message || 'Terjadi kesalahan.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'DAFTAR SEKARANG';
+  }
+});
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Bukti transfer gagal dibaca.'));
+
+    reader.readAsDataURL(file);
+  });
+}
+
+function tampilPesan(text, error){
+  pesan.textContent = text || '';
+  pesan.className = 'status ' + (error ? 'error' : 'success');
+}
+</script>
+</body>
+</html>
