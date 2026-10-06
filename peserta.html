@@ -1,17 +1,187 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Data Peserta</title><style>
-:root{--yellow:#FFC107;--black:#111;--bg:#f5f6f8;--green:#16803c;--red:#c62828}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#222}
-header{background:var(--black);color:#fff;padding:18px;text-align:center}main{max-width:1100px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:14px;padding:20px;margin:14px 0;box-shadow:0 3px 12px #0001}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:9px;font:inherit}
-button,.btn{display:inline-block;background:var(--yellow);color:#111;border:0;border-radius:9px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer}
-.dark{background:#111;color:#fff}.center{text-align:center}.muted{color:#666}
-.status{display:inline-block;padding:6px 11px;border-radius:20px;font-weight:700}.lunas{background:#dcfce7;color:#166534}.belum{background:#fee2e2;color:#991b1b}.hadir{background:#dbeafe;color:#1d4ed8}
-table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;white-space:nowrap}
-nav{background:#222;padding:10px;display:flex;gap:7px;flex-wrap:wrap;justify-content:center}nav a{color:#fff;text-decoration:none;padding:7px}
-.notice{padding:12px;border-radius:9px;background:#fff8db;border:1px solid #f1d66b}.big{font-size:30px;font-weight:800;letter-spacing:2px}
-</style></head><body>
-<header><h1>DATA SEMUA PESERTA</h1><p>LUNAS maupun BELUM LUNAS</p></header><main><div class="card"><div style="overflow:auto"><table><thead><tr>
-<th>Kode</th><th>Nama</th><th>Toko</th><th>Alamat</th><th>No WA</th><th>Email</th><th>Kaos</th><th>Pembayaran</th><th>Kehadiran</th></tr></thead><tbody id="data"><tr><td colspan="9" class="center">Data akan diambil dari Spreadsheet.</td></tr></tbody></table></div></div></main>
-<script></script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Approval Peserta - DPD TESPOIN Majalengka</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f3f3;font-family:Arial,sans-serif;color:#222}
+.wrap{max-width:1000px;margin:auto;padding:18px}
+.card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 4px 18px rgba(0,0,0,.08);margin-bottom:18px}
+h1{margin:0 0 5px;font-size:24px}
+.sub{color:#777;margin-bottom:18px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.box{padding:15px;border-radius:12px;text-align:center;font-weight:700}
+.total{background:#eee}
+.pending{background:#fff3cd;color:#856404}
+.paid{background:#dff5e4;color:#087b25}
+.num{display:block;font-size:26px;margin-top:5px}
+.tabs{display:flex;gap:8px;margin-bottom:15px}
+.tabs button{flex:1;padding:12px;border:0;border-radius:10px;font-weight:800;cursor:pointer;background:#ddd}
+.tabs button.active{background:#111;color:#f5c400}
+.search{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-bottom:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 8px;border-bottom:1px solid #eee;text-align:left;font-size:13px;vertical-align:middle}
+th{background:#111;color:#f5c400}
+.btn{border:0;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer}
+.approve{background:#f5c400;color:#111}
+.disabled{background:#ddd;color:#777}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:800}
+.belum{background:#fff3cd;color:#856404}
+.lunas{background:#dff5e4;color:#087b25}
+.msg{padding:10px;border-radius:10px;margin-bottom:12px;display:none}
+.error{background:#ffe1e1;color:#a00}
+.ok{background:#dff5e4;color:#087b25}
+.loading{text-align:center;padding:30px;color:#777}
+@media(max-width:700px){
+  .summary{grid-template-columns:1fr 1fr}
+  table{display:block;overflow-x:auto;white-space:nowrap}
+  h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>APPROVAL PESERTA</h1>
+    <div class="sub">DPD TESPOIN MAJALENGKA — Verifikasi pembayaran peserta</div>
+
+    <div id="msg" class="msg"></div>
+
+    <div class="summary">
+      <div class="box total">TOTAL<span class="num" id="total">0</span></div>
+      <div class="box pending">BELUM LUNAS<span class="num" id="jumlahBelum">0</span></div>
+      <div class="box paid">LUNAS<span class="num" id="jumlahLunas">0</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button id="tabBelum" class="active" onclick="setTab('belum')">BELUM LUNAS</button>
+      <button id="tabLunas" onclick="setTab('lunas')">SUDAH LUNAS</button>
+    </div>
+
+    <input id="cari" class="search" placeholder="Cari nama, toko, atau REG-XXXX..." oninput="render()">
+
+    <div id="loading" class="loading">Memuat peserta...</div>
+    <div id="tableWrap"></div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+let semua = [];
+let tab = 'belum';
+
+async function loadPeserta(){
+  document.getElementById('loading').style.display='block';
+  try {
+    const r = await fetch(API_URL + '?action=peserta');
+    const raw = await r.text();
+    let data;
+    try { data = JSON.parse(raw.trim()); }
+    catch(e) {
+      throw new Error('Respons API bukan JSON. Pastikan deployment Code.gs terbaru.');
+    }
+    if(!data.ok) throw new Error(data.message || 'Gagal mengambil peserta.');
+    semua = data.peserta || [];
+    updateSummary();
+    render();
+  } catch(e) {
+    showMsg(e.message,true);
+  } finally {
+    document.getElementById('loading').style.display='none';
+  }
+}
+
+function updateSummary(){
+  const lunas = semua.filter(x => String(x.statusPembayaran).toUpperCase()==='LUNAS').length;
+  document.getElementById('total').textContent = semua.length;
+  document.getElementById('jumlahLunas').textContent = lunas;
+  document.getElementById('jumlahBelum').textContent = semua.length-lunas;
+}
+
+function setTab(x){
+  tab=x;
+  document.getElementById('tabBelum').classList.toggle('active',x==='belum');
+  document.getElementById('tabLunas').classList.toggle('active',x==='lunas');
+  render();
+}
+
+function render(){
+  const q=document.getElementById('cari').value.toLowerCase().trim();
+  let data=semua.filter(x => {
+    const lunas=String(x.statusPembayaran).toUpperCase()==='LUNAS';
+    if(tab==='belum' && lunas) return false;
+    if(tab==='lunas' && !lunas) return false;
+    if(!q) return true;
+    return [x.kode,x.nama,x.toko,x.wa].some(v=>String(v||'').toLowerCase().includes(q));
+  });
+
+  let out='<table><thead><tr><th>REG</th><th>Nama</th><th>Toko</th><th>WA</th><th>Kaos</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
+
+  if(!data.length){
+    out+='<tr><td colspan="7" style="text-align:center;padding:25px">Tidak ada peserta.</td></tr>';
+  } else {
+    data.forEach(x=>{
+      const lunas=String(x.statusPembayaran).toUpperCase()==='LUNAS';
+      out += '<tr>';
+      out += '<td><b>'+esc(x.kode)+'</b></td>';
+      out += '<td>'+esc(x.nama)+'</td>';
+      out += '<td>'+esc(x.toko)+'</td>';
+      out += '<td>'+esc(x.wa)+'</td>';
+      out += '<td>'+esc(x.ukuran)+'</td>';
+      out += '<td><span class="badge '+(lunas?'lunas':'belum')+'">'+(lunas?'LUNAS':'BELUM LUNAS')+'</span></td>';
+      out += '<td>'+(lunas
+        ? '<button class="btn disabled" disabled>SUDAH LUNAS</button>'
+        : '<button class="btn approve" onclick="approve(\''+escJs(x.kode)+'\')">APPROVE LUNAS</button>')+'</td>';
+      out += '</tr>';
+    });
+  }
+  out+='</tbody></table>';
+  document.getElementById('tableWrap').innerHTML=out;
+}
+
+async function approve(kode){
+  if(!confirm('Set '+kode+' menjadi LUNAS?')) return;
+  try {
+    const r=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({
+        action:'verifikasiLunas',
+        kode:kode,
+        nominal:''
+      })
+    });
+    const raw=await r.text();
+    let data;
+    try { data=JSON.parse(raw.trim()); }
+    catch(e) { throw new Error('Approval terkirim tetapi respons API tidak terbaca.'); }
+    if(!data.ok) throw new Error(data.message||'Approval gagal.');
+    showMsg(kode+' berhasil menjadi LUNAS.',false);
+    await loadPeserta();
+  } catch(e) {
+    showMsg(e.message,true);
+  }
+}
+
+function showMsg(t,error){
+  const el=document.getElementById('msg');
+  el.textContent=t;
+  el.className='msg '+(error?'error':'ok');
+  el.style.display='block';
+}
+
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escJs(v){
+  return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+loadPeserta();
+</script>
+</body>
+</html>
