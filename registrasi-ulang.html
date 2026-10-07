@@ -418,20 +418,6 @@ async function bukaKamera(){
   }
 
 
-  if(
-    !navigator.mediaDevices ||
-    !navigator.mediaDevices.getUserMedia
-  ){
-
-    setCameraStatus(
-      'Browser tidak mendukung akses kamera. Gunakan Chrome melalui HTTPS.',
-      true
-    );
-
-    return;
-  }
-
-
   try{
 
     document
@@ -446,6 +432,7 @@ async function bukaKamera(){
 
     /*
       Minta izin kamera secara langsung.
+      Ini versi yang sebelumnya berhasil.
     */
 
     const stream =
@@ -454,19 +441,24 @@ async function bukaKamera(){
           facingMode:{
             ideal:'environment'
           }
-        },
-        audio:false
+        }
       });
 
 
+    /*
+      Stream hanya digunakan untuk
+      memastikan izin kamera diberikan.
+    */
+
     stream
       .getTracks()
-      .forEach(t => t.stop());
+      .forEach(
+        t => t.stop()
+      );
 
 
     /*
-      Bersihkan reader lama
-      jika masih ada.
+      Bersihkan reader terlebih dahulu.
     */
 
     document
@@ -478,12 +470,17 @@ async function bukaKamera(){
       new Html5Qrcode('reader');
 
 
+    /*
+      Gunakan facingMode sederhana.
+      Jangan gunakan object {ideal:...}
+      di sini karena versi ini sebelumnya
+      terbukti lebih stabil.
+    */
+
     await scanner.start(
 
       {
-        facingMode:{
-          ideal:'environment'
-        }
+        facingMode:'environment'
       },
 
       {
@@ -494,9 +491,7 @@ async function bukaKamera(){
           height:250
         },
 
-        aspectRatio:1.0,
-
-        disableFlip:false
+        aspectRatio:1.0
 
       },
 
@@ -537,7 +532,7 @@ async function bukaKamera(){
     if(e.name === 'NotAllowedError'){
 
       pesan =
-        'Izin kamera ditolak. Tekan ikon 🔒 / pengaturan situs di Chrome, izinkan Kamera, lalu tekan BUKA KAMERA lagi.';
+        'Izin kamera ditolak. Tekan ikon 🔒/pengaturan situs di Chrome lalu izinkan Kamera, kemudian tekan BUKA KAMERA lagi.';
 
     }
 
@@ -551,14 +546,14 @@ async function bukaKamera(){
     else if(e.name === 'NotReadableError'){
 
       pesan =
-        'Kamera sedang dipakai aplikasi lain. Tutup Kamera/WhatsApp/aplikasi lain yang menggunakan kamera, lalu coba lagi.';
+        'Kamera sedang dipakai aplikasi lain. Tutup aplikasi Kamera/WhatsApp lalu coba lagi.';
 
     }
 
     else if(e.name === 'SecurityError'){
 
       pesan =
-        'Akses kamera diblokir oleh browser. Pastikan halaman dibuka melalui HTTPS.';
+        'Akses kamera diblokir browser. Pastikan halaman dibuka melalui HTTPS.';
 
     }
 
@@ -646,8 +641,7 @@ function onScanSuccess(decodedText){
 
   /*
     Setelah QR terbaca,
-    prosesKode() melakukan pengecekan
-    pembayaran dan kehadiran.
+    langsung lakukan validasi.
   */
 
   prosesKode(decodedText);
@@ -823,6 +817,7 @@ async function prosesKode(kode){
 
     /* =====================================
        3. BELUM LUNAS
+       TIDAK BOLEH CHECK-IN
     ===================================== */
 
     if(statusBayar !== 'LUNAS'){
@@ -853,7 +848,9 @@ async function prosesKode(kode){
 
           <span>Kode Registrasi</span>
 
-          <b>${esc(p.kode)}</b>
+          <b>
+            ${esc(p.kode)}
+          </b>
 
         </div>
 
@@ -862,7 +859,9 @@ async function prosesKode(kode){
 
           <span>Nama Peserta</span>
 
-          <b>${esc(p.nama)}</b>
+          <b>
+            ${esc(p.nama)}
+          </b>
 
         </div>
 
@@ -871,7 +870,9 @@ async function prosesKode(kode){
 
           <span>Nama Toko</span>
 
-          <b>${esc(p.toko)}</b>
+          <b>
+            ${esc(p.toko)}
+          </b>
 
         </div>
 
@@ -911,8 +912,8 @@ async function prosesKode(kode){
 
 
       /*
-        BELUM LUNAS:
-        TIDAK ADA CHECK-IN.
+        PENTING:
+        Tidak ada checkin untuk BELUM LUNAS.
       */
 
       return;
@@ -921,7 +922,8 @@ async function prosesKode(kode){
 
 
     /* =====================================
-       4. CEK SUDAH HADIR
+       4. SUDAH LUNAS
+       CEK STATUS KEHADIRAN
     ===================================== */
 
     const statusHadir =
@@ -964,11 +966,6 @@ async function prosesKode(kode){
 
 
     if(!check.ok){
-
-      /*
-        Jika server mengatakan sudah check-in,
-        tampilkan informasi khusus.
-      */
 
       if(
         check.alreadyCheckin &&
@@ -1088,12 +1085,12 @@ function tampilData(p,mode){
 
       <div class="benefit-ok">
 
-        ✓ Peserta sudah tercatat hadir.
+        ✓ PESERTA SUDAH TERCATAT HADIR.
 
-        <br>
+        <br><br>
 
         Benefit peserta dapat diberikan
-        <b>1 kali saja</b>.
+        <b>1 KALI SAJA</b>.
 
       </div>
 
@@ -1383,36 +1380,6 @@ function rupiah(v){
       n.toLocaleString('id-ID');
 
 }
-
-
-/*
-=================================================
-CATATAN
-=================================================
-
-Kamera tidak otomatis dibuka.
-
-Petugas tetap menekan BUKA KAMERA.
-
-Validasi tampilan:
-
-BELUM LUNAS
-→ GAGAL
-→ tidak check-in
-
-LUNAS + BELUM HADIR
-→ CHECK-IN
-→ REGISTRASI ULANG BERHASIL
-
-LUNAS + SUDAH HADIR
-→ SUDAH REGISTRASI ULANG
-→ jangan berikan benefit lagi
-
-Penguncian sebenarnya tetap dilakukan
-di Code.gs pada tahap berikutnya.
-
-=================================================
-*/
 
 </script>
 
