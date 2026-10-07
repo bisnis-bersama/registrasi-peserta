@@ -1670,6 +1670,21 @@ function tampilData(p,mode){
 
     </div>
 
+    <div class="row">
+      <span>Tier Registrasi</span>
+      <b>${esc(p.tierRegistrasi || '-')}</b>
+    </div>
+
+    <div class="row">
+      <span>Estimasi Saat Daftar</span>
+      <b>${p.estimasiHarga ? rupiah(p.estimasiHarga) : '-'}</b>
+    </div>
+
+    <div class="row">
+      <span>Tier Pembayaran</span>
+      <b>${esc(p.tierPembayaran || '-')}</b>
+    </div>
+
 
     <div class="row">
 

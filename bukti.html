@@ -698,6 +698,13 @@ function tampilkanPeserta(p){
       0
     );
 
+  document.getElementById('rTierRegistrasi').textContent =
+    p.tierRegistrasi || p['Tier Registrasi'] || '-';
+  document.getElementById('rEstimasi').textContent =
+    p.estimasiHarga ? formatRupiah(p.estimasiHarga) : '-';
+  document.getElementById('rTierPembayaran').textContent =
+    p.tierPembayaran || p['Tier Pembayaran'] || '-';
+
 
   document.getElementById('rTanggal').textContent =
     p.tanggalPembayaran ||

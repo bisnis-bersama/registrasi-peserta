@@ -95,7 +95,7 @@ function render(){
     return;
   }
 
-  let out='<table><thead><tr><th>REG</th><th>Nama Peserta</th><th>Toko</th><th>WhatsApp</th><th>Kaos</th><th>Pembayaran</th><th>Kehadiran</th><th>Jam Check-in</th></tr></thead><tbody>';
+  let out='<table><thead><tr><th>REG</th><th>Nama Peserta</th><th>Toko</th><th>WhatsApp</th><th>Kaos</th><th>Tier</th><th>Nominal</th><th>Pembayaran</th><th>Kehadiran</th><th>Jam Check-in</th></tr></thead><tbody>';
 
   rows.forEach(p=>{
     const hadir=String(p.statusKehadiran||'').toUpperCase()==='HADIR';
@@ -104,7 +104,7 @@ function render(){
     out+='<td>'+esc(p.nama)+'</td>';
     out+='<td>'+esc(p.toko)+'</td>';
     out+='<td>'+esc(p.wa)+'</td>';
-    out+='<td>'+esc(p.ukuran)+'</td>';
+    out+='<td>'+esc(p.ukuran)+'</td>';out+='<td><b>'+esc(p.tierPembayaran||'-')+'</b></td>';out+='<td>'+formatRupiah(p.nominalPembayaran||0)+'</td>';
     out+='<td><span class="badge">LUNAS</span></td>';
     out+='<td>'+(hadir?'<span class="badge">HADIR</span>':'BELUM HADIR')+'</td>';
     out+='<td>'+esc(p.jamCheckin||'-')+'</td>';
@@ -115,6 +115,7 @@ function render(){
   document.getElementById('tableWrap').innerHTML=out;
 }
 
+function formatRupiah(v){return 'Rp '+Number(v||0).toLocaleString('id-ID');}
 function showMsg(t){
   const e=document.getElementById('msg');
   e.textContent=t;e.className='msg error';e.style.display='block';

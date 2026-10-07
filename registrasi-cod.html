@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Registrasi Peserta - DPD TESPOIN Majalengka</title>
+<title>Registrasi COD - DPD TESPOIN Majalengka</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;color:#222}.wrap{max-width:620px;margin:0 auto;padding:20px}.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 5px 25px rgba(0,0,0,.08)}.header{text-align:center;margin-bottom:22px}.logo{width:90px;height:90px;object-fit:contain;margin-bottom:8px}h1{font-size:22px;margin:4px 0}.sub{color:#777;font-size:14px}label{display:block;font-weight:700;margin:15px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd;border-radius:10px;font-size:15px;outline:none}input:focus,textarea:focus,select:focus{border-color:#f5c400}textarea{min-height:90px;resize:vertical}button{width:100%;border:0;border-radius:12px;padding:14px;margin-top:20px;background:#f5c400;color:#111;font-size:16px;font-weight:800;cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}.price-box{background:#111;color:#fff;border-radius:14px;padding:16px;margin-bottom:18px;text-align:center}.price-box .tier{font-size:20px;font-weight:900;color:#f5c400}.price-box .amount{font-size:26px;font-weight:900;margin-top:4px}.price-box small{display:block;color:#ddd;margin-top:5px}.info{background:#fff8d8;border-left:4px solid #f5c400;padding:12px;border-radius:8px;margin-bottom:18px;font-size:14px}.small{font-size:12px;color:#777;margin-top:8px}#hasil{display:none;margin-top:22px;border-top:2px dashed #ddd;padding-top:22px}.status{text-align:center;margin-top:12px;font-weight:700}.error{color:#c00}.success{color:#087b25}.proof-head{text-align:center}.proof-head h2{font-size:19px;margin:8px 0 5px}.proof-head p{font-size:13px;color:#666;margin:0 0 15px}.success-badge{display:inline-block;background:#e9f8ed;color:#087b25;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:800}.qr-box{margin:18px auto;padding:16px;background:#fff;border:1px solid #ddd;border-radius:14px;text-align:center;width:max-content;max-width:100%}#qrcode{width:220px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:auto}#qrcode img,#qrcode canvas{max-width:220px;height:auto}.qr-label{margin-top:10px;font-size:11px;font-weight:800;color:#555;max-width:220px}.detail-box{margin-top:16px;border:1px solid #ddd;border-radius:13px;overflow:hidden}.detail-title{background:#111;color:#f5c400;padding:12px;text-align:center;font-weight:900}.detail-row{display:flex;justify-content:space-between;gap:15px;padding:10px 12px;border-bottom:1px solid #eee;font-size:13px}.detail-row:last-child{border-bottom:0}.detail-row span{color:#666}.detail-row b{text-align:right;word-break:break-word}.save-note{margin-top:15px;padding:12px;border-radius:10px;background:#fff8d8;font-size:12px;line-height:1.5}.proof-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}.proof-actions button{margin-top:0}.btn-secondary{background:#222;color:#fff}.duplicate-box{display:none;margin-top:14px;padding:13px;border-radius:10px;background:#fff0f0;border:1px solid #e00000;color:#b00000;font-size:14px;line-height:1.5;font-weight:700}.file-info{display:none;margin-top:9px;padding:10px;border-radius:9px;background:#eef8ff;border:1px solid #cde8ff;color:#155b85;font-size:12px;line-height:1.5}@media(max-width:480px){.detail-row{align-items:flex-start}}
 </style>
 </head>
 <body data-version="FINAL-JPG-QR-2026-10-07-DUPLIKAT-FIX">
 <div class="wrap"><div class="card">
-<div class="header"><img src="logo.png" class="logo" onerror="this.style.display='none'"><h1>DPD TESPOIN MAJALENGKA</h1><div class="sub">REGISTRASI PESERTA</div></div>
-<div class="info">Silakan isi data dengan benar. Setelah berhasil, sistem akan memberikan <b>Kode Registrasi</b> seperti <b>REG-0001</b>.</div><div id="hargaBox" class="price-box"><div class="tier" id="tierAktif">MEMUAT HARGA...</div><div class="amount" id="hargaAktif">-</div><small id="keteranganHarga">Harga akan ditentukan otomatis berdasarkan tanggal.</small></div>
+<div class="header"><img src="logo.png" class="logo" onerror="this.style.display='none'"><h1>DPD TESPOIN MAJALENGKA</h1><div class="sub">REGISTRASI COD DI LOKASI</div></div>
+<div class="info"><b>REGISTRASI COD</b><br>Digunakan untuk peserta yang mendaftar dan membayar langsung di lokasi pada hari acara. Harga COD ditentukan otomatis dari Pengaturan.</div><div id="hargaBox" class="price-box"><div class="tier" id="tierAktif">MEMUAT HARGA...</div><div class="amount" id="hargaAktif">-</div><small id="keteranganHarga">Harga COD hanya berlaku pada hari acara.</small></div>
 <form id="formRegistrasi">
 <label>Nama Peserta *</label><input id="nama" required autocomplete="name">
 <label>Nama Toko</label><input id="toko">
@@ -19,14 +19,13 @@
 <label>Alamat *</label><textarea id="alamat" required></textarea>
 <label>Email</label><input id="email" type="email">
 <label>Ukuran Kaos *</label><select id="ukuran" required><option value="">-- Pilih Ukuran --</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select>
-<label>Bukti Transfer</label><input id="bukti" type="file" accept="image/*,.pdf">
-<div class="small">Upload bukti transfer pembayaran. File akan disimpan ke folder <b>BUKTI TRANSFER</b> dan link-nya akan dicatat di data peserta.</div>
+<label style="display:none">Bukti Transfer</label><input id="bukti" type="file" style="display:none">
 <div id="fileInfo" class="file-info"></div>
 <button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
 </form>
 <div id="duplikatBox" class="duplicate-box"></div>
 <div id="hasil">
-<div class="proof-head"><div class="success-badge">✓ REGISTRASI BERHASIL</div><h2>BUKTI REGISTRASI PESERTA</h2><p>Simpan halaman ini. QR Code digunakan untuk registrasi ulang saat acara.</p></div>
+<div class="proof-head"><div class="success-badge">✓ REGISTRASI COD BERHASIL</div><h2>BUKTI REGISTRASI PESERTA</h2><p>Simpan halaman ini. QR Code digunakan untuk registrasi ulang saat acara.</p></div>
 <div class="qr-box"><div id="qrcode"></div><div class="qr-label">SCAN QR CODE INI SAAT REGISTRASI ULANG</div></div>
 <div class="detail-box"><div class="detail-title">RINCIAN LENGKAP PESERTA</div>
 <div class="detail-row"><span>Nama Peserta</span><b id="rNama">-</b></div><div class="detail-row"><span>Nama Toko</span><b id="rToko">-</b></div><div class="detail-row"><span>No. WhatsApp</span><b id="rWa">-</b></div><div class="detail-row"><span>Alamat</span><b id="rAlamat">-</b></div><div class="detail-row"><span>Email</span><b id="rEmail">-</b></div><div class="detail-row"><span>Ukuran Kaos</span><b id="rUkuran">-</b></div><div class="detail-row"><span>Kode Registrasi</span><b id="rKode">-</b></div><div class="detail-row"><span>Tier / Jenis Harga</span><b id="rTier">-</b></div><div class="detail-row"><span>Estimasi Harga</span><b id="rEstimasi">-</b></div><div class="detail-row"><span>Status Pembayaran</span><b id="rStatusBayar">BELUM LUNAS</b></div>
@@ -76,7 +75,7 @@ form.addEventListener('submit',async function(e){
   const file=buktiInput.files[0];let buktiBase64='';let buktiNamaFile='';
   if(file){if(file.size>MAX_FILE_SIZE)throw new Error('Ukuran bukti transfer maksimal 5 MB.');buktiNamaFile=file.name;buktiBase64=await fileToBase64(file);}
 
-  const data={action:'registrasi',nama,toko,wa,alamat,email,ukuran,buktiBase64,buktiNamaFile,buktiNama:buktiNamaFile};
+  const data={action:'registrasiCOD',nama,toko,wa,alamat,email,ukuran,petugas:petugasAktif};
   btn.textContent='MENYIMPAN...';
   const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
   const raw=await response.text();let result;
@@ -88,7 +87,7 @@ form.addEventListener('submit',async function(e){
   }
 
   tampilkanBukti(result.peserta);hasil.style.display='block';form.reset();fileInfo.style.display='none';fileInfo.textContent='';tampilPesan('Data peserta sudah tersimpan ke Google Sheet.',false);window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
- }catch(err){console.error(err);tampilPesan(err.message||'Terjadi kesalahan.',true);}finally{btn.disabled=false;btn.textContent='DAFTAR SEKARANG';}
+ }catch(err){console.error(err);tampilPesan(err.message||'Terjadi kesalahan.',true);}finally{btn.disabled=false;btn.textContent='DAFTAR COD';}
 });
 
 async function cekDuplikat(wa,email){

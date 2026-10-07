@@ -520,6 +520,8 @@ tbody tr:hover{
           <th>NAMA TOKO</th>
           <th>WHATSAPP</th>
           <th>UKURAN KAOS</th>
+          <th>TIER BAYAR</th>
+          <th>NOMINAL</th>
           <th>PEMBAYARAN</th>
           <th>KEHADIRAN</th>
           <th>JAM CHECK-IN</th>
@@ -529,7 +531,7 @@ tbody tr:hover{
 
       <tbody id="tbody">
         <tr>
-          <td colspan="10" class="empty">
+          <td colspan="12" class="empty">
             Memuat data...
           </td>
         </tr>
@@ -590,6 +592,14 @@ tbody tr:hover{
 
         <b>Nominal</b>
         <span id="mNominal">-</span>
+        <b>Tier Registrasi</b>
+        <span id="mTierRegistrasi">-</span>
+
+        <b>Estimasi Saat Daftar</b>
+        <span id="mEstimasi">-</span>
+
+        <b>Tier Pembayaran</b>
+        <span id="mTierPembayaran">-</span>
 
         <b>Tanggal Verifikasi</b>
         <span id="mTanggalVerifikasi">-</span>
@@ -622,6 +632,14 @@ tbody tr:hover{
           onclick="confirmLunas()"
         >
           ✓ KONFIRMASI LUNAS
+        </button>
+        <button
+          class="btn"
+          id="btnCod"
+          onclick="confirmCOD()"
+          style="background:#f59e0b;color:#111"
+        >
+          💵 CATAT PEMBAYARAN COD
         </button>
 
         <button
@@ -709,7 +727,7 @@ async function load(){
 
   tbody.innerHTML = `
     <tr>
-      <td colspan="10" class="empty">
+      <td colspan="12" class="empty">
         Memuat data peserta...
       </td>
     </tr>
@@ -800,7 +818,7 @@ async function load(){
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" class="empty">
+        <td colspan="12" class="empty">
 
           <b>Gagal memuat data peserta.</b>
 
@@ -968,6 +986,12 @@ function getFiltered(){
 
       p.statusPembayaran,
 
+      p.tierRegistrasi,
+
+      p.tierPembayaran,
+
+      p.metodePembayaran,
+
       p.statusKehadiran
 
     ]
@@ -1004,7 +1028,7 @@ function render(){
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="10"
+        <td colspan="12"
             class="empty">
           Tidak ada data peserta.
         </td>
@@ -1115,6 +1139,14 @@ function render(){
 
           <td>
             ${esc(ukuran)}
+          </td>
+
+          <td>
+            <b>${esc(p.tierPembayaran || p.tierRegistrasi || '-')}</b>
+          </td>
+
+          <td>
+            ${p.nominalPembayaran ? formatRupiah(p.nominalPembayaran) : (p.estimasiHarga ? 'Estimasi '+formatRupiah(p.estimasiHarga) : '-')}
           </td>
 
           <td>
@@ -1244,6 +1276,13 @@ function openReview(kode){
     nominal
       ? formatRupiah(nominal)
       : '-';
+
+  const tr = document.getElementById('mTierRegistrasi');
+  if(tr) tr.textContent = clean(p.tierRegistrasi || '-');
+  const es = document.getElementById('mEstimasi');
+  if(es) es.textContent = p.estimasiHarga ? formatRupiah(p.estimasiHarga) : '-';
+  const tp = document.getElementById('mTierPembayaran');
+  if(tp) tp.textContent = clean(p.tierPembayaran || '-');
 
 
   document.getElementById(
@@ -1398,6 +1437,9 @@ function openReview(kode){
 
   }
 
+  const btnCod=document.getElementById('btnCod');
+  if(btnCod) btnCod.style.display=(pembayaran==='LUNAS'?'none':'block');
+
 
   document
     .getElementById('modal')
@@ -1483,248 +1525,77 @@ function convertDriveImageUrl(url){
 ========================= */
 
 async function confirmLunas(){
+  if(!selectedPeserta){alert('Peserta belum dipilih.');return;}
+  const kode=clean(selectedPeserta.kode);
+  const bukti=clean(selectedPeserta.buktiTransfer);
+  if(!kode){alert('Kode registrasi tidak tersedia.');return;}
+  if(!bukti){alert('Bukti transfer belum tersedia.\n\nSilakan cek bukti transfer terlebih dahulu.');return;}
 
-  if(!selectedPeserta){
-    alert('Peserta belum dipilih.');
-    return;
-  }
-
-  const kode =
-    clean(selectedPeserta.kode);
-
-  const bukti =
-    clean(selectedPeserta.buktiTransfer);
-
-  if(!kode){
-    alert('Kode registrasi tidak tersedia.');
-    return;
-  }
-
-  if(!bukti){
-    alert(
-      'Bukti transfer belum tersedia.\n\n' +
-      'Silakan cek bukti transfer terlebih dahulu.'
-    );
-    return;
-  }
-
-  const konfirmasi = confirm(
-
-    'Pastikan bukti transfer sudah sesuai dengan mutasi rekening.' +
-
-    '\n\nNama: ' +
-    clean(selectedPeserta.nama) +
-
-    '\nKode: ' +
-    kode +
-
-    '\n\nKonfirmasi sebagai LUNAS?'
-
+  const ok=confirm(
+    'Sistem akan menentukan harga berdasarkan TANGGAL PEMBAYARAN HARI INI.\n\n'+
+    'Nama: '+clean(selectedPeserta.nama)+'\nKode: '+kode+
+    '\n\nLanjutkan verifikasi pembayaran?'
   );
+  if(!ok)return;
 
-  if(!konfirmasi){
-    return;
-  }
-
-  const btn =
-    document.getElementById('btnConfirm');
-
-  btn.disabled = true;
-  btn.textContent = 'MEMBACA HARGA TIKET...';
+  const btn=document.getElementById('btnConfirm');
+  btn.disabled=true;btn.textContent='MEMPROSES...';
 
   try{
-
-    /* =====================================
-       AMBIL HARGA TIKET DARI PENGATURAN
-    ===================================== */
-
-    const settingResponse =
-      await fetch(
-        API_URL +
-        '?action=pengaturan&_=' +
-        Date.now(),
-        {
-          method:'GET',
-          cache:'no-store'
-        }
-      );
-
-    const settingText =
-      await settingResponse.text();
-
-    let settingData;
-
-    try{
-
-      settingData =
-        JSON.parse(settingText);
-
-    }catch(e){
-
-      throw new Error(
-        'Response pengaturan bukan JSON.'
-      );
-
-    }
-
-    if(
-      !settingData ||
-      settingData.ok === false
-    ){
-
-      throw new Error(
-        settingData &&
-        settingData.message
-          ? settingData.message
-          : 'Gagal mengambil pengaturan acara.'
-      );
-
-    }
-
-    const pengaturan =
-      settingData.pengaturan ||
-      settingData.data ||
-      settingData;
-
-
-    /*
-     * SATU-SATUNYA SUMBER NOMINAL
-     * TIKET PESERTA
-     */
-
-    const hargaTiket =
-      Number(
-        String(
-          pengaturan.tiket ??
-          pengaturan.hargaTiket ??
-          ''
-        ).replace(/[^\d]/g,'')
-      );
-
-
-    if(
-      !hargaTiket ||
-      hargaTiket <= 0
-    ){
-
-      throw new Error(
-        'Harga Tiket Peserta belum diatur di halaman Pengaturan.'
-      );
-
-    }
-
-
-    btn.textContent =
-      'MEMPROSES PEMBAYARAN...';
-
-
-    /* =====================================
-       KIRIM VERIFIKASI LUNAS
-    ===================================== */
-
-    const response =
-      await fetch(
-        API_URL,
-        {
-
-          method:'POST',
-
-          headers:{
-            'Content-Type':
-              'text/plain;charset=utf-8'
-          },
-
-          body:JSON.stringify({
-
-            action:
-              'verifikasiLunas',
-
-            kode:
-              kode,
-
-            /*
-             * NOMINAL OTOMATIS
-             * DARI PENGATURAN
-             */
-            nominal:
-              hargaTiket
-
-          })
-
-        }
-      );
-
-
-    const text =
-      await response.text();
-
+    const response=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'verifikasiLunas',kode:kode})
+    });
+    const text=await response.text();
     let data;
+    try{data=JSON.parse(text.trim())}catch(e){throw new Error('Response server bukan JSON.')}
+    if(!data||data.ok===false)throw new Error(data.message||'Gagal mengonfirmasi pembayaran.');
 
-    try{
-
-      data =
-        JSON.parse(text);
-
-    }catch(e){
-
-      throw new Error(
-        'Response server bukan JSON.'
-      );
-
-    }
-
-
-    if(
-      !data ||
-      data.ok === false
-    ){
-
-      throw new Error(
-        data && data.message
-          ? data.message
-          : 'Gagal mengonfirmasi pembayaran.'
-      );
-
-    }
-
-
-    alert(
-      'Pembayaran berhasil dikonfirmasi LUNAS.' +
-
-      '\n\nKode: ' +
-      kode +
-
-      '\nNama: ' +
-      clean(selectedPeserta.nama) +
-
-      '\nNominal: ' +
-      formatRupiah(hargaTiket)
-    );
-
+    const p=data.peserta||{};
+    alert('Pembayaran berhasil dikonfirmasi LUNAS.\n\n'+
+      'Kode: '+kode+'\nNama: '+clean(selectedPeserta.nama)+
+      '\nTier Pembayaran: '+clean(p.tierPembayaran||'-')+
+      '\nNominal: '+formatRupiah(p.nominalPembayaran||0));
 
     closeModal();
-
     await load();
-
-
   }catch(error){
-
     console.error(error);
-
-    alert(
-      'Gagal konfirmasi LUNAS:\n\n' +
-      error.message
-    );
-
+    alert('Gagal konfirmasi LUNAS:\n\n'+error.message);
   }finally{
-
-    btn.disabled = false;
-
-    btn.textContent =
-      '✓ KONFIRMASI LUNAS';
-
+    btn.disabled=false;btn.textContent='✓ KONFIRMASI LUNAS';
   }
+}
 
+async function confirmCOD(){
+  if(!selectedPeserta){alert('Peserta belum dipilih.');return;}
+  const kode=clean(selectedPeserta.kode);
+  if(!kode){alert('Kode registrasi tidak tersedia.');return;}
+  const ok=confirm(
+    'CATAT PEMBAYARAN COD?\n\n'+
+    'Harga COD diambil otomatis dari Pengaturan dan hanya berlaku pada hari acara.\n\n'+
+    'Nama: '+clean(selectedPeserta.nama)+'\nKode: '+kode
+  );
+  if(!ok)return;
+
+  const btn=document.getElementById('btnCod');
+  btn.disabled=true;btn.textContent='MEMPROSES COD...';
+  try{
+    const r=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'pembayaranCOD',kode:kode})
+    });
+    const t=await r.text();let d;
+    try{d=JSON.parse(t.trim())}catch(e){throw new Error('Response server bukan JSON.')}
+    if(!d.ok)throw new Error(d.message||'Gagal mencatat COD.');
+    const p=d.peserta||{};
+    alert('COD berhasil dicatat.\n\n'+
+      'Tier: COD\nNominal: '+formatRupiah(p.nominalPembayaran||0));
+    closeModal();await load();
+  }catch(e){alert('Gagal mencatat COD:\n\n'+e.message)}
+  finally{btn.disabled=false;btn.textContent='💵 CATAT PEMBAYARAN COD'}
 }
 
 
