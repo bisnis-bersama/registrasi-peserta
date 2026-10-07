@@ -3,16 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Admin DPD TESPOIN Majalengka</title>
+
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:#f3f3f3;
   color:#222;
 }
-.wrap{max-width:900px;margin:auto;padding:18px}
+
+.wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:18px;
+}
+
 .header{
   background:#111;
   color:#fff;
@@ -21,8 +30,19 @@ body{
   text-align:center;
   box-shadow:0 5px 20px rgba(0,0,0,.12);
 }
-.header h1{margin:0;color:#f5c400;font-size:25px}
-.header p{margin:7px 0 0;color:#ddd;font-size:14px}
+
+.header h1{
+  margin:0;
+  color:#f5c400;
+  font-size:25px;
+}
+
+.header p{
+  margin:7px 0 0;
+  color:#ddd;
+  font-size:14px;
+}
+
 .badge{
   display:inline-block;
   margin-top:12px;
@@ -33,26 +53,209 @@ body{
   font-size:12px;
   font-weight:900;
 }
+
+/* =========================
+   TOMBOL
+========================= */
+
+.top-button{
+  display:flex;
+  gap:10px;
+  margin:16px 0;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:11px 15px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.btn-refresh{
+  background:#198754;
+  color:#fff;
+}
+
+.btn-setting{
+  background:#f5c400;
+  color:#111;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+  display:none;
+  padding:11px 14px;
+  border-radius:10px;
+  margin-bottom:15px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.status.show{
+  display:block;
+}
+
+.status.ok{
+  background:#dff5e4;
+  color:#087b25;
+}
+
+.status.err{
+  background:#ffe1e1;
+  color:#a00000;
+}
+
+/* =========================
+   KARTU UTAMA
+========================= */
+
 .stats{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin:16px 0;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
 }
+
 .stat{
   background:#fff;
-  border-radius:14px;
-  padding:15px 10px;
-  text-align:center;
-  box-shadow:0 3px 12px rgba(0,0,0,.05);
+  border-radius:15px;
+  padding:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  border-left:5px solid #111;
 }
-.stat strong{display:block;font-size:25px;margin-bottom:5px}
-.stat span{font-size:12px;color:#666}
+
+.stat.green{
+  border-left-color:#198754;
+}
+
+.stat.red{
+  border-left-color:#dc3545;
+}
+
+.stat.orange{
+  border-left-color:#f59e0b;
+}
+
+.stat.blue{
+  border-left-color:#0d6efd;
+}
+
+.stat.gray{
+  border-left-color:#64748b;
+}
+
+.label{
+  font-size:12px;
+  color:#777;
+  font-weight:800;
+}
+
+.number{
+  font-size:30px;
+  font-weight:900;
+  margin-top:6px;
+}
+
+.nominal{
+  margin-top:5px;
+  color:#198754;
+  font-size:14px;
+  font-weight:800;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+  margin-top:17px;
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.section-title{
+  font-size:17px;
+  font-weight:900;
+  margin-bottom:15px;
+}
+
+/* =========================
+   KAOS
+========================= */
+
+.kaos-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+}
+
+.kaos{
+  background:#f7f7f7;
+  border:1px solid #e5e5e5;
+  border-radius:12px;
+  padding:14px 8px;
+  text-align:center;
+}
+
+.kaos-name{
+  font-size:14px;
+  font-weight:900;
+  color:#666;
+}
+
+.kaos-number{
+  font-size:28px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+/* =========================
+   KEHADIRAN
+========================= */
+
+.attendance{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.att-card{
+  background:#f7f7f7;
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+}
+
+.att-title{
+  font-size:13px;
+  color:#666;
+  font-weight:800;
+}
+
+.att-number{
+  font-size:32px;
+  font-weight:900;
+  margin-top:6px;
+}
+
+/* =========================
+   MENU
+========================= */
+
 .menu{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:14px;
+  margin-top:17px;
 }
+
 .menu a{
   text-decoration:none;
   color:#222;
@@ -65,7 +268,11 @@ body{
   box-shadow:0 3px 15px rgba(0,0,0,.07);
   transition:.15s;
 }
-.menu a:active{transform:scale(.98)}
+
+.menu a:active{
+  transform:scale(.98);
+}
+
 .icon{
   width:50px;
   height:50px;
@@ -77,8 +284,34 @@ body{
   font-size:24px;
   flex:none;
 }
-.menu h3{margin:0 0 5px;font-size:17px}
-.menu p{margin:0;color:#777;font-size:12px;line-height:1.4}
+
+.menu h3{
+  margin:0 0 5px;
+  font-size:17px;
+}
+
+.menu p{
+  margin:0;
+  color:#777;
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* =========================
+   CATATAN
+========================= */
+
+.note{
+  margin-top:16px;
+  background:#fff8d8;
+  border-left:4px solid #f5c400;
+  padding:12px;
+  border-radius:9px;
+  font-size:12px;
+  color:#555;
+  line-height:1.5;
+}
+
 .logout{
   width:100%;
   margin-top:18px;
@@ -90,130 +323,1024 @@ body{
   font-weight:800;
   cursor:pointer;
 }
-.note{
-  margin-top:16px;
-  background:#fff8d8;
-  border-left:4px solid #f5c400;
-  padding:12px;
-  border-radius:9px;
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+  text-align:center;
+  color:#777;
   font-size:12px;
-  color:#555;
+  margin-top:14px;
 }
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:800px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .kaos-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
 @media(max-width:650px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .menu{grid-template-columns:1fr}
+
+  .menu{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:450px){
+
+  .wrap{
+    padding:12px;
+  }
+
+  .header{
+    padding:20px 15px;
+  }
+
+  .header h1{
+    font-size:21px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .number{
+    font-size:24px;
+  }
+
+  .kaos{
+    padding:12px 5px;
+  }
+
+  .kaos-number{
+    font-size:24px;
+  }
+
 }
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
+  <!-- HEADER -->
+
   <div class="header">
+
     <h1>DPD TESPOIN MAJALENGKA</h1>
-    <p>ADMIN PANITIA — SISTEM REGISTRASI PESERTA</p>
-    <div class="badge">HALAMAN ADMIN</div>
+
+    <p>
+      ADMIN PANITIA — SISTEM REGISTRASI PESERTA
+    </p>
+
+    <div class="badge">
+      HALAMAN ADMIN
+    </div>
+
   </div>
 
-  <div class="stats">
-    <div class="stat">
-      <strong id="total">-</strong>
-      <span>TOTAL PESERTA</span>
-    </div>
-    <div class="stat">
-      <strong id="belum">-</strong>
-      <span>BELUM LUNAS</span>
-    </div>
-    <div class="stat">
-      <strong id="lunas">-</strong>
-      <span>LUNAS</span>
-    </div>
-    <div class="stat">
-      <strong id="hadir">-</strong>
-      <span>HADIR</span>
-    </div>
+
+  <!-- TOMBOL -->
+
+  <div class="top-button">
+
+    <button
+      class="btn btn-refresh"
+      onclick="loadDashboard()">
+
+      ↻ MUAT ULANG DATA
+
+    </button>
+
+    <button
+      class="btn btn-setting"
+      onclick="location.href='pengaturan.html'">
+
+      ⚙ PENGATURAN ACARA
+
+    </button>
+
   </div>
+
+
+  <div
+    id="status"
+    class="status">
+  </div>
+
+
+  <!-- =========================
+       RINGKASAN
+  ========================== -->
+
+  <div class="stats">
+
+    <!-- TOTAL -->
+
+    <div class="stat">
+
+      <div class="label">
+        TOTAL PESERTA
+      </div>
+
+      <div
+        class="number"
+        id="total">
+        0
+      </div>
+
+    </div>
+
+
+    <!-- LUNAS -->
+
+    <div class="stat green">
+
+      <div class="label">
+        TOTAL LUNAS
+      </div>
+
+      <div
+        class="number"
+        id="lunas">
+        0
+      </div>
+
+      <div
+        class="nominal"
+        id="nominalLunas">
+        Rp 0
+      </div>
+
+    </div>
+
+
+    <!-- BELUM LUNAS -->
+
+    <div class="stat red">
+
+      <div class="label">
+        BELUM LUNAS
+      </div>
+
+      <div
+        class="number"
+        id="belum">
+        0
+      </div>
+
+    </div>
+
+
+    <!-- COD -->
+
+    <div class="stat orange">
+
+      <div class="label">
+        COD
+      </div>
+
+      <div
+        class="number"
+        id="cod">
+        0
+      </div>
+
+      <div
+        class="nominal"
+        id="nominalCOD">
+        Rp 0
+      </div>
+
+    </div>
+
+
+    <!-- HADIR -->
+
+    <div class="stat blue">
+
+      <div class="label">
+        SUDAH HADIR
+      </div>
+
+      <div
+        class="number"
+        id="hadir">
+        0
+      </div>
+
+    </div>
+
+
+    <!-- BELUM HADIR -->
+
+    <div class="stat gray">
+
+      <div class="label">
+        BELUM HADIR
+      </div>
+
+      <div
+        class="number"
+        id="belumHadir">
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       UKURAN KAOS
+  ========================== -->
+
+  <div class="section">
+
+    <div class="section-title">
+      👕 UKURAN KAOS PESERTA
+    </div>
+
+    <div class="kaos-grid">
+
+      <div class="kaos">
+        <div class="kaos-name">S</div>
+        <div
+          class="kaos-number"
+          id="kaosS">
+          0
+        </div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">M</div>
+        <div
+          class="kaos-number"
+          id="kaosM">
+          0
+        </div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">L</div>
+        <div
+          class="kaos-number"
+          id="kaosL">
+          0
+        </div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">XL</div>
+        <div
+          class="kaos-number"
+          id="kaosXL">
+          0
+        </div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">XXL</div>
+        <div
+          class="kaos-number"
+          id="kaosXXL">
+          0
+        </div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">XXXL</div>
+        <div
+          class="kaos-number"
+          id="kaosXXXL">
+          0
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       KEHADIRAN
+  ========================== -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📋 KEHADIRAN PESERTA
+    </div>
+
+    <div class="attendance">
+
+      <div class="att-card">
+
+        <div class="att-title">
+          SUDAH HADIR
+        </div>
+
+        <div
+          class="att-number"
+          id="hadir2">
+          0
+        </div>
+
+      </div>
+
+
+      <div class="att-card">
+
+        <div class="att-title">
+          BELUM HADIR
+        </div>
+
+        <div
+          class="att-number"
+          id="belumHadir2">
+          0
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       MENU ADMIN
+  ========================== -->
 
   <div class="menu">
 
     <a href="peserta.html">
-      <div class="icon">👥</div>
-      <div>
-        <h3>Approval Peserta</h3>
-        <p>Lihat peserta dan ubah status pembayaran menjadi LUNAS.</p>
+
+      <div class="icon">
+        👥
       </div>
+
+      <div>
+
+        <h3>
+          Approval Peserta
+        </h3>
+
+        <p>
+          Lihat peserta dan konfirmasi
+          pembayaran.
+        </p>
+
+      </div>
+
     </a>
+
 
     <a href="registrasi-ulang.html">
-      <div class="icon">📷</div>
-      <div>
-        <h3>Registrasi Ulang</h3>
-        <p>Scan QR peserta saat hari acara dan catat kehadiran.</p>
+
+      <div class="icon">
+        📷
       </div>
+
+      <div>
+
+        <h3>
+          Registrasi Ulang
+        </h3>
+
+        <p>
+          Scan QR peserta saat hari acara
+          dan catat kehadiran.
+        </p>
+
+      </div>
+
     </a>
+
 
     <a href="lunas.html">
-      <div class="icon">💰</div>
-      <div>
-        <h3>Peserta Lunas</h3>
-        <p>Melihat daftar peserta yang pembayaran sudah disetujui.</p>
+
+      <div class="icon">
+        💰
       </div>
+
+      <div>
+
+        <h3>
+          Peserta Lunas
+        </h3>
+
+        <p>
+          Melihat daftar peserta yang
+          pembayaran sudah disetujui.
+        </p>
+
+      </div>
+
     </a>
+
 
     <a href="pengaturan.html">
-      <div class="icon">⚙️</div>
-      <div>
-        <h3>Pengaturan Acara</h3>
-        <p>Atur tanggal, lokasi, harga tiket, kuota, benefit dan status pendaftaran.</p>
+
+      <div class="icon">
+        ⚙️
       </div>
+
+      <div>
+
+        <h3>
+          Pengaturan Acara
+        </h3>
+
+        <p>
+          Atur tanggal, lokasi, harga tiket,
+          benefit, petugas dan status
+          pendaftaran.
+        </p>
+
+      </div>
+
     </a>
 
   </div>
 
+
+  <!-- CATATAN -->
+
   <div class="note">
-    <b>Catatan:</b> QR peserta hanya digunakan sebagai identitas saat registrasi ulang.
+
+    <b>Catatan:</b>
+
+    QR peserta hanya digunakan sebagai
+    identitas saat registrasi ulang.
+
     Scan QR tidak mengubah status pembayaran.
+
   </div>
 
-  <button class="logout" onclick="logout()">KELUAR ADMIN</button>
+
+  <button
+    class="logout"
+    onclick="logout()">
+
+    KELUAR ADMIN
+
+  </button>
+
+
+  <div
+    id="loading"
+    class="loading">
+
+    Memuat data...
+
+  </div>
 
 </div>
 
+
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
 
-async function loadSummary(){
-  try{
-    const response = await fetch(API_URL + '?action=peserta&_=' + Date.now());
-    const raw = await response.text();
-    const data = JSON.parse(raw.trim());
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
 
-    if(!data.ok) return;
 
-    const peserta = data.peserta || [];
-    const lunas = peserta.filter(p =>
-      String(p.statusPembayaran || '').toUpperCase() === 'LUNAS'
-    ).length;
-    const hadir = peserta.filter(p =>
-      String(p.statusKehadiran || '').toUpperCase() === 'HADIR'
-    ).length;
+/* =========================
+   HELPER
+========================= */
 
-    document.getElementById('total').textContent = peserta.length;
-    document.getElementById('lunas').textContent = lunas;
-    document.getElementById('belum').textContent = peserta.length - lunas;
-    document.getElementById('hadir').textContent = hadir;
+function clean(value){
 
-  }catch(e){
-    console.error(e);
-  }
+  return String(
+    value ?? ''
+  ).trim();
+
 }
+
+
+function upper(value){
+
+  return clean(value)
+    .toUpperCase();
+
+}
+
+
+function rupiah(value){
+
+  /*
+   * Mengatasi angka:
+   * 150000
+   * "150000"
+   * "Rp 150.000"
+   */
+
+  const number =
+    Number(
+      String(value ?? '')
+        .replace(/[^\d]/g,'')
+    ) || 0;
+
+  return (
+    'Rp ' +
+    number.toLocaleString('id-ID')
+  );
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function showStatus(
+  message,
+  type
+){
+
+  const el =
+    document.getElementById(
+      'status'
+    );
+
+  el.textContent =
+    message;
+
+  el.className =
+    'status show ' +
+    (type || '');
+
+}
+
+
+/* =========================
+   LOAD DASHBOARD
+========================= */
+
+async function loadDashboard(){
+
+  document.getElementById(
+    'loading'
+  ).textContent =
+    'Mengambil data peserta...';
+
+  showStatus(
+    'Mengambil data peserta...',
+    ''
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_URL +
+        '?action=peserta&_=' +
+        Date.now(),
+        {
+          method:'GET',
+          cache:'no-store'
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        'HTTP ' +
+        response.status
+      );
+
+    }
+
+
+    const raw =
+      await response.text();
+
+
+    let data;
+
+    try{
+
+      data =
+        JSON.parse(
+          raw.trim()
+        );
+
+    }catch(error){
+
+      console.error(
+        'Response API:',
+        raw
+      );
+
+      throw new Error(
+        'Response API bukan JSON.'
+      );
+
+    }
+
+
+    if(
+      !data ||
+      data.ok === false
+    ){
+
+      throw new Error(
+        data &&
+        data.message
+          ? data.message
+          : 'Gagal mengambil data peserta.'
+      );
+
+    }
+
+
+    const peserta =
+      Array.isArray(
+        data.peserta
+      )
+      ? data.peserta
+      : [];
+
+
+    hitungDashboard(
+      peserta
+    );
+
+
+    showStatus(
+      'Dashboard diperbarui — ' +
+      peserta.length +
+      ' peserta.',
+      'ok'
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    showStatus(
+      'Gagal memuat data: ' +
+      error.message,
+      'err'
+    );
+
+  }finally{
+
+    document.getElementById(
+      'loading'
+    ).textContent =
+      'Data diperbarui otomatis dari server.';
+
+  }
+
+}
+
+
+/* =========================
+   HITUNG DASHBOARD
+========================= */
+
+function hitungDashboard(
+  peserta
+){
+
+  /* =========================
+     TOTAL
+  ========================== */
+
+  const total =
+    peserta.length;
+
+
+  /* =========================
+     STATUS PEMBAYARAN
+  ========================== */
+
+  const lunas =
+    peserta.filter(
+      function(p){
+
+        return upper(
+          p.statusPembayaran
+        ) === 'LUNAS';
+
+      }
+    );
+
+
+  const belumLunas =
+    peserta.filter(
+      function(p){
+
+        return upper(
+          p.statusPembayaran
+        ) !== 'LUNAS';
+
+      }
+    );
+
+
+  /* =========================
+     COD
+     
+     COD hanya dihitung dari
+     metode pembayaran COD.
+
+     Nominal hanya dijumlahkan
+     bila pembayaran sudah LUNAS.
+  ========================== */
+
+  const pesertaCOD =
+    peserta.filter(
+      function(p){
+
+        return upper(
+          p.metodePembayaran
+        ) === 'COD';
+
+      }
+    );
+
+
+  const codLunas =
+    pesertaCOD.filter(
+      function(p){
+
+        return upper(
+          p.statusPembayaran
+        ) === 'LUNAS';
+
+      }
+    );
+
+
+  /* =========================
+     NOMINAL LUNAS
+  ========================== */
+
+  const nominalLunas =
+    lunas.reduce(
+      function(total,p){
+
+        return total +
+          Number(
+            String(
+              p.nominalPembayaran ?? ''
+            ).replace(/[^\d]/g,'')
+          );
+
+      },
+      0
+    );
+
+
+  /* =========================
+     NOMINAL COD
+  ========================== */
+
+  const nominalCOD =
+    codLunas.reduce(
+      function(total,p){
+
+        return total +
+          Number(
+            String(
+              p.nominalPembayaran ?? ''
+            ).replace(/[^\d]/g,'')
+          );
+
+      },
+      0
+    );
+
+
+  /* =========================
+     KEHADIRAN
+  ========================== */
+
+  const hadir =
+    peserta.filter(
+      function(p){
+
+        return upper(
+          p.statusKehadiran
+        ) === 'HADIR';
+
+      }
+    );
+
+
+  const belumHadir =
+    peserta.filter(
+      function(p){
+
+        return upper(
+          p.statusKehadiran
+        ) !== 'HADIR';
+
+      }
+    );
+
+
+  /* =========================
+     UKURAN KAOS
+  ========================== */
+
+  const kaos = {
+
+    S:0,
+    M:0,
+    L:0,
+    XL:0,
+    XXL:0,
+    XXXL:0
+
+  };
+
+
+  peserta.forEach(
+    function(p){
+
+      const ukuran =
+        upper(
+          p.ukuran
+        );
+
+
+      if(
+        Object.prototype
+          .hasOwnProperty
+          .call(
+            kaos,
+            ukuran
+          )
+      ){
+
+        kaos[ukuran]++;
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     TAMPILKAN
+  ========================== */
+
+  document.getElementById(
+    'total'
+  ).textContent =
+    total;
+
+
+  document.getElementById(
+    'lunas'
+  ).textContent =
+    lunas.length;
+
+
+  document.getElementById(
+    'nominalLunas'
+  ).textContent =
+    rupiah(
+      nominalLunas
+    );
+
+
+  document.getElementById(
+    'belum'
+  ).textContent =
+    belumLunas.length;
+
+
+  document.getElementById(
+    'cod'
+  ).textContent =
+    pesertaCOD.length;
+
+
+  document.getElementById(
+    'nominalCOD'
+  ).textContent =
+    rupiah(
+      nominalCOD
+    );
+
+
+  document.getElementById(
+    'hadir'
+  ).textContent =
+    hadir.length;
+
+
+  document.getElementById(
+    'belumHadir'
+  ).textContent =
+    belumHadir.length;
+
+
+  document.getElementById(
+    'hadir2'
+  ).textContent =
+    hadir.length;
+
+
+  document.getElementById(
+    'belumHadir2'
+  ).textContent =
+    belumHadir.length;
+
+
+  document.getElementById(
+    'kaosS'
+  ).textContent =
+    kaos.S;
+
+
+  document.getElementById(
+    'kaosM'
+  ).textContent =
+    kaos.M;
+
+
+  document.getElementById(
+    'kaosL'
+  ).textContent =
+    kaos.L;
+
+
+  document.getElementById(
+    'kaosXL'
+  ).textContent =
+    kaos.XL;
+
+
+  document.getElementById(
+    'kaosXXL'
+  ).textContent =
+    kaos.XXL;
+
+
+  document.getElementById(
+    'kaosXXXL'
+  ).textContent =
+    kaos.XXXL;
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
 
 function logout(){
-  if(confirm('Keluar dari halaman admin?')){
-    window.location.href='login.html';
+
+  if(
+    confirm(
+      'Keluar dari halaman admin?'
+    )
+  ){
+
+    window.location.href =
+      'login.html';
+
   }
+
 }
 
-loadSummary();
+
+/* =========================
+   START
+========================= */
+
+loadDashboard();
+
 </script>
+
 </body>
 </html>
