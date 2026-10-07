@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1">
+
+<title>Registrasi COD - TESPOIN Majalengka</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f3f3f3;
+  font-family:Arial,Helvetica,sans-serif;
+  color:#222;
+}
+
+.wrap{
+  max-width:650px;
+  margin:auto;
+  padding:18px;
+}
+
+.header{
+  background:#111;
+  color:#fff;
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+}
+
+.header h1{
+  margin:0;
+  color:#f5c400;
+  font-size:23px;
+}
+
+.header p{
+  margin:7px 0 0;
+  color:#ddd;
+  font-size:13px;
+}
+
+.card{
+  background:#fff;
+  margin-top:16px;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 3px 15px rgba(0,0,0,.07);
+}
+
+.title{
+  font-size:17px;
+  font-weight:900;
+  margin-bottom:15px;
+}
+
+.harga{
+  background:#fff8d8;
+  border:1px solid #f5c400;
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:16px;
+}
+
+.harga small{
+  display:block;
+  color:#777;
+  font-size:12px;
+}
+
+.harga strong{
+  display:block;
+  color:#198754;
+  font-size:25px;
+  margin-top:4px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin:13px 0 6px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #d8d8d8;
+  border-radius:9px;
+  font-size:14px;
+  background:#fff;
+}
+
+textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#f5c400;
+  color:#111;
+  font-size:15px;
+  font-weight:900;
+}
+
+button:disabled{
+  opacity:.6;
+}
+
+.msg{
+  display:none;
+  margin-top:14px;
+  padding:13px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.msg.show{
+  display:block;
+}
+
+.msg.ok{
+  background:#dff5e4;
+  color:#087b25;
+}
+
+.msg.err{
+  background:#ffe1e1;
+  color:#a00000;
+}
+
+.result{
+  display:none;
+  margin-top:16px;
+  background:#f7f7f7;
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+}
+
+.result.show{
+  display:block;
+}
+
+.kode{
+  font-size:28px;
+  font-weight:900;
+  margin:8px 0;
+}
+
+.status-lunas{
+  display:inline-block;
+  background:#d1fae5;
+  color:#065f46;
+  padding:7px 12px;
+  border-radius:20px;
+  font-weight:900;
+  font-size:12px;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:16px;
+  color:#666;
+  text-decoration:none;
+  font-size:13px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="header">
+
+<h1>REGISTRASI COD</h1>
+
+<p>
+DPD TESPOIN MAJALENGKA
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+💵 PENDAFTARAN PESERTA LANGSUNG
+</div>
+
+
+<div class="harga">
+
+<small>
+HARGA TIKET PESERTA
+</small>
+
+<strong id="harga">
+Membaca harga tiket...
+</strong>
+
+</div>
+
+
+<form id="form">
+
+<label>
+Nama Peserta
+</label>
+
+<input
+  id="nama"
+  required
+  placeholder="Nama lengkap">
+
+
+<label>
+Nama Toko
+</label>
+
+<input
+  id="toko"
+  placeholder="Nama toko">
+
+
+<label>
+WhatsApp
+</label>
+
+<input
+  id="wa"
+  type="tel"
+  required
+  placeholder="08xxxxxxxxxx">
+
+
+<label>
+Alamat
+</label>
+
+<textarea
+  id="alamat"
+  placeholder="Alamat peserta"></textarea>
+
+
+<label>
+Email
+</label>
+
+<input
+  id="email"
+  type="email"
+  placeholder="email@contoh.com">
+
+
+<label>
+Ukuran Kaos
+</label>
+
+<select id="ukuran" required>
+
+<option value="">
+-- PILIH UKURAN --
+</option>
+
+<option value="S">S</option>
+
+<option value="M">M</option>
+
+<option value="L">L</option>
+
+<option value="XL">XL</option>
+
+<option value="2XL">2XL</option>
+
+<option value="3XL">3XL</option>
+
+<option value="4XL">4XL</option>
+
+</select>
+
+
+<label>
+Petugas
+</label>
+
+<input
+  id="petugas"
+  placeholder="Nama petugas">
+
+
+<button
+  type="submit"
+  id="btn">
+
+  ✓ BAYAR & DAFTARKAN
+
+</button>
+
+</form>
+
+
+<div
+  id="msg"
+  class="msg">
+</div>
+
+
+<div
+  id="result"
+  class="result">
+
+  <div>
+    REGISTRASI BERHASIL
+  </div>
+
+  <div
+    class="kode"
+    id="kode">
+    -
+  </div>
+
+  <div class="status-lunas">
+    LUNAS COD
+  </div>
+
+  <p id="detail">
+    -
+  </p>
+
+</div>
+
+</div>
+
+
+<a
+  href="index-admin.html"
+  class="back">
+
+  ← Kembali ke Dashboard Admin
+
+</a>
+
+</div>
+
+
+<script>
+
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+
+let hargaTiket = 0;
+
+
+function rupiah(value){
+
+  return 'Rp ' +
+    Number(value || 0)
+      .toLocaleString('id-ID');
+
+}
+
+
+function showMsg(
+  text,
+  ok
+){
+
+  const el =
+    document.getElementById('msg');
+
+  el.textContent =
+    text;
+
+  el.className =
+    'msg show ' +
+    (ok ? 'ok' : 'err');
+
+}
+
+
+async function loadHarga(){
+
+  try{
+
+    const r =
+      await fetch(
+        API_URL +
+        '?action=pengaturan&_=' +
+        Date.now()
+      );
+
+
+    const d =
+      await r.json();
+
+
+    if(!d.ok){
+
+      throw new Error(
+        d.message ||
+        'Gagal membaca pengaturan.'
+      );
+
+    }
+
+
+    const p =
+      d.pengaturan || {};
+
+
+    hargaTiket =
+      Number(
+        String(
+          p.tiket ||
+          p.hargaTiket ||
+          p.harga ||
+          0
+        ).replace(/[^\d]/g,'')
+      );
+
+
+    if(!hargaTiket){
+
+      document.getElementById(
+        'harga'
+      ).textContent =
+        'Harga belum diatur';
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      'harga'
+    ).textContent =
+      rupiah(hargaTiket);
+
+
+  }catch(e){
+
+    document.getElementById(
+      'harga'
+    ).textContent =
+      'Gagal membaca harga';
+
+    showMsg(
+      e.message,
+      false
+    );
+
+  }
+
+}
+
+
+document
+.getElementById('form')
+.addEventListener(
+  'submit',
+  async function(e){
+
+    e.preventDefault();
+
+
+    if(!hargaTiket){
+
+      showMsg(
+        'Harga tiket belum diatur di Pengaturan Acara.',
+        false
+      );
+
+      return;
+
+    }
+
+
+    const btn =
+      document.getElementById('btn');
+
+
+    btn.disabled =
+      true;
+
+    btn.textContent =
+      'MENYIMPAN...';
+
+
+    try{
+
+      const body = {
+
+        action:
+          'registrasiCOD',
+
+        nama:
+          document.getElementById(
+            'nama'
+          ).value.trim(),
+
+        toko:
+          document.getElementById(
+            'toko'
+          ).value.trim(),
+
+        wa:
+          document.getElementById(
+            'wa'
+          ).value.trim(),
+
+        alamat:
+          document.getElementById(
+            'alamat'
+          ).value.trim(),
+
+        email:
+          document.getElementById(
+            'email'
+          ).value.trim(),
+
+        ukuran:
+          document.getElementById(
+            'ukuran'
+          ).value,
+
+        petugas:
+          document.getElementById(
+            'petugas'
+          ).value.trim()
+
+      };
+
+
+      const r =
+        await fetch(
+          API_URL,
+          {
+            method:'POST',
+
+            headers:{
+              'Content-Type':
+                'text/plain;charset=utf-8'
+            },
+
+            body:
+              JSON.stringify(body)
+          }
+        );
+
+
+      const text =
+        await r.text();
+
+
+      let d;
+
+      try{
+
+        d =
+          JSON.parse(
+            text.trim()
+          );
+
+      }catch(e){
+
+        throw new Error(
+          'Response server bukan JSON.'
+        );
+
+      }
+
+
+      if(
+        !d ||
+        d.ok === false
+      ){
+
+        throw new Error(
+          d.message ||
+          'Gagal menyimpan peserta.'
+        );
+
+      }
+
+
+      document.getElementById(
+        'kode'
+      ).textContent =
+        d.kode || '-';
+
+
+      document.getElementById(
+        'detail'
+      ).textContent =
+        'Nominal: ' +
+        rupiah(d.nominal) +
+        ' • Metode: COD';
+
+
+      document.getElementById(
+        'result'
+      ).classList.add('show');
+
+
+      showMsg(
+        'Peserta berhasil disimpan ke Spreadsheet dan langsung LUNAS COD.',
+        true
+      );
+
+
+      document.getElementById(
+        'form'
+      ).reset();
+
+
+    }catch(error){
+
+      console.error(error);
+
+      showMsg(
+        error.message,
+        false
+      );
+
+    }finally{
+
+      btn.disabled =
+        false;
+
+      btn.textContent =
+        '✓ BAYAR & DAFTARKAN';
+
+    }
+
+  }
+);
+
+
+loadHarga();
+
+</script>
+
+</body>
+</html>
