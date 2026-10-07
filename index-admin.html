@@ -636,6 +636,15 @@ body{
         </div>
       </div>
 
+      <div class="kaos">
+        <div class="kaos-name">XXXXL</div>
+        <div
+          class="kaos-number"
+          id="kaosXXXXL">
+          0
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -1177,7 +1186,8 @@ function hitungDashboard(
     L:0,
     XL:0,
     XXL:0,
-    XXXL:0
+    XXXL:0,
+    XXXXL:0
 
   };
 
@@ -1310,6 +1320,11 @@ function hitungDashboard(
     'kaosXXXL'
   ).textContent =
     kaos.XXXL;
+
+  document.getElementById(
+    'kaosXXXXL'
+  ).textContent =
+    kaos.XXXXL;
 
 }
 
