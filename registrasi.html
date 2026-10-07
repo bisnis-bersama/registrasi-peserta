@@ -72,7 +72,7 @@ form.addEventListener('submit',async function(e){
   const duplikat=await cekDuplikat(wa,email);
   if(duplikat){duplikatBox.innerHTML='⚠️ <b>DATA SUDAH TERDAFTAR</b><br>'+duplikat;duplikatBox.style.display='block';tampilPesan('Registrasi dibatalkan karena data sudah terdaftar.',true);return;}
 
-  btn.textContent='MEMBACA BUKTI TRANSFER...';
+  btn.textContent='MENGECILKAN BUKTI...';
   const file=buktiInput.files[0];let buktiBase64='';let buktiNamaFile='';
   if(file){if(file.size>MAX_FILE_SIZE)throw new Error('Ukuran bukti transfer maksimal 5 MB.');buktiNamaFile=file.name;buktiBase64=await fileToBase64(file);}
 
@@ -92,9 +92,10 @@ form.addEventListener('submit',async function(e){
 });
 
 async function cekDuplikat(wa,email){
- if(wa){const peserta=await cariAPI(wa);if(peserta){const a=normalisasiWa(wa),b=normalisasiWa(peserta.wa||peserta.noWa||peserta.whatsapp||'');if(a&&b&&a===b)return 'Nomor WhatsApp ini sudah digunakan untuk registrasi <b>'+escapeHtml(peserta.kode||'')+'</b>.<br>Satu nomor WhatsApp hanya boleh satu pendaftaran.';}}
- if(email){const peserta=await cariAPI(email);if(peserta){const a=String(email).trim().toLowerCase(),b=String(peserta.email||'').trim().toLowerCase();if(a&&b&&a===b)return 'Email ini sudah digunakan untuk registrasi <b>'+escapeHtml(peserta.kode||'')+'</b>.<br>Satu email hanya boleh satu pendaftaran.';}}
- return '';
+  // Pemeriksaan duplikat dilakukan oleh Code.gs saat POST registrasi.
+  // Tidak perlu GET /?action=cari di sini karena deployment lama
+  // dapat mengembalikan 'Action GET tidak dikenal'.
+  return '';
 }
 
 async function cariAPI(q){
@@ -102,7 +103,50 @@ async function cariAPI(q){
 }
 
 function normalisasiWa(v){let s=String(v||'').replace(/\D/g,'');if(s.startsWith('62'))s='0'+s.substring(2);if(s.startsWith('8'))s='0'+s;return s;}
-function fileToBase64(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Bukti transfer gagal dibaca.'));reader.readAsDataURL(file);});}
+async function fileToBase64(file){
+  // Kompres gambar sebelum dikirim ke Apps Script.
+  // Ini mencegah proses MENYIMPAN terlalu lama karena Base64 membesar ~33%.
+  if(!file.type.startsWith('image/')){
+    return await readFileAsDataURL(file);
+  }
+
+  const MAX_SIDE = 1400;
+  const QUALITY = 0.78;
+
+  const dataUrl = await readFileAsDataURL(file);
+  const img = new Image();
+
+  await new Promise((resolve,reject)=>{
+    img.onload=resolve;
+    img.onerror=()=>reject(new Error('Gambar bukti transfer tidak dapat dibaca.'));
+    img.src=dataUrl;
+  });
+
+  let width=img.naturalWidth || img.width;
+  let height=img.naturalHeight || img.height;
+  const scale=Math.min(1,MAX_SIDE/Math.max(width,height));
+  width=Math.max(1,Math.round(width*scale));
+  height=Math.max(1,Math.round(height*scale));
+
+  const canvas=document.createElement('canvas');
+  canvas.width=width;
+  canvas.height=height;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,width,height);
+  ctx.drawImage(img,0,0,width,height);
+
+  return canvas.toDataURL('image/jpeg',QUALITY);
+}
+
+function readFileAsDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error('Bukti transfer gagal dibaca.'));
+    reader.readAsDataURL(file);
+  });
+}
 
 function tampilkanBukti(p){
  document.getElementById('rNama').textContent=p.nama||'-';document.getElementById('rToko').textContent=p.toko||'-';document.getElementById('rWa').textContent=p.wa||'-';document.getElementById('rAlamat').textContent=p.alamat||'-';document.getElementById('rEmail').textContent=p.email||'-';document.getElementById('rUkuran').textContent=p.ukuran||'-';document.getElementById('rKode').textContent=p.kode||'-';
