@@ -4,148 +4,615 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Pengaturan Acara - DPD TESPOIN Majalengka</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f3f3;color:#222;font-family:Arial,sans-serif}
-.wrap{max-width:800px;margin:auto;padding:18px}
-.header{background:#111;color:#fff;border-radius:18px;padding:20px;text-align:center}
-.header h1{margin:0;color:#f5c400;font-size:22px}
-.header p{margin:7px 0 0;color:#ddd;font-size:13px}
-.card{background:#fff;margin-top:16px;padding:18px;border-radius:16px;box-shadow:0 3px 15px rgba(0,0,0,.07)}
-label{display:block;font-weight:800;font-size:13px;margin:13px 0 6px}
-input,textarea,select{width:100%;padding:12px;border:1px solid #d8d8d8;border-radius:9px;font-size:14px;background:#fff}
-textarea{min-height:100px;resize:vertical}
-button{width:100%;margin-top:18px;padding:13px;border:0;border-radius:10px;background:#f5c400;color:#111;font-size:15px;font-weight:900;cursor:pointer}
-.msg{display:none;margin-top:14px;padding:12px;border-radius:10px;font-weight:700;font-size:13px}
-.ok{display:block;background:#dff5e4;color:#087b25}
-.err{display:block;background:#ffe1e1;color:#a00000}
-.back{display:block;text-align:center;margin-top:15px;color:#666;text-decoration:none;font-size:13px}
-.note{font-size:12px;color:#777;line-height:1.5;margin-top:10px}
+
+body{
+  margin:0;
+  background:#f3f3f3;
+  color:#222;
+  font-family:Arial,sans-serif
+}
+
+.wrap{
+  max-width:800px;
+  margin:auto;
+  padding:18px
+}
+
+.header{
+  background:#111;
+  color:#fff;
+  border-radius:18px;
+  padding:20px;
+  text-align:center
+}
+
+.header h1{
+  margin:0;
+  color:#f5c400;
+  font-size:22px
+}
+
+.header p{
+  margin:7px 0 0;
+  color:#ddd;
+  font-size:13px
+}
+
+.card{
+  background:#fff;
+  margin-top:16px;
+  padding:18px;
+  border-radius:16px;
+  box-shadow:0 3px 15px rgba(0,0,0,.07)
+}
+
+.section{
+  margin-top:22px;
+  padding-top:15px;
+  border-top:1px solid #eee
+}
+
+.section:first-child{
+  margin-top:0;
+  padding-top:0;
+  border-top:0
+}
+
+.section-title{
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:8px;
+  color:#111
+}
+
+label{
+  display:block;
+  font-weight:800;
+  font-size:13px;
+  margin:13px 0 6px
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid #d8d8d8;
+  border-radius:9px;
+  font-size:14px;
+  background:#fff
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  outline:none;
+  border-color:#f5c400
+}
+
+button{
+  width:100%;
+  margin-top:20px;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  background:#f5c400;
+  color:#111;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
+
+.msg{
+  display:none;
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:13px
+}
+
+.ok{
+  display:block;
+  background:#dff5e4;
+  color:#087b25
+}
+
+.err{
+  display:block;
+  background:#ffe1e1;
+  color:#a00000
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  color:#666;
+  text-decoration:none;
+  font-size:13px
+}
+
+.note{
+  font-size:12px;
+  color:#777;
+  line-height:1.5;
+  margin-top:10px
+}
+
+.harga-info{
+  background:#fff8d9;
+  border:1px solid #f5c400;
+  padding:10px;
+  border-radius:9px;
+  font-size:12px;
+  color:#665500;
+  margin-top:7px
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
   <div class="header">
     <h1>PENGATURAN ACARA</h1>
     <p>DPD TESPOIN MAJALENGKA</p>
   </div>
 
   <div class="card">
+
     <form id="form">
-      <label>Judul Acara</label>
-      <input id="judul" required>
 
-      <label>Deskripsi</label>
-      <textarea id="deskripsi"></textarea>
+      <!-- ================= ACARA ================= -->
+      <div class="section">
 
-      <label>Tanggal</label>
-      <input id="tanggal" type="date">
+        <div class="section-title">📋 INFORMASI ACARA</div>
 
-      <label>Waktu</label>
-      <input id="waktu" placeholder="10.00 WIB - selesai">
+        <label>Judul Acara</label>
+        <input id="judul" required>
 
-      <label>Lokasi</label>
-      <input id="lokasi">
+        <label>Deskripsi Acara</label>
+        <textarea id="deskripsi"></textarea>
 
-      <label>Harga Tiket</label>
-      <input id="harga" type="number" min="0" placeholder="150000">
+        <label>Tanggal</label>
+        <input id="tanggal" type="date">
 
-      <label>Kuota</label>
-      <input id="kuota" type="number" min="0" placeholder="300">
+        <label>Waktu</label>
+        <input id="waktu" placeholder="10.00 WIB - selesai">
 
-      <label>Nomor WhatsApp Panitia</label>
-      <input id="wa" type="tel" placeholder="08xxxxxxxxxx">
+        <label>Lokasi</label>
+        <input id="lokasi">
 
-      <label>Benefit Peserta</label>
-      <textarea id="benefit" placeholder="Kaos, makan, coffee break, sertifikat, doorprize, dll."></textarea>
+      </div>
 
-      <label>Link Pamflet</label>
-      <input id="pamflet" type="url" placeholder="https://...">
 
-      <label>Status Pendaftaran</label>
-      <select id="status">
-        <option value="DIBUKA">DIBUKA</option>
-        <option value="DITUTUP">DITUTUP</option>
-      </select>
+      <!-- ================= TIKET ================= -->
+      <div class="section">
 
-      <button type="submit">SIMPAN PENGATURAN</button>
+        <div class="section-title">🎫 TIKET PESERTA</div>
+
+        <label>Harga Tiket Peserta</label>
+        <input
+          id="harga"
+          type="number"
+          min="0"
+          placeholder="150000"
+        >
+
+        <div class="harga-info">
+          Hanya tersedia <b>1 jenis tiket: TIKET PESERTA</b>.
+          Nominal pembayaran peserta akan mengikuti harga yang diatur di sini.
+        </div>
+
+      </div>
+
+
+      <!-- ================= KONTAK ================= -->
+      <div class="section">
+
+        <div class="section-title">📱 KONTAK PANITIA</div>
+
+        <label>Nomor WhatsApp Panitia</label>
+        <input
+          id="wa"
+          type="tel"
+          placeholder="08xxxxxxxxxx"
+        >
+
+      </div>
+
+
+      <!-- ================= BENEFIT ================= -->
+      <div class="section">
+
+        <div class="section-title">🎁 BENEFIT PESERTA</div>
+
+        <label>Benefit Peserta</label>
+        <textarea
+          id="benefit"
+          placeholder="Kaos, makan, coffee break, sertifikat, doorprize, dll."
+        ></textarea>
+
+        <label>Pemberi Benefit</label>
+        <input
+          id="pemberiBenefit"
+          placeholder="Nama petugas / panitia"
+        >
+
+      </div>
+
+
+      <!-- ================= PETUGAS ================= -->
+      <div class="section">
+
+        <div class="section-title">👥 PETUGAS</div>
+
+        <label>Petugas Registrasi</label>
+        <input
+          id="petugasRegistrasi"
+          placeholder="Nama petugas registrasi"
+        >
+
+        <label>Petugas Scan / Registrasi Ulang</label>
+        <input
+          id="petugasScan"
+          placeholder="Nama petugas scan"
+        >
+
+        <label>Petugas Pembayaran / COD</label>
+        <input
+          id="petugasPembayaran"
+          placeholder="Nama petugas pembayaran"
+        >
+
+        <label>Petugas Approval Peserta</label>
+        <input
+          id="petugasApproval"
+          placeholder="Nama petugas approval"
+        >
+
+      </div>
+
+
+      <!-- ================= PAMFLET ================= -->
+      <div class="section">
+
+        <div class="section-title">🖼️ PAMFLET / POSTER</div>
+
+        <label>Link Pamflet / Poster</label>
+        <input
+          id="pamflet"
+          type="url"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
+      <!-- ================= STATUS ================= -->
+      <div class="section">
+
+        <div class="section-title">⚙️ STATUS PENDAFTARAN</div>
+
+        <label>Status Pendaftaran</label>
+
+        <select id="status">
+          <option value="DIBUKA">DIBUKA</option>
+          <option value="DITUTUP">DITUTUP</option>
+        </select>
+
+      </div>
+
+
+      <button type="submit">
+        SIMPAN PENGATURAN
+      </button>
+
       <div id="msg" class="msg"></div>
-      <div class="note">Pengaturan ini disimpan ke sheet PENGATURAN dan dapat dipakai oleh halaman depan/registrasi.</div>
+
+      <div class="note">
+        Pengaturan disimpan ke sheet <b>PENGATURAN</b>.
+        Harga tiket peserta menjadi sumber nominal pembayaran
+        pada proses registrasi dan verifikasi.
+      </div>
+
     </form>
+
   </div>
 
-  <a href="index-admin.html" class="back">← Kembali ke Dashboard Admin</a>
+  <a href="index-admin.html" class="back">
+    ← Kembali ke Dashboard Admin
+  </a>
+
 </div>
 
-<script>
-const API_URL='https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
 
-function setVal(id,v){document.getElementById(id).value=v??''}
+<script>
+
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+
+function setVal(id,v){
+  const el=document.getElementById(id);
+  if(el) el.value=v??'';
+}
+
 
 async function parseResponse(r){
+
   const raw=await r.text();
-  try{return JSON.parse(raw.trim())}
-  catch(e){throw new Error('Respons API tidak dapat dibaca. Pastikan Web App Apps Script sudah di-deploy versi terbaru.')}
+
+  try{
+    return JSON.parse(raw.trim());
+  }
+
+  catch(e){
+
+    throw new Error(
+      'Respons API tidak dapat dibaca. Pastikan Web App Apps Script sudah di-deploy versi terbaru.'
+    );
+
+  }
+
 }
+
 
 async function load(){
+
   try{
-    const r=await fetch(API_URL+'?action=pengaturan&_='+Date.now());
+
+    const r=await fetch(
+      API_URL+'?action=pengaturan&_='+Date.now()
+    );
+
     const d=await parseResponse(r);
-    if(!d.ok)throw new Error(d.message||'Gagal mengambil pengaturan.');
+
+    if(!d.ok){
+      throw new Error(
+        d.message||'Gagal mengambil pengaturan.'
+      );
+    }
+
     const p=d.pengaturan||d.data||d;
-    setVal('judul',p.judulAcara||p.judul||'');
-    setVal('deskripsi',p.deskripsi||'');
-    setVal('tanggal',p.tanggal||'');
-    setVal('waktu',p.waktu||'');
-    setVal('lokasi',p.lokasi||'');
-    setVal('harga',p.hargaTiket??p.harga??'');
-    setVal('kuota',p.kuota??'');
-    setVal('wa',p.nomorWa??p.wa??'');
-    setVal('benefit',p.benefit||'');
-    setVal('pamflet',p.pamflet||'');
-    setVal('status',p.statusPendaftaran||p.status||'DIBUKA');
-  }catch(e){
-    show(e.message,false);
+
+
+    setVal(
+      'judul',
+      p.judulAcara||p.judul||''
+    );
+
+    setVal(
+      'deskripsi',
+      p.deskripsi||''
+    );
+
+    setVal(
+      'tanggal',
+      p.tanggal||''
+    );
+
+    setVal(
+      'waktu',
+      p.waktu||''
+    );
+
+    setVal(
+      'lokasi',
+      p.lokasi||''
+    );
+
+    setVal(
+      'harga',
+      p.hargaTiket??p.tiket??p.harga??''
+    );
+
+    setVal(
+      'wa',
+      p.nomorWa??p.wa??''
+    );
+
+    setVal(
+      'benefit',
+      p.benefit||''
+    );
+
+    setVal(
+      'pemberiBenefit',
+      p.pemberiBenefit||''
+    );
+
+    setVal(
+      'petugasRegistrasi',
+      p.petugasRegistrasi||''
+    );
+
+    setVal(
+      'petugasScan',
+      p.petugasScan||''
+    );
+
+    setVal(
+      'petugasPembayaran',
+      p.petugasPembayaran||''
+    );
+
+    setVal(
+      'petugasApproval',
+      p.petugasApproval||''
+    );
+
+    setVal(
+      'pamflet',
+      p.pamflet||''
+    );
+
+    setVal(
+      'status',
+      p.statusPendaftaran||p.status||'DIBUKA'
+    );
+
   }
+
+  catch(e){
+
+    show(e.message,false);
+
+  }
+
 }
 
-document.getElementById('form').addEventListener('submit',async e=>{
+
+document
+.getElementById('form')
+.addEventListener('submit',async e=>{
+
   e.preventDefault();
+
   const btn=e.target.querySelector('button');
-  btn.disabled=true;btn.textContent='MENYIMPAN...';
+
+  btn.disabled=true;
+  btn.textContent='MENYIMPAN...';
+
+
   try{
+
     const body={
+
       action:'simpanPengaturan',
-      judulAcara:document.getElementById('judul').value.trim(),
-      deskripsi:document.getElementById('deskripsi').value.trim(),
-      tanggal:document.getElementById('tanggal').value,
-      waktu:document.getElementById('waktu').value.trim(),
-      lokasi:document.getElementById('lokasi').value.trim(),
-      hargaTiket:document.getElementById('harga').value,
-      kuota:document.getElementById('kuota').value,
-      nomorWa:document.getElementById('wa').value.trim(),
-      benefit:document.getElementById('benefit').value.trim(),
-      pamflet:document.getElementById('pamflet').value.trim(),
-      statusPendaftaran:document.getElementById('status').value
+
+      judulAcara:
+        document.getElementById('judul').value.trim(),
+
+      deskripsi:
+        document.getElementById('deskripsi').value.trim(),
+
+      tanggal:
+        document.getElementById('tanggal').value,
+
+      waktu:
+        document.getElementById('waktu').value.trim(),
+
+      lokasi:
+        document.getElementById('lokasi').value.trim(),
+
+      // SATU-SATUNYA HARGA TIKET
+      hargaTiket:
+        document.getElementById('harga').value,
+
+      nomorWa:
+        document.getElementById('wa').value.trim(),
+
+      benefit:
+        document.getElementById('benefit').value.trim(),
+
+      pemberiBenefit:
+        document.getElementById('pemberiBenefit').value.trim(),
+
+      petugasRegistrasi:
+        document.getElementById('petugasRegistrasi').value.trim(),
+
+      petugasScan:
+        document.getElementById('petugasScan').value.trim(),
+
+      petugasPembayaran:
+        document.getElementById('petugasPembayaran').value.trim(),
+
+      petugasApproval:
+        document.getElementById('petugasApproval').value.trim(),
+
+      pamflet:
+        document.getElementById('pamflet').value.trim(),
+
+      statusPendaftaran:
+        document.getElementById('status').value
+
     };
-    const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
+
+
+    const r=await fetch(
+      API_URL,
+      {
+        method:'POST',
+        headers:{
+          'Content-Type':
+          'text/plain;charset=utf-8'
+        },
+        body:JSON.stringify(body)
+      }
+    );
+
+
     const d=await parseResponse(r);
-    if(!d.ok)throw new Error(d.message||'Gagal menyimpan.');
-    show('Pengaturan berhasil disimpan.',true);
-  }catch(e){
-    show(e.message,false);
-  }finally{
-    btn.disabled=false;btn.textContent='SIMPAN PENGATURAN';
+
+
+    if(!d.ok){
+
+      throw new Error(
+        d.message||'Gagal menyimpan.'
+      );
+
+    }
+
+
+    show(
+      'Pengaturan berhasil disimpan.',
+      true
+    );
+
   }
+
+  catch(e){
+
+    show(
+      e.message,
+      false
+    );
+
+  }
+
+  finally{
+
+    btn.disabled=false;
+    btn.textContent='SIMPAN PENGATURAN';
+
+  }
+
 });
 
+
 function show(t,ok){
+
   const e=document.getElementById('msg');
-  e.textContent=t;e.className='msg '+(ok?'ok':'err');e.style.display='block';
+
+  e.textContent=t;
+
+  e.className=
+    'msg '+(ok?'ok':'err');
+
+  e.style.display='block';
+
 }
 
+
 load();
+
 </script>
+
 </body>
 </html>
