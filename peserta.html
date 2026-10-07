@@ -1396,77 +1396,92 @@ function openReview(kode){
   if(!url){
 
     proof.innerHTML = `
-
       <div class="proof-note">
-
         <b>Bukti transfer belum tersedia.</b>
-
         <br><br>
-
-        Pastikan file bukti sudah tersimpan
-        di Google Drive dan kolom
-        <b>Bukti Transfer</b>
-        pada Spreadsheet berisi URL.
-
+        File bukti belum tersimpan ke server atau kolom
+        <b>Bukti Transfer</b> pada Spreadsheet belum berisi URL.
       </div>
-
     `;
 
   }
-
-
-  else if(
-
-    /\.(jpg|jpeg|png|gif|webp)(\?|$)/i
-      .test(url)
-
-  ){
-
-    proof.innerHTML = `
-
-      <img
-        src="${escAttr(url)}"
-        alt="Bukti transfer">
-
-
-      <a
-        href="${escAttr(url)}"
-        target="_blank"
-        rel="noopener">
-
-        BUKA BUKTI PENUH
-
-      </a>
-
-    `;
-
-  }
-
 
   else{
 
-    proof.innerHTML = `
+    const driveId = ambilDriveId(url);
 
-      <div class="proof-note">
+    const imageUrl = driveId
+      ? 'https://drive.google.com/uc?export=view&id=' + encodeURIComponent(driveId)
+      : url;
 
-        File bukti tersedia.
+    const isImage =
+      /\.(jpg|jpeg|png|gif|webp)(\?|#|$)/i.test(url) ||
+      !!driveId;
 
-      </div>
+    if(isImage){
 
+      proof.innerHTML = `
+        <img
+          src="${escAttr(imageUrl)}"
+          alt="Bukti transfer"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
 
-      <a
-        href="${escAttr(url)}"
-        target="_blank"
-        rel="noopener">
+        <div
+          class="proof-note"
+          style="display:none;margin-top:10px">
+          Gambar tidak dapat ditampilkan langsung.
+          Silakan buka bukti penuh.
+        </div>
 
-        BUKA BUKTI TRANSFER
+        <a
+          href="${escAttr(url)}"
+          target="_blank"
+          rel="noopener">
+          BUKA BUKTI PENUH
+        </a>
+      `;
 
-      </a>
+    }
 
-    `;
+    else if(/\.pdf(\?|#|$)/i.test(url)){
+
+      proof.innerHTML = `
+        <iframe
+          src="${escAttr(url)}"
+          style="width:100%;height:500px;border:1px solid #ddd;border-radius:10px"
+          title="Bukti transfer PDF">
+        </iframe>
+
+        <a
+          href="${escAttr(url)}"
+          target="_blank"
+          rel="noopener">
+          BUKA PDF PENUH
+        </a>
+      `;
+
+    }
+
+    else{
+
+      proof.innerHTML = `
+        <div class="proof-note">
+          <b>File bukti tersedia.</b>
+          <br>
+          Tekan tombol di bawah untuk memeriksa bukti transfer.
+        </div>
+
+        <a
+          href="${escAttr(url)}"
+          target="_blank"
+          rel="noopener">
+          BUKA BUKTI TRANSFER
+        </a>
+      `;
+
+    }
 
   }
-
 
 
   document
@@ -1704,6 +1719,21 @@ function esc(v){
 
 }
 
+
+
+function ambilDriveId(url){
+
+  const s = String(url || '');
+
+  let m = s.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(m) return m[1];
+
+  m = s.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(m) return m[1];
+
+  return '';
+
+}
 
 function escAttr(v){
 
