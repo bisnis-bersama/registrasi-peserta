@@ -22,6 +22,8 @@ body{
   padding:18px;
 }
 
+/* HEADER */
+
 .header{
   background:#111;
   color:#fff;
@@ -54,9 +56,7 @@ body{
   font-weight:900;
 }
 
-/* =========================
-   TOMBOL
-========================= */
+/* TOMBOL */
 
 .top-button{
   display:flex;
@@ -84,9 +84,7 @@ body{
   color:#111;
 }
 
-/* =========================
-   STATUS
-========================= */
+/* STATUS */
 
 .status{
   display:none;
@@ -111,9 +109,7 @@ body{
   color:#a00000;
 }
 
-/* =========================
-   KARTU UTAMA
-========================= */
+/* STATISTIK */
 
 .stats{
   display:grid;
@@ -168,9 +164,7 @@ body{
   font-weight:800;
 }
 
-/* =========================
-   SECTION
-========================= */
+/* SECTION */
 
 .section{
   margin-top:17px;
@@ -186,13 +180,11 @@ body{
   margin-bottom:15px;
 }
 
-/* =========================
-   KAOS
-========================= */
+/* KAOS */
 
 .kaos-grid{
   display:grid;
-  grid-template-columns:repeat(6,1fr);
+  grid-template-columns:repeat(7,1fr);
   gap:10px;
 }
 
@@ -216,9 +208,7 @@ body{
   margin-top:5px;
 }
 
-/* =========================
-   KEHADIRAN
-========================= */
+/* KEHADIRAN */
 
 .attendance{
   display:grid;
@@ -245,9 +235,7 @@ body{
   margin-top:6px;
 }
 
-/* =========================
-   MENU
-========================= */
+/* MENU */
 
 .menu{
   display:grid;
@@ -297,9 +285,7 @@ body{
   line-height:1.4;
 }
 
-/* =========================
-   CATATAN
-========================= */
+/* CATATAN */
 
 .note{
   margin-top:16px;
@@ -324,10 +310,6 @@ body{
   cursor:pointer;
 }
 
-/* =========================
-   LOADING
-========================= */
-
 .loading{
   text-align:center;
   color:#777;
@@ -335,18 +317,16 @@ body{
   margin-top:14px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* RESPONSIVE */
 
-@media(max-width:800px){
+@media(max-width:850px){
 
   .stats{
     grid-template-columns:repeat(2,1fr);
   }
 
   .kaos-grid{
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
   }
 
 }
@@ -355,6 +335,10 @@ body{
 
   .menu{
     grid-template-columns:1fr;
+  }
+
+  .kaos-grid{
+    grid-template-columns:repeat(4,1fr);
   }
 
 }
@@ -386,12 +370,21 @@ body{
     font-size:24px;
   }
 
+  .kaos-grid{
+    grid-template-columns:repeat(4,1fr);
+    gap:7px;
+  }
+
   .kaos{
-    padding:12px 5px;
+    padding:11px 4px;
+  }
+
+  .kaos-name{
+    font-size:11px;
   }
 
   .kaos-number{
-    font-size:24px;
+    font-size:22px;
   }
 
 }
@@ -448,13 +441,9 @@ body{
   </div>
 
 
-  <!-- =========================
-       RINGKASAN
-  ========================== -->
+  <!-- STATISTIK -->
 
   <div class="stats">
-
-    <!-- TOTAL -->
 
     <div class="stat">
 
@@ -470,8 +459,6 @@ body{
 
     </div>
 
-
-    <!-- LUNAS -->
 
     <div class="stat green">
 
@@ -494,8 +481,6 @@ body{
     </div>
 
 
-    <!-- BELUM LUNAS -->
-
     <div class="stat red">
 
       <div class="label">
@@ -510,8 +495,6 @@ body{
 
     </div>
 
-
-    <!-- COD -->
 
     <div class="stat orange">
 
@@ -534,8 +517,6 @@ body{
     </div>
 
 
-    <!-- HADIR -->
-
     <div class="stat blue">
 
       <div class="label">
@@ -550,8 +531,6 @@ body{
 
     </div>
 
-
-    <!-- BELUM HADIR -->
 
     <div class="stat gray">
 
@@ -570,9 +549,7 @@ body{
   </div>
 
 
-  <!-- =========================
-       UKURAN KAOS
-  ========================== -->
+  <!-- UKURAN KAOS -->
 
   <div class="section">
 
@@ -584,56 +561,37 @@ body{
 
       <div class="kaos">
         <div class="kaos-name">S</div>
-        <div
-          class="kaos-number"
-          id="kaosS">
-          0
-        </div>
+        <div class="kaos-number" id="kaosS">0</div>
       </div>
 
       <div class="kaos">
         <div class="kaos-name">M</div>
-        <div
-          class="kaos-number"
-          id="kaosM">
-          0
-        </div>
+        <div class="kaos-number" id="kaosM">0</div>
       </div>
 
       <div class="kaos">
         <div class="kaos-name">L</div>
-        <div
-          class="kaos-number"
-          id="kaosL">
-          0
-        </div>
+        <div class="kaos-number" id="kaosL">0</div>
       </div>
 
       <div class="kaos">
         <div class="kaos-name">XL</div>
-        <div
-          class="kaos-number"
-          id="kaosXL">
-          0
-        </div>
+        <div class="kaos-number" id="kaosXL">0</div>
       </div>
 
       <div class="kaos">
-        <div class="kaos-name">XXL</div>
-        <div
-          class="kaos-number"
-          id="kaosXXL">
-          0
-        </div>
+        <div class="kaos-name">2XL</div>
+        <div class="kaos-number" id="kaos2XL">0</div>
       </div>
 
       <div class="kaos">
-        <div class="kaos-name">XXXL</div>
-        <div
-          class="kaos-number"
-          id="kaosXXXL">
-          0
-        </div>
+        <div class="kaos-name">3XL</div>
+        <div class="kaos-number" id="kaos3XL">0</div>
+      </div>
+
+      <div class="kaos">
+        <div class="kaos-name">4XL</div>
+        <div class="kaos-number" id="kaos4XL">0</div>
       </div>
 
     </div>
@@ -641,9 +599,7 @@ body{
   </div>
 
 
-  <!-- =========================
-       KEHADIRAN
-  ========================== -->
+  <!-- KEHADIRAN -->
 
   <div class="section">
 
@@ -687,9 +643,7 @@ body{
   </div>
 
 
-  <!-- =========================
-       MENU ADMIN
-  ========================== -->
+  <!-- MENU -->
 
   <div class="menu">
 
@@ -706,8 +660,7 @@ body{
         </h3>
 
         <p>
-          Lihat peserta dan konfirmasi
-          pembayaran.
+          Lihat peserta dan konfirmasi pembayaran.
         </p>
 
       </div>
@@ -728,8 +681,7 @@ body{
         </h3>
 
         <p>
-          Scan QR peserta saat hari acara
-          dan catat kehadiran.
+          Scan QR peserta saat hari acara dan catat kehadiran.
         </p>
 
       </div>
@@ -737,21 +689,22 @@ body{
     </a>
 
 
-    <a href="lunas.html">
+    <!-- DAFTAR COD -->
+
+    <a href="register-cod.html">
 
       <div class="icon">
-        💰
+        💵
       </div>
 
       <div>
 
         <h3>
-          Peserta Lunas
+          Daftar COD
         </h3>
 
         <p>
-          Melihat daftar peserta yang
-          pembayaran sudah disetujui.
+          Daftarkan peserta langsung di tempat dan bayar lunas.
         </p>
 
       </div>
@@ -772,9 +725,7 @@ body{
         </h3>
 
         <p>
-          Atur tanggal, lokasi, harga tiket,
-          benefit, petugas dan status
-          pendaftaran.
+          Atur tanggal, lokasi, harga tiket, benefit, petugas dan status pendaftaran.
         </p>
 
       </div>
@@ -784,15 +735,11 @@ body{
   </div>
 
 
-  <!-- CATATAN -->
-
   <div class="note">
 
     <b>Catatan:</b>
 
-    QR peserta hanya digunakan sebagai
-    identitas saat registrasi ulang.
-
+    QR peserta hanya digunakan sebagai identitas saat registrasi ulang.
     Scan QR tidak mengubah status pembayaran.
 
   </div>
@@ -847,13 +794,6 @@ function upper(value){
 
 function rupiah(value){
 
-  /*
-   * Mengatasi angka:
-   * 150000
-   * "150000"
-   * "Rp 150.000"
-   */
-
   const number =
     Number(
       String(value ?? '')
@@ -868,6 +808,16 @@ function rupiah(value){
 }
 
 
+function angkaNominal(value){
+
+  return Number(
+    String(value ?? '')
+      .replace(/[^\d]/g,'')
+  ) || 0;
+
+}
+
+
 /* =========================
    STATUS
 ========================= */
@@ -878,9 +828,7 @@ function showStatus(
 ){
 
   const el =
-    document.getElementById(
-      'status'
-    );
+    document.getElementById('status');
 
   el.textContent =
     message;
@@ -893,7 +841,7 @@ function showStatus(
 
 
 /* =========================
-   LOAD DASHBOARD
+   LOAD
 ========================= */
 
 async function loadDashboard(){
@@ -902,12 +850,6 @@ async function loadDashboard(){
     'loading'
   ).textContent =
     'Mengambil data peserta...';
-
-  showStatus(
-    'Mengambil data peserta...',
-    ''
-  );
-
 
   try{
 
@@ -946,12 +888,7 @@ async function loadDashboard(){
           raw.trim()
         );
 
-    }catch(error){
-
-      console.error(
-        'Response API:',
-        raw
-      );
+    }catch(e){
 
       throw new Error(
         'Response API bukan JSON.'
@@ -976,20 +913,16 @@ async function loadDashboard(){
 
 
     const peserta =
-      Array.isArray(
-        data.peserta
-      )
-      ? data.peserta
-      : [];
+      Array.isArray(data.peserta)
+        ? data.peserta
+        : [];
 
 
-    hitungDashboard(
-      peserta
-    );
+    hitungDashboard(peserta);
 
 
     showStatus(
-      'Dashboard diperbarui — ' +
+      'Data berhasil dimuat: ' +
       peserta.length +
       ' peserta.',
       'ok'
@@ -998,9 +931,7 @@ async function loadDashboard(){
 
   }catch(error){
 
-    console.error(
-      error
-    );
+    console.error(error);
 
     showStatus(
       'Gagal memuat data: ' +
@@ -1013,7 +944,7 @@ async function loadDashboard(){
     document.getElementById(
       'loading'
     ).textContent =
-      'Data diperbarui otomatis dari server.';
+      'Data diperbarui dari server.';
 
   }
 
@@ -1021,154 +952,100 @@ async function loadDashboard(){
 
 
 /* =========================
-   HITUNG DASHBOARD
+   HITUNG
 ========================= */
 
-function hitungDashboard(
-  peserta
-){
+function hitungDashboard(peserta){
 
-  /* =========================
-     TOTAL
-  ========================== */
+  /* TOTAL */
 
   const total =
     peserta.length;
 
 
-  /* =========================
-     STATUS PEMBAYARAN
-  ========================== */
+  /* LUNAS */
 
   const lunas =
     peserta.filter(
-      function(p){
-
-        return upper(
-          p.statusPembayaran
-        ) === 'LUNAS';
-
-      }
+      p =>
+        upper(p.statusPembayaran)
+        === 'LUNAS'
     );
 
+
+  /* BELUM LUNAS */
 
   const belumLunas =
     peserta.filter(
-      function(p){
-
-        return upper(
-          p.statusPembayaran
-        ) !== 'LUNAS';
-
-      }
+      p =>
+        upper(p.statusPembayaran)
+        !== 'LUNAS'
     );
 
 
-  /* =========================
-     COD
-     
-     COD hanya dihitung dari
-     metode pembayaran COD.
-
-     Nominal hanya dijumlahkan
-     bila pembayaran sudah LUNAS.
-  ========================== */
-
-  const pesertaCOD =
-    peserta.filter(
-      function(p){
-
-        return upper(
-          p.metodePembayaran
-        ) === 'COD';
-
-      }
-    );
-
-
-  const codLunas =
-    pesertaCOD.filter(
-      function(p){
-
-        return upper(
-          p.statusPembayaran
-        ) === 'LUNAS';
-
-      }
-    );
-
-
-  /* =========================
-     NOMINAL LUNAS
-  ========================== */
+  /* NOMINAL LUNAS */
 
   const nominalLunas =
     lunas.reduce(
-      function(total,p){
-
-        return total +
-          Number(
-            String(
-              p.nominalPembayaran ?? ''
-            ).replace(/[^\d]/g,'')
-          );
-
-      },
+      (total,p) =>
+        total +
+        angkaNominal(
+          p.nominalPembayaran
+        ),
       0
     );
 
 
-  /* =========================
-     NOMINAL COD
-  ========================== */
+  /* COD */
+
+  const cod =
+    peserta.filter(
+      p =>
+        upper(p.metodePembayaran)
+        === 'COD'
+    );
+
+
+  /* NOMINAL COD */
 
   const nominalCOD =
-    codLunas.reduce(
-      function(total,p){
+    cod
+      .filter(
+        p =>
+          upper(p.statusPembayaran)
+          === 'LUNAS'
+      )
+      .reduce(
+        (total,p) =>
+          total +
+          angkaNominal(
+            p.nominalPembayaran
+          ),
+        0
+      );
 
-        return total +
-          Number(
-            String(
-              p.nominalPembayaran ?? ''
-            ).replace(/[^\d]/g,'')
-          );
 
-      },
-      0
-    );
-
-
-  /* =========================
-     KEHADIRAN
-  ========================== */
+  /* HADIR */
 
   const hadir =
     peserta.filter(
-      function(p){
-
-        return upper(
-          p.statusKehadiran
-        ) === 'HADIR';
-
-      }
+      p =>
+        upper(p.statusKehadiran)
+        === 'HADIR'
     );
 
+
+  /* BELUM HADIR */
 
   const belumHadir =
     peserta.filter(
-      function(p){
-
-        return upper(
-          p.statusKehadiran
-        ) !== 'HADIR';
-
-      }
+      p =>
+        upper(p.statusKehadiran)
+        !== 'HADIR'
     );
 
 
-  /* =========================
-     UKURAN KAOS
-  ========================== */
+  /* KAOS */
 
   const kaos = {
 
@@ -1176,19 +1053,18 @@ function hitungDashboard(
     M:0,
     L:0,
     XL:0,
-    XXL:0,
-    XXXL:0
+    '2XL':0,
+    '3XL':0,
+    '4XL':0
 
   };
 
 
   peserta.forEach(
-    function(p){
+    p => {
 
       const ukuran =
-        upper(
-          p.ukuran
-        );
+        upper(p.ukuran);
 
 
       if(
@@ -1208,9 +1084,7 @@ function hitungDashboard(
   );
 
 
-  /* =========================
-     TAMPILKAN
-  ========================== */
+  /* TAMPILKAN */
 
   document.getElementById(
     'total'
@@ -1241,7 +1115,7 @@ function hitungDashboard(
   document.getElementById(
     'cod'
   ).textContent =
-    pesertaCOD.length;
+    cod.length;
 
 
   document.getElementById(
@@ -1301,22 +1175,26 @@ function hitungDashboard(
 
 
   document.getElementById(
-    'kaosXXL'
+    'kaos2XL'
   ).textContent =
-    kaos.XXL;
+    kaos['2XL'];
 
 
   document.getElementById(
-    'kaosXXXL'
+    'kaos3XL'
   ).textContent =
-    kaos.XXXL;
+    kaos['3XL'];
+
+
+  document.getElementById(
+    'kaos4XL'
+  ).textContent =
+    kaos['4XL'];
 
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* LOGOUT */
 
 function logout(){
 
@@ -1334,9 +1212,7 @@ function logout(){
 }
 
 
-/* =========================
-   START
-========================= */
+/* START */
 
 loadDashboard();
 
