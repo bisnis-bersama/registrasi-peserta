@@ -1485,89 +1485,142 @@ function convertDriveImageUrl(url){
 async function confirmLunas(){
 
   if(!selectedPeserta){
-
-    alert(
-      'Peserta belum dipilih.'
-    );
-
+    alert('Peserta belum dipilih.');
     return;
   }
-
-
-  /*
-   * CODE.GS MENERIMA:
-   * data.kode
-   */
 
   const kode =
-    clean(
-      selectedPeserta.kode
-    );
-
+    clean(selectedPeserta.kode);
 
   const bukti =
-    clean(
-      selectedPeserta.buktiTransfer
-    );
-
+    clean(selectedPeserta.buktiTransfer);
 
   if(!kode){
-
-    alert(
-      'Kode registrasi tidak tersedia.'
-    );
-
+    alert('Kode registrasi tidak tersedia.');
     return;
   }
 
-
   if(!bukti){
-
     alert(
       'Bukti transfer belum tersedia.\n\n' +
       'Silakan cek bukti transfer terlebih dahulu.'
     );
-
     return;
   }
 
+  const konfirmasi = confirm(
 
-  const konfirmasi =
-    confirm(
+    'Pastikan bukti transfer sudah sesuai dengan mutasi rekening.' +
 
-      'Pastikan bukti transfer sudah sesuai dengan mutasi rekening.' +
+    '\n\nNama: ' +
+    clean(selectedPeserta.nama) +
 
-      '\n\nNama: ' +
-      clean(
-        selectedPeserta.nama
-      ) +
+    '\nKode: ' +
+    kode +
 
-      '\nKode: ' +
-      kode +
+    '\n\nKonfirmasi sebagai LUNAS?'
 
-      '\n\nKonfirmasi sebagai LUNAS?'
-
-    );
-
+  );
 
   if(!konfirmasi){
     return;
   }
 
-
   const btn =
-    document.getElementById(
-      'btnConfirm'
-    );
-
+    document.getElementById('btnConfirm');
 
   btn.disabled = true;
-
-  btn.textContent =
-    'MEMPROSES...';
-
+  btn.textContent = 'MEMBACA HARGA TIKET...';
 
   try{
+
+    /* =====================================
+       AMBIL HARGA TIKET DARI PENGATURAN
+    ===================================== */
+
+    const settingResponse =
+      await fetch(
+        API_URL +
+        '?action=pengaturan&_=' +
+        Date.now(),
+        {
+          method:'GET',
+          cache:'no-store'
+        }
+      );
+
+    const settingText =
+      await settingResponse.text();
+
+    let settingData;
+
+    try{
+
+      settingData =
+        JSON.parse(settingText);
+
+    }catch(e){
+
+      throw new Error(
+        'Response pengaturan bukan JSON.'
+      );
+
+    }
+
+    if(
+      !settingData ||
+      settingData.ok === false
+    ){
+
+      throw new Error(
+        settingData &&
+        settingData.message
+          ? settingData.message
+          : 'Gagal mengambil pengaturan acara.'
+      );
+
+    }
+
+    const pengaturan =
+      settingData.pengaturan ||
+      settingData.data ||
+      settingData;
+
+
+    /*
+     * SATU-SATUNYA SUMBER NOMINAL
+     * TIKET PESERTA
+     */
+
+    const hargaTiket =
+      Number(
+        String(
+          pengaturan.tiket ??
+          pengaturan.hargaTiket ??
+          ''
+        ).replace(/[^\d]/g,'')
+      );
+
+
+    if(
+      !hargaTiket ||
+      hargaTiket <= 0
+    ){
+
+      throw new Error(
+        'Harga Tiket Peserta belum diatur di halaman Pengaturan.'
+      );
+
+    }
+
+
+    btn.textContent =
+      'MEMPROSES PEMBAYARAN...';
+
+
+    /* =====================================
+       KIRIM VERIFIKASI LUNAS
+    ===================================== */
 
     const response =
       await fetch(
@@ -1581,11 +1634,6 @@ async function confirmLunas(){
               'text/plain;charset=utf-8'
           },
 
-          /*
-           * PENTING:
-           * Code.gs menggunakan data.kode
-           */
-
           body:JSON.stringify({
 
             action:
@@ -1594,8 +1642,12 @@ async function confirmLunas(){
             kode:
               kode,
 
+            /*
+             * NOMINAL OTOMATIS
+             * DARI PENGATURAN
+             */
             nominal:
-              150000
+              hargaTiket
 
           })
 
@@ -1606,9 +1658,7 @@ async function confirmLunas(){
     const text =
       await response.text();
 
-
     let data;
-
 
     try{
 
@@ -1639,14 +1689,20 @@ async function confirmLunas(){
 
 
     alert(
-      'Pembayaran ' +
+      'Pembayaran berhasil dikonfirmasi LUNAS.' +
+
+      '\n\nKode: ' +
       kode +
-      ' berhasil dikonfirmasi LUNAS.'
+
+      '\nNama: ' +
+      clean(selectedPeserta.nama) +
+
+      '\nNominal: ' +
+      formatRupiah(hargaTiket)
     );
 
 
     closeModal();
-
 
     await load();
 
@@ -1655,12 +1711,10 @@ async function confirmLunas(){
 
     console.error(error);
 
-
     alert(
       'Gagal konfirmasi LUNAS:\n\n' +
       error.message
     );
-
 
   }finally{
 
@@ -1672,6 +1726,7 @@ async function confirmLunas(){
   }
 
 }
+
 
 
 /* =========================
