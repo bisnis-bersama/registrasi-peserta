@@ -41,7 +41,10 @@ body{
   padding:20px;
 }
 
-/* STAT */
+/* =========================
+   STATISTIK
+========================= */
+
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -69,10 +72,6 @@ body{
   font-weight:900;
 }
 
-.stat.total{
-  border-left-color:#111;
-}
-
 .stat.belum{
   border-left-color:#dc3545;
 }
@@ -85,7 +84,10 @@ body{
   border-left-color:#0d6efd;
 }
 
-/* CONTROL */
+/* =========================
+   CONTROL
+========================= */
+
 .controls{
   background:#fff;
   padding:15px;
@@ -111,10 +113,6 @@ body{
   font-size:13px;
 }
 
-.tab:hover{
-  background:#f1f1f1;
-}
-
 .tab.active{
   background:#111;
   color:#fff;
@@ -130,11 +128,10 @@ body{
   font-size:14px;
 }
 
-.search:focus{
-  border-color:#111;
-}
+/* =========================
+   STATUS
+========================= */
 
-/* STATUS */
 .status{
   margin-bottom:15px;
   padding:11px 14px;
@@ -158,7 +155,10 @@ body{
   color:#146c43;
 }
 
-/* TABLE */
+/* =========================
+   TABLE
+========================= */
+
 .table-wrap{
   background:#fff;
   border-radius:14px;
@@ -201,7 +201,10 @@ tbody tr:hover{
   color:#777;
 }
 
-/* BADGE */
+/* =========================
+   BADGE
+========================= */
+
 .badge{
   display:inline-block;
   padding:6px 9px;
@@ -231,7 +234,10 @@ tbody tr:hover{
   color:#475569;
 }
 
-/* BUTTON */
+/* =========================
+   BUTTON
+========================= */
+
 .btn{
   border:0;
   padding:8px 11px;
@@ -246,21 +252,29 @@ tbody tr:hover{
   color:#fff;
 }
 
-.btn-proof:hover{
-  background:#333;
-}
-
 .btn-refresh{
   background:#198754;
   color:#fff;
   margin-bottom:12px;
 }
 
-.btn-refresh:hover{
-  background:#146c43;
+.btn-lunas{
+  flex:1;
+  background:#198754;
+  color:#fff;
+  padding:12px;
 }
 
-/* MODAL */
+.btn-close{
+  background:#ddd;
+  color:#222;
+  padding:12px 18px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
 .modal{
   display:none;
   position:fixed;
@@ -324,6 +338,10 @@ tbody tr:hover{
   color:#555;
 }
 
+.detail span{
+  word-break:break-word;
+}
+
 .proof-title{
   font-size:14px;
   font-weight:800;
@@ -357,21 +375,12 @@ tbody tr:hover{
   margin-top:18px;
 }
 
-.btn-lunas{
-  flex:1;
-  background:#198754;
-  color:#fff;
-  padding:12px;
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
-.btn-close{
-  background:#ddd;
-  color:#222;
-  padding:12px 18px;
-}
-
-/* RESPONSIVE */
 @media(max-width:800px){
+
   .container{
     padding:12px;
   }
@@ -403,6 +412,7 @@ tbody tr:hover{
 }
 
 @media(max-width:450px){
+
   .stats{
     grid-template-columns:repeat(2,1fr);
   }
@@ -466,19 +476,23 @@ tbody tr:hover{
 
     <div class="tabs">
 
-      <button class="tab active" data-tab="SEMUA" onclick="setTab('SEMUA',this)">
+      <button class="tab active"
+        onclick="setTab('SEMUA',this)">
         SEMUA
       </button>
 
-      <button class="tab" data-tab="BELUM LUNAS" onclick="setTab('BELUM LUNAS',this)">
+      <button class="tab"
+        onclick="setTab('BELUM LUNAS',this)">
         BELUM LUNAS
       </button>
 
-      <button class="tab" data-tab="SUDAH LUNAS" onclick="setTab('SUDAH LUNAS',this)">
+      <button class="tab"
+        onclick="setTab('SUDAH LUNAS',this)">
         SUDAH LUNAS
       </button>
 
-      <button class="tab" data-tab="SUDAH HADIR" onclick="setTab('SUDAH HADIR',this)">
+      <button class="tab"
+        onclick="setTab('SUDAH HADIR',this)">
         SUDAH HADIR
       </button>
 
@@ -488,7 +502,7 @@ tbody tr:hover{
       type="text"
       id="search"
       class="search"
-      placeholder="Cari nama, kode registrasi, toko, WhatsApp..."
+      placeholder="Cari nama, kode, toko, WhatsApp, email..."
       oninput="render()"
     >
 
@@ -528,7 +542,10 @@ tbody tr:hover{
 </div>
 
 
-<!-- MODAL BUKTI -->
+<!-- =========================
+     MODAL DETAIL
+========================= -->
+
 <div class="modal" id="modal">
 
   <div class="modal-box">
@@ -559,14 +576,29 @@ tbody tr:hover{
         <b>WhatsApp</b>
         <span id="mWa">-</span>
 
+        <b>Alamat</b>
+        <span id="mAlamat">-</span>
+
         <b>Email</b>
         <span id="mEmail">-</span>
+
+        <b>Ukuran Kaos</b>
+        <span id="mUkuran">-</span>
 
         <b>Status</b>
         <span id="mStatus">-</span>
 
         <b>Nominal</b>
         <span id="mNominal">-</span>
+
+        <b>Tanggal Verifikasi</b>
+        <span id="mTanggalVerifikasi">-</span>
+
+        <b>Status Kehadiran</b>
+        <span id="mKehadiran">-</span>
+
+        <b>Jam Check-in</b>
+        <span id="mCheckin">-</span>
 
       </div>
 
@@ -575,9 +607,11 @@ tbody tr:hover{
       </div>
 
       <div class="proof-box" id="proofBox">
+
         <div class="no-proof">
           Belum ada bukti transfer.
         </div>
+
       </div>
 
       <div class="modal-actions">
@@ -617,19 +651,7 @@ let selectedPeserta = null;
 
 
 /* =========================
-   STATUS MESSAGE
-========================= */
-
-function showStatus(message, type=''){
-  const el = document.getElementById('status');
-
-  el.textContent = message;
-  el.className = 'status show ' + type;
-}
-
-
-/* =========================
-   NORMALIZE
+   HELPER
 ========================= */
 
 function clean(value){
@@ -640,6 +662,41 @@ function upper(value){
   return clean(value).toUpperCase();
 }
 
+function esc(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+function escAttr(value){
+
+  return String(value ?? '')
+    .replace(/\\/g,'\\\\')
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function showStatus(message,type=''){
+
+  const el =
+    document.getElementById('status');
+
+  el.textContent = message;
+
+  el.className =
+    'status show ' + type;
+}
+
 
 /* =========================
    LOAD DATA
@@ -647,7 +704,8 @@ function upper(value){
 
 async function load(){
 
-  const tbody = document.getElementById('tbody');
+  const tbody =
+    document.getElementById('tbody');
 
   tbody.innerHTML = `
     <tr>
@@ -657,7 +715,9 @@ async function load(){
     </tr>
   `;
 
-  showStatus('Mengambil data peserta...');
+  showStatus(
+    'Mengambil data peserta...'
+  );
 
   try{
 
@@ -666,10 +726,11 @@ async function load(){
       '?action=peserta&_=' +
       Date.now();
 
-    const response = await fetch(url, {
-      method:'GET',
-      cache:'no-store'
-    });
+    const response =
+      await fetch(url,{
+        method:'GET',
+        cache:'no-store'
+      });
 
     if(!response.ok){
       throw new Error(
@@ -677,34 +738,49 @@ async function load(){
       );
     }
 
-    const text = await response.text();
+    const text =
+      await response.text();
 
     let data;
 
     try{
+
       data = JSON.parse(text);
+
     }catch(e){
-      console.error('Response bukan JSON:', text);
+
+      console.error(
+        'Response bukan JSON:',
+        text
+      );
+
       throw new Error(
         'Response API bukan JSON.'
       );
     }
 
-    console.log('DATA PESERTA:', data);
-
     if(!data || data.ok === false){
+
       throw new Error(
         data && data.message
           ? data.message
           : 'API mengembalikan error.'
       );
+
     }
 
-    peserta = Array.isArray(data.peserta)
-      ? data.peserta
-      : [];
+    peserta =
+      Array.isArray(data.peserta)
+        ? data.peserta
+        : [];
+
+    console.log(
+      'DATA PESERTA:',
+      peserta
+    );
 
     updateStats();
+
     render();
 
     showStatus(
@@ -725,11 +801,18 @@ async function load(){
     tbody.innerHTML = `
       <tr>
         <td colspan="10" class="empty">
+
           <b>Gagal memuat data peserta.</b>
+
           <br><br>
+
           ${esc(error.message)}
+
           <br><br>
-          Silakan tekan <b>MUAT ULANG DATA</b>.
+
+          Silakan tekan
+          <b>MUAT ULANG DATA</b>.
+
         </td>
       </tr>
     `;
@@ -739,7 +822,9 @@ async function load(){
       error.message,
       'error'
     );
+
   }
+
 }
 
 
@@ -749,36 +834,43 @@ async function load(){
 
 function updateStats(){
 
-  const total = peserta.length;
+  const total =
+    peserta.length;
 
-  const belum = peserta.filter(p =>
-    upper(
-      p.statusPembayaran ||
-      p.status ||
-      p.StatusPembayaran
-    ) !== 'LUNAS'
-  ).length;
+  const belum =
+    peserta.filter(p =>
+      upper(p.statusPembayaran)
+      !== 'LUNAS'
+    ).length;
 
-  const lunas = peserta.filter(p =>
-    upper(
-      p.statusPembayaran ||
-      p.status ||
-      p.StatusPembayaran
-    ) === 'LUNAS'
-  ).length;
+  const lunas =
+    peserta.filter(p =>
+      upper(p.statusPembayaran)
+      === 'LUNAS'
+    ).length;
 
-  const hadir = peserta.filter(p =>
-    upper(
-      p.statusKehadiran ||
-      p.kehadiran ||
-      p.StatusKehadiran
-    ) === 'HADIR'
-  ).length;
+  const hadir =
+    peserta.filter(p =>
+      upper(p.statusKehadiran)
+      === 'HADIR'
+    ).length;
 
-  document.getElementById('totalPeserta').textContent = total;
-  document.getElementById('belumLunas').textContent = belum;
-  document.getElementById('sudahLunas').textContent = lunas;
-  document.getElementById('sudahHadir').textContent = hadir;
+  document.getElementById(
+    'totalPeserta'
+  ).textContent = total;
+
+  document.getElementById(
+    'belumLunas'
+  ).textContent = belum;
+
+  document.getElementById(
+    'sudahLunas'
+  ).textContent = lunas;
+
+  document.getElementById(
+    'sudahHadir'
+  ).textContent = hadir;
+
 }
 
 
@@ -786,13 +878,16 @@ function updateStats(){
    TAB
 ========================= */
 
-function setTab(tab, button){
+function setTab(tab,button){
 
   currentTab = tab;
 
-  document.querySelectorAll('.tab')
-    .forEach(el => {
+  document
+    .querySelectorAll('.tab')
+    .forEach(function(el){
+
       el.classList.remove('active');
+
     });
 
   if(button){
@@ -800,6 +895,7 @@ function setTab(tab, button){
   }
 
   render();
+
 }
 
 
@@ -811,63 +907,81 @@ function getFiltered(){
 
   const keyword =
     clean(
-      document.getElementById('search').value
+      document.getElementById(
+        'search'
+      ).value
     ).toLowerCase();
 
-  return peserta.filter(p => {
+  return peserta.filter(function(p){
 
-    const pembayaran = upper(
-      p.statusPembayaran ||
-      p.status ||
-      p.StatusPembayaran
-    );
+    const pembayaran =
+      upper(p.statusPembayaran);
 
-    const kehadiran = upper(
-      p.statusKehadiran ||
-      p.kehadiran ||
-      p.StatusKehadiran
-    );
+    const kehadiran =
+      upper(p.statusKehadiran);
 
-    if(currentTab === 'BELUM LUNAS'){
-      if(pembayaran === 'LUNAS'){
-        return false;
-      }
+
+    if(
+      currentTab === 'BELUM LUNAS' &&
+      pembayaran === 'LUNAS'
+    ){
+      return false;
     }
 
-    if(currentTab === 'SUDAH LUNAS'){
-      if(pembayaran !== 'LUNAS'){
-        return false;
-      }
+
+    if(
+      currentTab === 'SUDAH LUNAS' &&
+      pembayaran !== 'LUNAS'
+    ){
+      return false;
     }
 
-    if(currentTab === 'SUDAH HADIR'){
-      if(kehadiran !== 'HADIR'){
-        return false;
-      }
+
+    if(
+      currentTab === 'SUDAH HADIR' &&
+      kehadiran !== 'HADIR'
+    ){
+      return false;
     }
+
 
     if(!keyword){
       return true;
     }
 
+
     const gabungan = [
-      p.kodeRegistrasi,
+
       p.kode,
-      p.namaPeserta,
+
       p.nama,
-      p.namaToko,
-      p.noWhatsApp,
-      p.whatsapp,
-      p.email,
+
+      p.toko,
+
+      p.wa,
+
       p.alamat,
-      p.ukuranKaos
+
+      p.email,
+
+      p.ukuran,
+
+      p.statusPembayaran,
+
+      p.statusKehadiran
+
     ]
     .map(clean)
     .join(' ')
     .toLowerCase();
 
-    return gabungan.includes(keyword);
+
+    return gabungan.includes(
+      keyword
+    );
+
   });
+
 }
 
 
@@ -878,15 +992,20 @@ function getFiltered(){
 function render(){
 
   const tbody =
-    document.getElementById('tbody');
+    document.getElementById(
+      'tbody'
+    );
 
-  const data = getFiltered();
+  const data =
+    getFiltered();
+
 
   if(!data.length){
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="10" class="empty">
+        <td colspan="10"
+            class="empty">
           Tidak ada data peserta.
         </td>
       </tr>
@@ -895,259 +1014,322 @@ function render(){
     return;
   }
 
-  tbody.innerHTML = data.map((p,index) => {
 
-    const kode = clean(
-      p.kodeRegistrasi || p.kode
-    );
+  tbody.innerHTML =
+    data.map(function(p,index){
 
-    const nama = clean(
-      p.namaPeserta || p.nama
-    );
+      /*
+       * SESUAI CODE.GS
+       */
 
-    const toko = clean(
-      p.namaToko || '-'
-    );
+      const kode =
+        clean(p.kode || '-');
 
-    const wa = clean(
-      p.noWhatsApp ||
-      p.whatsapp ||
-      '-'
-    );
+      const nama =
+        clean(p.nama || '-');
 
-    const ukuran = clean(
-      p.ukuranKaos ||
-      '-'
-    );
+      const toko =
+        clean(p.toko || '-');
 
-    const pembayaran = upper(
-      p.statusPembayaran ||
-      p.status ||
-      p.StatusPembayaran
-    );
+      const wa =
+        clean(p.wa || '-');
 
-    const kehadiran = upper(
-      p.statusKehadiran ||
-      p.kehadiran ||
-      p.StatusKehadiran
-    );
+      const ukuran =
+        clean(p.ukuran || '-');
 
-    const jamCheckin = clean(
-      p.jamCheckin ||
-      p.jamCheckIn ||
-      p.JamCheckin ||
-      '-'
-    );
+      const pembayaran =
+        upper(
+          p.statusPembayaran
+        );
 
-    let pembayaranHtml = '';
+      const kehadiran =
+        upper(
+          p.statusKehadiran
+        );
 
-    if(pembayaran === 'LUNAS'){
+      const jamCheckin =
+        clean(
+          p.jamCheckin || '-'
+        );
 
-      pembayaranHtml = `
-        <span class="badge badge-lunas">
-          LUNAS
-        </span>
+
+      const pembayaranHtml =
+        pembayaran === 'LUNAS'
+
+        ? `
+          <span class="badge badge-lunas">
+            LUNAS
+          </span>
+        `
+
+        : `
+          <span class="badge badge-belum">
+            BELUM LUNAS
+          </span>
+        `;
+
+
+      const hadirHtml =
+        kehadiran === 'HADIR'
+
+        ? `
+          <span class="badge badge-hadir">
+            SUDAH HADIR
+          </span>
+        `
+
+        : `
+          <span class="badge badge-belum-hadir">
+            BELUM HADIR
+          </span>
+        `;
+
+
+      return `
+
+        <tr>
+
+          <td>
+            ${index + 1}
+          </td>
+
+          <td>
+            <b>
+              ${esc(kode)}
+            </b>
+          </td>
+
+          <td>
+            <b>
+              ${esc(nama)}
+            </b>
+          </td>
+
+          <td>
+            ${esc(toko)}
+          </td>
+
+          <td>
+            ${esc(wa)}
+          </td>
+
+          <td>
+            ${esc(ukuran)}
+          </td>
+
+          <td>
+            ${pembayaranHtml}
+          </td>
+
+          <td>
+            ${hadirHtml}
+          </td>
+
+          <td>
+            ${esc(jamCheckin)}
+          </td>
+
+          <td>
+
+            <button
+              class="btn btn-proof"
+              onclick="openReview('${escAttr(kode)}')"
+            >
+              LIHAT BUKTI
+            </button>
+
+          </td>
+
+        </tr>
+
       `;
 
-    }else{
+    }).join('');
 
-      pembayaranHtml = `
-        <span class="badge badge-belum">
-          BELUM LUNAS
-        </span>
-      `;
-    }
-
-
-    let hadirHtml = '';
-
-    if(kehadiran === 'HADIR'){
-
-      hadirHtml = `
-        <span class="badge badge-hadir">
-          SUDAH HADIR
-        </span>
-      `;
-
-    }else{
-
-      hadirHtml = `
-        <span class="badge badge-belum-hadir">
-          BELUM HADIR
-        </span>
-      `;
-    }
-
-
-    return `
-      <tr>
-
-        <td>${index + 1}</td>
-
-        <td>
-          <b>${esc(kode || '-')}</b>
-        </td>
-
-        <td>
-          <b>${esc(nama || '-')}</b>
-        </td>
-
-        <td>
-          ${esc(toko)}
-        </td>
-
-        <td>
-          ${esc(wa)}
-        </td>
-
-        <td>
-          ${esc(ukuran)}
-        </td>
-
-        <td>
-          ${pembayaranHtml}
-        </td>
-
-        <td>
-          ${hadirHtml}
-        </td>
-
-        <td>
-          ${esc(jamCheckin)}
-        </td>
-
-        <td>
-          <button
-            class="btn btn-proof"
-            onclick="openReview('${escAttr(kode)}')"
-          >
-            LIHAT BUKTI
-          </button>
-        </td>
-
-      </tr>
-    `;
-
-  }).join('');
 }
 
 
 /* =========================
-   OPEN REVIEW
+   OPEN DETAIL
 ========================= */
 
 function openReview(kode){
 
-  const p = peserta.find(x =>
-    clean(
-      x.kodeRegistrasi ||
-      x.kode
-    ) === clean(kode)
-  );
+  const p =
+    peserta.find(function(x){
+
+      return clean(x.kode)
+        === clean(kode);
+
+    });
+
 
   if(!p){
-    alert('Data peserta tidak ditemukan.');
+
+    alert(
+      'Data peserta tidak ditemukan.'
+    );
+
     return;
   }
 
+
   selectedPeserta = p;
 
-  const nama = clean(
-    p.namaPeserta || p.nama
-  );
 
-  const toko = clean(
-    p.namaToko || '-'
-  );
+  /* DATA UTAMA */
 
-  const wa = clean(
-    p.noWhatsApp ||
-    p.whatsapp ||
-    '-'
-  );
+  document.getElementById(
+    'mKode'
+  ).textContent =
+    clean(p.kode || '-');
 
-  const email = clean(
-    p.email || '-'
-  );
 
-  const pembayaran = upper(
-    p.statusPembayaran ||
-    p.status ||
-    p.StatusPembayaran
-  );
+  document.getElementById(
+    'mNama'
+  ).textContent =
+    clean(p.nama || '-');
+
+
+  document.getElementById(
+    'mToko'
+  ).textContent =
+    clean(p.toko || '-');
+
+
+  document.getElementById(
+    'mWa'
+  ).textContent =
+    clean(p.wa || '-');
+
+
+  document.getElementById(
+    'mAlamat'
+  ).textContent =
+    clean(p.alamat || '-');
+
+
+  document.getElementById(
+    'mEmail'
+  ).textContent =
+    clean(p.email || '-');
+
+
+  document.getElementById(
+    'mUkuran'
+  ).textContent =
+    clean(p.ukuran || '-');
+
+
+  const pembayaran =
+    upper(
+      p.statusPembayaran
+    );
+
+
+  document.getElementById(
+    'mStatus'
+  ).textContent =
+    pembayaran ||
+    'BELUM LUNAS';
+
 
   const nominal =
-    p.nominalPembayaran ||
-    p.nominal ||
-    '-';
-
-  document.getElementById('mKode')
-    .textContent =
-      clean(
-        p.kodeRegistrasi ||
-        p.kode ||
-        '-'
-      );
-
-  document.getElementById('mNama')
-    .textContent = nama;
-
-  document.getElementById('mToko')
-    .textContent = toko;
-
-  document.getElementById('mWa')
-    .textContent = wa;
-
-  document.getElementById('mEmail')
-    .textContent = email;
-
-  document.getElementById('mStatus')
-    .textContent =
-      pembayaran || 'BELUM LUNAS';
-
-  document.getElementById('mNominal')
-    .textContent =
-      nominal === '-'
-        ? '-'
-        : formatRupiah(nominal);
+    p.nominalPembayaran;
 
 
-  const proofBox =
-    document.getElementById('proofBox');
+  document.getElementById(
+    'mNominal'
+  ).textContent =
+    nominal
+      ? formatRupiah(nominal)
+      : '-';
+
+
+  document.getElementById(
+    'mTanggalVerifikasi'
+  ).textContent =
+    clean(
+      p.tanggalVerifikasi || '-'
+    );
+
+
+  document.getElementById(
+    'mKehadiran'
+  ).textContent =
+    clean(
+      p.statusKehadiran ||
+      'BELUM HADIR'
+    );
+
+
+  document.getElementById(
+    'mCheckin'
+  ).textContent =
+    clean(
+      p.jamCheckin || '-'
+    );
+
+
+  /* =========================
+     BUKTI TRANSFER
+  ========================= */
 
   const bukti =
     clean(
       p.buktiTransfer ||
-      p.bukti ||
-      p.BuktiTransfer ||
-      p.urlBukti
+      ''
+    );
+
+
+  const proofBox =
+    document.getElementById(
+      'proofBox'
     );
 
 
   if(bukti){
 
     const imageUrl =
-      convertDriveImageUrl(bukti);
+      convertDriveImageUrl(
+        bukti
+      );
+
 
     proofBox.innerHTML = `
+
       <a
         href="${escAttr(bukti)}"
         target="_blank"
         rel="noopener"
       >
+
         <img
           src="${escAttr(imageUrl)}"
           alt="Bukti Transfer"
-          onerror="this.style.display='none';document.getElementById('proofError').style.display='block';"
+          onerror="
+            this.style.display='none';
+            document.getElementById('proofError').style.display='block';
+          "
         >
+
       </a>
+
 
       <div
         id="proofError"
-        style="display:none;padding:20px;color:#b42318"
+        style="
+          display:none;
+          padding:20px;
+          color:#b42318;
+        "
       >
-        Bukti tidak dapat ditampilkan sebagai gambar.
+
+        Bukti tidak dapat ditampilkan
+        sebagai gambar.
+
         <br><br>
+
         <a
           href="${escAttr(bukti)}"
           target="_blank"
@@ -1155,9 +1337,12 @@ function openReview(kode){
         >
           BUKA BUKTI TRANSFER
         </a>
+
       </div>
 
+
       <div style="margin-top:10px">
+
         <a
           href="${escAttr(bukti)}"
           target="_blank"
@@ -1165,37 +1350,59 @@ function openReview(kode){
         >
           Buka bukti di tab baru
         </a>
+
       </div>
+
     `;
 
   }else{
 
     proofBox.innerHTML = `
+
       <div class="no-proof">
-        ⚠️ BUKTI TRANSFER BELUM TERSEDIA
+
+        ⚠️ BUKTI TRANSFER
+        BELUM TERSEDIA
+
         <br><br>
-        Belum ada file bukti transfer yang tersimpan.
+
+        Belum ada file bukti transfer
+        yang tersimpan.
+
       </div>
+
     `;
+
   }
 
 
+  /* =========================
+     TOMBOL LUNAS
+  ========================= */
+
   const btn =
-    document.getElementById('btnConfirm');
+    document.getElementById(
+      'btnConfirm'
+    );
+
 
   if(pembayaran === 'LUNAS'){
 
-    btn.style.display = 'none';
+    btn.style.display =
+      'none';
 
   }else{
 
-    btn.style.display = 'block';
+    btn.style.display =
+      'block';
+
   }
 
 
   document
     .getElementById('modal')
     .classList.add('show');
+
 }
 
 
@@ -1205,44 +1412,57 @@ function openReview(kode){
 
 function convertDriveImageUrl(url){
 
-  const value = clean(url);
+  const value =
+    clean(url);
 
   if(!value){
     return '';
   }
 
+
   let fileId = '';
 
-  /*
-   * FORMAT:
-   * https://drive.google.com/file/d/FILE_ID/view
-   */
-  let match = value.match(
-    /\/file\/d\/([a-zA-Z0-9_-]+)/
-  );
-
-  if(match && match[1]){
-    fileId = match[1];
-  }
 
   /*
-   * FORMAT:
-   * https://drive.google.com/open?id=FILE_ID
+   * /file/d/FILE_ID/view
    */
-  if(!fileId){
 
-    match = value.match(
-      /[?&]id=([a-zA-Z0-9_-]+)/
+  let match =
+    value.match(
+      /\/file\/d\/([a-zA-Z0-9_-]+)/
     );
 
-    if(match && match[1]){
-      fileId = match[1];
-    }
+
+  if(match && match[1]){
+
+    fileId =
+      match[1];
+
   }
 
+
   /*
-   * GOOGLE DRIVE THUMBNAIL
+   * ?id=FILE_ID
    */
+
+  if(!fileId){
+
+    match =
+      value.match(
+        /[?&]id=([a-zA-Z0-9_-]+)/
+      );
+
+
+    if(match && match[1]){
+
+      fileId =
+        match[1];
+
+    }
+
+  }
+
+
   if(fileId){
 
     return (
@@ -1253,35 +1473,53 @@ function convertDriveImageUrl(url){
 
   }
 
-  /*
-   * Kalau bukan Google Drive,
-   * gunakan URL asli.
-   */
+
   return value;
 }
 
+
 /* =========================
-   CONFIRM LUNAS
+   KONFIRMASI LUNAS
 ========================= */
 
 async function confirmLunas(){
 
   if(!selectedPeserta){
-    alert('Peserta belum dipilih.');
+
+    alert(
+      'Peserta belum dipilih.'
+    );
+
     return;
   }
 
-  const kode = clean(
-    selectedPeserta.kodeRegistrasi ||
-    selectedPeserta.kode
-  );
 
-  const bukti = clean(
-    selectedPeserta.buktiTransfer ||
-    selectedPeserta.bukti ||
-    selectedPeserta.BuktiTransfer ||
-    selectedPeserta.urlBukti
-  );
+  /*
+   * CODE.GS MENERIMA:
+   * data.kode
+   */
+
+  const kode =
+    clean(
+      selectedPeserta.kode
+    );
+
+
+  const bukti =
+    clean(
+      selectedPeserta.buktiTransfer
+    );
+
+
+  if(!kode){
+
+    alert(
+      'Kode registrasi tidak tersedia.'
+    );
+
+    return;
+  }
+
 
   if(!bukti){
 
@@ -1296,17 +1534,21 @@ async function confirmLunas(){
 
   const konfirmasi =
     confirm(
-      'Pastikan bukti transfer sudah sesuai dengan mutasi rekening.\n\n' +
-      'Nama: ' +
+
+      'Pastikan bukti transfer sudah sesuai dengan mutasi rekening.' +
+
+      '\n\nNama: ' +
       clean(
-        selectedPeserta.namaPeserta ||
         selectedPeserta.nama
       ) +
+
       '\nKode: ' +
       kode +
-      '\n\n' +
-      'Konfirmasi sebagai LUNAS?'
+
+      '\n\nKonfirmasi sebagai LUNAS?'
+
     );
+
 
   if(!konfirmasi){
     return;
@@ -1314,61 +1556,97 @@ async function confirmLunas(){
 
 
   const btn =
-    document.getElementById('btnConfirm');
+    document.getElementById(
+      'btnConfirm'
+    );
+
 
   btn.disabled = true;
-  btn.textContent = 'MEMPROSES...';
+
+  btn.textContent =
+    'MEMPROSES...';
 
 
   try{
 
     const response =
-      await fetch(API_URL, {
+      await fetch(
+        API_URL,
+        {
 
-        method:'POST',
+          method:'POST',
 
-        headers:{
-          'Content-Type':
-            'text/plain;charset=utf-8'
-        },
+          headers:{
+            'Content-Type':
+              'text/plain;charset=utf-8'
+          },
 
-        body:JSON.stringify({
-          action:'verifikasiLunas',
-          kodeRegistrasi:kode,
-          nominal:200000
-        })
-      });
+          /*
+           * PENTING:
+           * Code.gs menggunakan data.kode
+           */
+
+          body:JSON.stringify({
+
+            action:
+              'verifikasiLunas',
+
+            kode:
+              kode,
+
+            nominal:
+              200000
+
+          })
+
+        }
+      );
 
 
     const text =
       await response.text();
 
+
     let data;
 
+
     try{
-      data = JSON.parse(text);
+
+      data =
+        JSON.parse(text);
+
     }catch(e){
+
       throw new Error(
         'Response server bukan JSON.'
       );
+
     }
 
 
-    if(!data || data.ok === false){
+    if(
+      !data ||
+      data.ok === false
+    ){
 
       throw new Error(
         data && data.message
           ? data.message
           : 'Gagal mengonfirmasi pembayaran.'
       );
+
     }
 
 
     alert(
-      'Pembayaran berhasil dikonfirmasi LUNAS.'
+      'Pembayaran ' +
+      kode +
+      ' berhasil dikonfirmasi LUNAS.'
     );
 
+
     closeModal();
+
 
     await load();
 
@@ -1377,17 +1655,22 @@ async function confirmLunas(){
 
     console.error(error);
 
+
     alert(
       'Gagal konfirmasi LUNAS:\n\n' +
       error.message
     );
 
+
   }finally{
 
     btn.disabled = false;
+
     btn.textContent =
       '✓ KONFIRMASI LUNAS';
+
   }
+
 }
 
 
@@ -1402,33 +1685,12 @@ function closeModal(){
     .classList.remove('show');
 
   selectedPeserta = null;
+
 }
 
 
 /* =========================
-   ESCAPE HTML
-========================= */
-
-function esc(value){
-
-  return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
-
-function escAttr(value){
-
-  return String(value ?? '')
-    .replace(/\\/g,'\\\\')
-    .replace(/'/g,"\\'");
-}
-
-
-/* =========================
-   RUPIAH
+   FORMAT RUPIAH
 ========================= */
 
 function formatRupiah(value){
@@ -1439,12 +1701,19 @@ function formatRupiah(value){
         .replace(/[^\d]/g,'')
     );
 
+
   if(!number){
     return 'Rp 0';
   }
 
-  return 'Rp ' +
-    number.toLocaleString('id-ID');
+
+  return (
+    'Rp ' +
+    number.toLocaleString(
+      'id-ID'
+    )
+  );
+
 }
 
 
@@ -1454,17 +1723,22 @@ function formatRupiah(value){
 
 document
   .getElementById('modal')
-  .addEventListener('click', function(e){
+  .addEventListener(
+    'click',
+    function(e){
 
-    if(e.target === this){
-      closeModal();
+      if(e.target === this){
+
+        closeModal();
+
+      }
+
     }
-
-  });
+  );
 
 
 /* =========================
-   ESC KEY
+   ESC
 ========================= */
 
 document.addEventListener(
@@ -1472,7 +1746,9 @@ document.addEventListener(
   function(e){
 
     if(e.key === 'Escape'){
+
       closeModal();
+
     }
 
   }
