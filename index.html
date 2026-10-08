@@ -207,9 +207,9 @@ body{
     <div><div class="label">Tiket</div><div id="harga" class="value">Memuat...</div></div>
   </div>
 
-  <div class="item">
+  <div class="item" id="kuotaItem">
     <div class="icon">👥</div>
-    <div><div class="label">Kuota</div><div id="kuota" class="value">300 Peserta</div></div>
+    <div><div class="label">Kuota</div><div id="kuota" class="value">-</div></div>
   </div>
 
   <a href="registrasi.html" id="btnDaftar" class="btn">DAFTAR SEKARANG</a>
@@ -242,17 +242,50 @@ body{
 </main>
 
 <script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+function formatTanggal(value){
+  if(value === undefined || value === null || String(value).trim() === '') return '-';
+  const s = String(value).trim();
+
+  // Sudah berupa tanggal biasa dari pengaturan
+  if(/^\d{1,2}\s+[A-Za-zÀ-ÿ]+\s+\d{4}$/.test(s)) return s;
+
+  // Format YYYY-MM-DD
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m){
+    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`;
+  }
+
+  // Date ISO dari Google Apps Script
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})T/);
+  if(m){
+    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`;
+  }
+
+  return s;
+}
+
+function formatRupiah(value){
+  if(value === undefined || value === null || String(value).trim() === '') return '-';
+  const raw = String(value).replace(/[^0-9]/g,'');
+  if(!raw) return '-';
+  return 'Rp ' + Number(raw).toLocaleString('id-ID');
+}
+
 function tampilkanPengaturan(data){
   if(!data) return;
 
   document.getElementById('judulAcara').textContent =
-    data.judulAcara || 'INFORMASI ACARA';
+    data.judulAcara || data.judul || 'INFORMASI ACARA';
 
   document.getElementById('deskripsi').textContent =
     data.deskripsi || '';
 
   document.getElementById('tanggal').textContent =
-    data.tanggal || '-';
+    formatTanggal(data.tanggal);
 
   document.getElementById('waktu').textContent =
     data.waktu || '-';
@@ -260,16 +293,16 @@ function tampilkanPengaturan(data){
   document.getElementById('lokasi').textContent =
     data.lokasi || '-';
 
-  if(data.hargaTiket !== undefined && data.hargaTiket !== null && data.hargaTiket !== ''){
-    const n = Number(String(data.hargaTiket).replace(/[^0-9]/g,''));
-    document.getElementById('harga').textContent =
-      n ? 'Rp ' + n.toLocaleString('id-ID') : '-';
-  }else{
-    document.getElementById('harga').textContent = '-';
-  }
+  const hargaTiket = data.tiket ?? data.hargaTiket ?? data.harga;
+  document.getElementById('harga').textContent = formatRupiah(hargaTiket);
 
-  document.getElementById('kuota').textContent =
-    data.kuota || '-';
+  const kuotaItem = document.getElementById('kuotaItem');
+  if(data.kuota !== undefined && data.kuota !== null && String(data.kuota).trim() !== ''){
+    document.getElementById('kuota').textContent = data.kuota;
+    kuotaItem.style.display = '';
+  }else{
+    kuotaItem.style.display = 'none';
+  }
 
   const box = document.getElementById('benefit');
 
@@ -304,6 +337,27 @@ function tampilkanPengaturan(data){
     btn.textContent = 'DAFTAR SEKARANG';
   }
 }
+
+async function muatPengaturan(){
+  try{
+    const r = await fetch(API_URL + '?action=pengaturan&_=' + Date.now(), {cache:'no-store'});
+    const raw = await r.text();
+    const result = JSON.parse(raw.trim());
+
+    if(!result || result.ok === false){
+      throw new Error(result?.message || 'Gagal mengambil pengaturan.');
+    }
+
+    // Backend yang digunakan dapat mengembalikan {pengaturan:{...}}
+    // atau langsung object pengaturan. Keduanya didukung.
+    const data = result.pengaturan || result.data || result;
+    tampilkanPengaturan(data);
+  }catch(err){
+    console.error('Gagal memuat pengaturan:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', muatPengaturan);
 
 function escapeHtml(s){
   return String(s)
