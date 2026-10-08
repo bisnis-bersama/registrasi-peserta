@@ -291,10 +291,12 @@ function cari_(p) {
 
   const qWa = normalizeWa_(q);
   const qEmail = normalizeEmail_(q);
+  const qKode = normalizeKode_(q);
   const all = getAllObjects_(sh);
 
   const hasil = all.filter(function(x) {
-    return String(x.kode).toLowerCase() === q.toLowerCase() ||
+    return (qKode && normalizeKode_(x.kode) === qKode) ||
+      String(x.kode).toLowerCase() === q.toLowerCase() ||
       (qWa && normalizeWa_(x.wa) === qWa) ||
       (qEmail && normalizeEmail_(x.email) === qEmail);
   });
@@ -577,11 +579,6 @@ function hargaBerlaku_(date, allowCod) {
     }
   }
 
-  if (eventDate && today === eventDate && !allowCod) {
-    const cod = angka_(s.codHarga);
-    if (cod > 0) return {ok:true,tier:'COD',harga:cod};
-  }
-
   return {
     ok:false,
     message:'Tidak ada harga tiket yang aktif untuk tanggal ' + today + '. Silakan periksa periode Tier di Pengaturan.'
@@ -646,9 +643,12 @@ function findRowByKode_(sh,kode) {
   const lastRow = sh.getLastRow();
   if (lastRow < 2) return null;
   const values = sh.getRange(2,2,lastRow-1,1).getValues();
-  const target = String(kode).trim().toLowerCase();
+  const targetRaw = String(kode).trim().toLowerCase();
+  const target = normalizeKode_(targetRaw);
   for (let i=0;i<values.length;i++) {
-    if (String(values[i][0] || '').trim().toLowerCase() === target) return i+2;
+    const savedRaw = String(values[i][0] || '').trim().toLowerCase();
+    if (savedRaw === targetRaw) return i+2;
+    if (target && normalizeKode_(savedRaw) === target) return i+2;
   }
   return null;
 }
@@ -702,6 +702,13 @@ function normalisasiLinkDrive_(value) {
     return 'https://drive.google.com/file/d/' + url + '/view';
   }
   return url;
+}
+
+function normalizeKode_(value) {
+  const s = String(value || '').trim().toUpperCase();
+  const m = s.match(/^REG[- ]?(\\d+)$/);
+  if (!m) return s;
+  return 'REG-' + String(parseInt(m[1],10)).padStart(4,'0');
 }
 
 function normalizeWa_(value) {

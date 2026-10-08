@@ -445,7 +445,9 @@ button:disabled{
 
       <button
         class="btn"
-        onclick="cekKodeManual()">
+        onclick="prosesKode(
+          document.getElementById('kodeManual').value
+        )">
 
         CEK
 
@@ -1111,20 +1113,6 @@ async function apiPost(data){
 /* =========================================
    PROSES KODE
 ========================================= */
-
-function normalisasiKodeManual(value){
-  let s=String(value||'').trim().toUpperCase();
-  const m=s.match(/^REG-(\d+)$/);
-  if(m) return 'REG-'+m[1].padStart(4,'0');
-  return s;
-}
-
-function cekKodeManual(){
-  const input=document.getElementById('kodeManual');
-  const kode=normalisasiKodeManual(input ? input.value : '');
-  if(input) input.value=kode;
-  prosesKode(kode);
-}
 
 async function prosesKode(kode){
 
