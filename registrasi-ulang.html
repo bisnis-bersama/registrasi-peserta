@@ -1165,15 +1165,27 @@ async function prosesKode(kode){
        1. CARI DATA PESERTA
     ===================================== */
 
+    // Normalisasi kode manual/QR agar REG-3, REG-03, REG-003,
+    // dan REG-0003 dianggap sebagai kode yang sama.
+    function normalisasiKodeRegistrasi(v){
+      v = String(v || '').trim().toUpperCase();
+      v = v.replace(/\s+/g,'');
+      const m = v.match(/^REG[-_]?0*(\d+)$/);
+      if(m){
+        return 'REG-' + String(parseInt(m[1],10)).padStart(4,'0');
+      }
+      return v;
+    }
+
+    const kodeCari = normalisasiKodeRegistrasi(kode);
+
     const cari =
       await apiGet(
-
         API_URL +
         '?action=cari&kode=' +
-        encodeURIComponent(kode) +
+        encodeURIComponent(kodeCari) +
         '&_=' +
         Date.now()
-
       );
 
 
@@ -1335,7 +1347,7 @@ async function prosesKode(kode){
 
         action:'checkin',
 
-        kode:kode
+        kode:kodeCari
 
       });
 
