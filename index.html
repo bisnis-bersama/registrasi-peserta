@@ -275,17 +275,56 @@ function formatRupiah(value){
   return 'Rp ' + Number(raw).toLocaleString('id-ID');
 }
 
+function nilaiAngka(value){
+  const n = Number(String(value ?? '').replace(/[^0-9]/g,''));
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+function parseTanggalKey(value){
+  const s = String(value ?? '').trim();
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(!m) return null;
+  return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+}
+
+function ambilHargaTiket(data){
+  // Prioritas utama mengikuti struktur PENGATURAN saat ini: tier 1/2/3.
+  // Jika periode tier tersedia, pilih tier yang sedang aktif.
+  const sekarang = new Date();
+  const tiers = [
+    {harga:data.tier1Harga, mulai:data.tier1Mulai, selesai:data.tier1Selesai},
+    {harga:data.tier2Harga, mulai:data.tier2Mulai, selesai:data.tier2Selesai},
+    {harga:data.tier3Harga, mulai:data.tier3Mulai, selesai:data.tier3Selesai}
+  ];
+
+  for(const tier of tiers){
+    const harga = nilaiAngka(tier.harga);
+    if(!harga) continue;
+    const mulai = parseTanggalKey(tier.mulai);
+    const selesai = parseTanggalKey(tier.selesai);
+    if(mulai && selesai){
+      const akhir = new Date(selesai);
+      akhir.setHours(23,59,59,999);
+      if(sekarang >= mulai && sekarang <= akhir) return harga;
+    }
+  }
+
+  // Fallback agar tetap kompatibel dengan pengaturan lama.
+  return nilaiAngka(data.tiket) || nilaiAngka(data.hargaTiket) || nilaiAngka(data.harga) ||
+         nilaiAngka(data.tier1Harga) || nilaiAngka(data.tier2Harga) || nilaiAngka(data.tier3Harga);
+}
+
 function tampilkanPengaturan(data){
   if(!data) return;
 
   document.getElementById('judulAcara').textContent =
-    data.judulAcara || data.judul || 'INFORMASI ACARA';
+    data.judul || data.judulAcara || 'INFORMASI ACARA';
 
   document.getElementById('deskripsi').textContent =
     data.deskripsi || '';
 
   document.getElementById('tanggal').textContent =
-    formatTanggal(data.tanggal);
+    formatTanggal((data.tanggalAcara || data.tanggal));
 
   document.getElementById('waktu').textContent =
     data.waktu || '-';
@@ -293,7 +332,7 @@ function tampilkanPengaturan(data){
   document.getElementById('lokasi').textContent =
     data.lokasi || '-';
 
-  const hargaTiket = data.tiket ?? data.hargaTiket ?? data.harga;
+  const hargaTiket = ambilHargaTiket(data);
   document.getElementById('harga').textContent = formatRupiah(hargaTiket);
 
   const kuotaItem = document.getElementById('kuotaItem');
