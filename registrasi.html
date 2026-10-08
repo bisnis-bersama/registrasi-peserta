@@ -36,6 +36,10 @@ textarea{min-height:90px;resize:vertical}
 .file-box{background:#fafafa;border:1px dashed #ccc;border-radius:11px;padding:10px}
 input[type=file]{padding:8px;border:0;background:transparent}
 .small{font-size:12px;color:#777;margin-top:7px;line-height:1.45}
+.payment-choice{margin-top:14px;padding:13px;border:1px solid #e5e5e5;border-radius:12px;background:#fafafa;text-align:center}
+.payment-title{font-size:13px;font-weight:900;color:#111}
+.payment-note{font-size:11px;color:#777;margin-top:4px}
+.btn-cod{display:flex;align-items:center;justify-content:center;width:100%;height:45px;margin-top:10px;border-radius:10px;background:#111;color:#ffc107;text-decoration:none;font-size:13px;font-weight:900}
 button{width:100%;border:0;border-radius:12px;padding:15px;margin-top:22px;background:#ffc107;color:#111;font-size:16px;font-weight:900;cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
 #hasil{display:none;margin-top:22px;border-top:2px dashed #ddd;padding-top:22px}
@@ -116,6 +120,12 @@ button:disabled{opacity:.6;cursor:not-allowed}
       <label>Bukti Transfer</label>
       <div class="file-box"><input id="bukti" type="file" accept="image/*,.pdf"></div>
       <div class="small">Opsional. Jika diaktifkan di Apps Script, file akan disimpan ke Google Drive.</div>
+
+      <div class="payment-choice">
+        <div class="payment-title">PILIH CARA PEMBAYARAN</div>
+        <div class="payment-note">Silakan pilih salah satu: transfer atau bayar di tempat.</div>
+        <a href="registrasi-cod.html" class="btn-cod">💵 BAYAR DI TEMPAT (COD)</a>
+      </div>
 
       <button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
     </form>
