@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Registrasi Ulang - DPD TESPOIN Majalengka</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  background:#f3f3f3;
+  font-family:Arial,sans-serif;
+  color:#222
+}
+
+.wrap{
+  max-width:720px;
+  margin:auto;
+  padding:16px
+}
+
+.header{
+  background:#111;
+  color:#fff;
+  border-radius:18px;
+  padding:20px;
+  text-align:center
+}
+
+.header h1{
+  margin:0;
+  color:#f5c400;
+  font-size:22px
+}
+
+.header p{
+  margin:6px 0 0;
+  color:#ddd;
+  font-size:13px
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  margin-top:15px;
+  box-shadow:0 3px 15px rgba(0,0,0,.07)
+}
+
+/* =========================
+   AREA SCANNER
+========================= */
+
+#reader{
+  width:100%;
+  max-width:560px;
+  margin:auto;
+  overflow:hidden;
+  border-radius:14px;
+  background:#111;
+}
+
+/*
+  html5-qrcode membuat video sendiri.
+  Kita biarkan video memenuhi area.
+*/
+#reader video{
+  width:100% !important;
+  height:auto !important;
+  max-height:70vh;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+/* Hilangkan beberapa elemen bawaan */
+#reader img{
+  max-width:100%;
+}
+
+#reader__scan_region{
+  min-height:250px;
+}
+
+/* =========================
+   PETUNJUK SCAN
+========================= */
+
+.scan-guide{
+  margin-top:12px;
+  background:#111;
+  color:#fff;
+  border-radius:12px;
+  padding:13px 12px;
+  text-align:center;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.5;
+}
+
+.scan-guide.ready{
+  background:#0b7d2b;
+}
+
+.scan-guide.warning{
+  background:#9a7100;
+}
+
+.scan-guide.error{
+  background:#a40000;
+}
+
+.camera-status{
+  text-align:center;
+  padding:10px 5px 4px;
+  font-size:13px;
+  color:#666;
+  line-height:1.5;
+}
+
+/* =========================
+   TOMBOL
+========================= */
+
+.camera-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:13px 15px;
+  font-weight:800;
+  cursor:pointer
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
+
+.btn{
+  background:#f5c400;
+  color:#111
+}
+
+.btn-dark{
+  background:#111;
+  color:#fff
+}
+
+.scan-note{
+  text-align:center;
+  color:#777;
+  font-size:12px;
+  margin-top:10px;
+  line-height:1.5;
+}
+
+/* =========================
+   MANUAL
+========================= */
+
+.manual{
+  display:flex;
+  gap:8px;
+  margin-top:15px
+}
+
+.manual input{
+  flex:1;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:15px
+}
+
+/* =========================
+   HASIL
+========================= */
+
+.result{
+  display:none;
+  margin-top:16px;
+  padding:15px;
+  border-radius:12px
+}
+
+.ok{
+  background:#e9f8ed;
+  border:1px solid #b9e5c3
+}
+
+.warn{
+  background:#fff3cd;
+  border:1px solid #f0d98a
+}
+
+.err{
+  background:#ffe6e6;
+  color:#9b0000;
+  border:1px solid #f0bcbc
+}
+
+.title{
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:10px
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  font-size:13px
+}
+
+.row:last-child{
+  border-bottom:0
+}
+
+.row span{
+  color:#666
+}
+
+.row b{
+  text-align:right;
+  word-break:break-word
+}
+
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:15px;
+  font-size:11px;
+  font-weight:900
+}
+
+.lunas{
+  background:#dff5e4;
+  color:#087b25
+}
+
+.belum{
+  background:#fff3cd;
+  color:#856404
+}
+
+.hadir{
+  background:#dff5e4;
+  color:#087b25
+}
+
+.belumhadir{
+  background:#eee;
+  color:#555
+}
+
+.benefit-ok{
+  margin-top:15px;
+  padding:13px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #b9e5c3;
+  color:#087b25;
+  font-weight:800;
+  line-height:1.5
+}
+
+.benefit-warning{
+  margin-top:15px;
+  padding:14px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #e0c86b;
+  color:#856404;
+  font-weight:800;
+  line-height:1.5
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:14px;
+  color:#666;
+  text-decoration:none;
+  font-size:13px
+}
+
+@media(max-width:520px){
+
+  .wrap{
+    padding:10px
+  }
+
+  .card{
+    padding:12px
+  }
+
+  .manual{
+    display:block
+  }
+
+  .manual button{
+    width:100%;
+    margin-top:8px
+  }
+
+  .camera-actions{
+    grid-template-columns:1fr
+  }
+
+  .row{
+    align-items:flex-start
+  }
+
+  .row b{
+    max-width:58%
+  }
+
+  #reader{
+    border-radius:12px
+  }
+
+}
+
+
+/* =========================
+   ANIMASI SCAN
+========================= */
+
+@keyframes pulseScan{
+  0%{
+    opacity:.65
+  }
+
+  50%{
+    opacity:1
+  }
+
+  100%{
+    opacity:.65
+  }
+}
+
+.scanning{
+  animation:pulseScan 1.5s infinite;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+
+    <h1>REGISTRASI ULANG</h1>
+
+    <p>
+      DPD TESPOIN MAJALENGKA
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <div id="reader"></div>
+
+
+    <!-- PETUNJUK OTOMATIS -->
+
+    <div
+      id="scanGuide"
+      class="scan-guide">
+
+      📱 Arahkan QR peserta ke tengah kamera
+
+    </div>
+
+
+    <div
+      id="cameraStatus"
+      class="camera-status">
+
+      Kamera belum aktif.
+      Tekan <b>BUKA KAMERA</b>.
+
+    </div>
+
+
+    <div class="camera-actions">
+
+      <button
+        class="btn"
+        id="btnCamera"
+        onclick="bukaKamera()">
+
+        📷 BUKA KAMERA
+
+      </button>
+
+
+      <button
+        class="btn-dark"
+        id="btnStop"
+        onclick="tutupKamera()"
+        disabled>
+
+        ■ TUTUP KAMERA
+
+      </button>
+
+    </div>
+
+
+    <div class="scan-note">
+
+      Arahkan QR ke tengah kamera.
+      <br>
+      Jika QR terlalu kecil, dekatkan HP.
+      Jika QR memenuhi layar, jauhkan sedikit.
+
+    </div>
+
+
+    <div class="manual">
+
+      <input
+        id="kodeManual"
+        placeholder="Atau masukkan REG-0001">
+
+      <button
+        class="btn"
+        onclick="prosesKode(
+          document.getElementById('kodeManual').value
+        )">
+
+        CEK
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="result"
+      class="result">
+    </div>
+
+  </div>
+
+
+  <a
+    class="back"
+    href="index-admin.html">
+
+    ← Kembali ke Dashboard Admin
+
+  </a>
+
+</div>
+
+
+<script>
+
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+
+let sedangProses = false;
+
+let scanner = null;
+
+let kameraAktif = false;
+
+let waktuMulaiScan = 0;
+
+let timerPetunjuk = null;
+
+
+/* =========================================
+   ELEMENT PETUNJUK
+========================================= */
+
+function setGuide(text,type=''){
+
+  const el =
+    document.getElementById('scanGuide');
+
+  if(!el)
+    return;
+
+  el.className =
+    'scan-guide ' + type;
+
+  el.innerHTML =
+    text;
+
+}
+
+
+/* =========================================
+   STATUS KAMERA
+========================================= */
+
+function setCameraStatus(text,error=false){
+
+  const el =
+    document.getElementById('cameraStatus');
+
+  el.innerHTML =
+    text;
+
+  el.style.color =
+    error ? '#b00000' : '#666';
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function esc(v){
+
+  return String(v ?? '')
+    .replace(
+      /[&<>"']/g,
+      m => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      }[m])
+    );
+
+}
+
+
+/* =========================================
+   MULAI PETUNJUK OTOMATIS
+========================================= */
+
+function mulaiPetunjuk(){
+
+  clearInterval(timerPetunjuk);
+
+  waktuMulaiScan =
+    Date.now();
+
+
+  setGuide(
+    '📱 ARAHKAN QR KE TENGAH KAMERA',
+    ''
+  );
+
+
+  /*
+    Petunjuk ini bersifat adaptive.
+    Kita tidak mengklaim mengetahui jarak
+    secara presisi sebelum QR terbaca.
+  */
+
+  timerPetunjuk =
+    setInterval(() => {
+
+      if(!kameraAktif)
+        return;
+
+
+      const detik =
+        Math.floor(
+          (Date.now() - waktuMulaiScan) / 1000
+        );
+
+
+      if(detik < 3){
+
+        setGuide(
+          '📱 ARAHKAN QR KE TENGAH KAMERA',
+          ''
+        );
+
+      }
+
+      else if(detik < 7){
+
+        setGuide(
+          '🔍 QR BELUM TERBACA — DEKATKAN QR SEDIKIT',
+          'warning'
+        );
+
+      }
+
+      else if(detik < 12){
+
+        setGuide(
+          '↔️ JIKA QR TERLALU BESAR, JAUHKAN HP SEDIKIT',
+          'warning'
+        );
+
+      }
+
+      else{
+
+        setGuide(
+          '⚠ QR BELUM TERBACA — LURUSKAN QR DAN ATUR JARAK',
+          'warning'
+        );
+
+      }
+
+    },3000);
+
+}
+
+
+/* =========================================
+   STOP PETUNJUK
+========================================= */
+
+function stopPetunjuk(){
+
+  clearInterval(timerPetunjuk);
+
+  timerPetunjuk =
+    null;
+
+}
+
+
+/* =========================================
+   BUKA KAMERA
+========================================= */
+
+async function bukaKamera(){
+
+  if(kameraAktif)
+    return;
+
+
+  if(!window.isSecureContext){
+
+    setCameraStatus(
+      'Kamera membutuhkan koneksi HTTPS.',
+      true
+    );
+
+    setGuide(
+      '⚠ HALAMAN HARUS HTTPS',
+      'error'
+    );
+
+    return;
+  }
+
+
+  try{
+
+    document
+      .getElementById('btnCamera')
+      .disabled = true;
+
+
+    setCameraStatus(
+      'Meminta izin kamera...'
+    );
+
+
+    setGuide(
+      '📷 MEMBUKA KAMERA...',
+      ''
+    );
+
+
+    /*
+      Minta izin kamera.
+    */
+
+    const stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          facingMode:{
+            ideal:'environment'
+          },
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:720
+          }
+
+        }
+
+      });
+
+
+    /*
+      Stream izin dihentikan.
+      html5-qrcode akan membuka kamera sendiri.
+    */
+
+    stream
+      .getTracks()
+      .forEach(
+        t => t.stop()
+      );
+
+
+    /*
+      Bersihkan reader.
+    */
+
+    document
+      .getElementById('reader')
+      .innerHTML = '';
+
+
+    scanner =
+      new Html5Qrcode('reader');
+
+
+    /*
+      Ukuran QR BOX otomatis.
+      Lebih besar dari versi lama sehingga
+      QR dari jarak agak jauh lebih mudah masuk.
+    */
+
+    const qrbox =
+      function(
+        viewfinderWidth,
+        viewfinderHeight
+      ){
+
+        const minEdge =
+          Math.min(
+            viewfinderWidth,
+            viewfinderHeight
+          );
+
+
+        let size =
+          Math.floor(
+            minEdge * 0.72
+          );
+
+
+        /*
+          Batas minimum.
+        */
+
+        size =
+          Math.max(
+            220,
+            size
+          );
+
+
+        /*
+          Batas maksimum.
+        */
+
+        size =
+          Math.min(
+            420,
+            size
+          );
+
+
+        return {
+          width:size,
+          height:size
+        };
+
+      };
+
+
+    /*
+      Mulai scanner.
+    */
+
+    await scanner.start(
+
+      {
+        facingMode:'environment'
+      },
+
+      {
+
+        fps:15,
+
+        qrbox:qrbox,
+
+        aspectRatio:1.333334,
+
+        disableFlip:true,
+
+        experimentalFeatures:{
+          useBarCodeDetectorIfSupported:true
+        }
+
+      },
+
+      onScanSuccess,
+
+      onScanFailure
+
+    );
+
+
+    kameraAktif =
+      true;
+
+
+    document
+      .getElementById('btnStop')
+      .disabled = false;
+
+
+    setCameraStatus(
+      '✓ Kamera aktif. Kamera belakang digunakan.'
+    );
+
+
+    mulaiPetunjuk();
+
+
+  }
+
+  catch(e){
+
+    console.error(e);
+
+
+    document
+      .getElementById('btnCamera')
+      .disabled = false;
+
+
+    let pesan =
+      'Kamera tidak dapat dibuka.';
+
+
+    if(e.name === 'NotAllowedError'){
+
+      pesan =
+        'Izin kamera ditolak. Tekan ikon 🔒/pengaturan situs di Chrome lalu izinkan Kamera.';
+
+    }
+
+    else if(e.name === 'NotFoundError'){
+
+      pesan =
+        'Kamera tidak ditemukan pada perangkat.';
+
+    }
+
+    else if(e.name === 'NotReadableError'){
+
+      pesan =
+        'Kamera sedang dipakai aplikasi lain. Tutup Kamera/WhatsApp lalu coba lagi.';
+
+    }
+
+    else if(e.name === 'SecurityError'){
+
+      pesan =
+        'Akses kamera diblokir browser. Pastikan halaman HTTPS.';
+
+    }
+
+    else if(e.message){
+
+      pesan +=
+        ' ' + e.message;
+
+    }
+
+
+    setCameraStatus(
+      pesan,
+      true
+    );
+
+
+    setGuide(
+      '❌ KAMERA TIDAK DAPAT DIGUNAKAN',
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   TUTUP KAMERA
+========================================= */
+
+async function tutupKamera(){
+
+  stopPetunjuk();
+
+
+  try{
+
+    if(scanner){
+
+      if(kameraAktif){
+
+        await scanner.stop();
+
+      }
+
+      await scanner.clear();
+
+    }
+
+  }
+
+  catch(e){
+
+    console.warn(e);
+
+  }
+
+
+  scanner = null;
+
+  kameraAktif = false;
+
+
+  document
+    .getElementById('reader')
+    .innerHTML = '';
+
+
+  document
+    .getElementById('btnStop')
+    .disabled = true;
+
+
+  document
+    .getElementById('btnCamera')
+    .disabled = false;
+
+
+  setCameraStatus(
+    'Kamera ditutup. Tekan BUKA KAMERA untuk memulai lagi.'
+  );
+
+
+  setGuide(
+    '📱 ARAHKAN QR KE TENGAH KAMERA',
+    ''
+  );
+
+}
+
+
+/* =========================================
+   QR BERHASIL TERBACA
+========================================= */
+
+function onScanSuccess(
+  decodedText,
+  decodedResult
+){
+
+  if(sedangProses)
+    return;
+
+
+  stopPetunjuk();
+
+
+  setGuide(
+    '✓ QR TERBACA — MEMERIKSA DATA...',
+    'ready'
+  );
+
+
+  setCameraStatus(
+    'QR berhasil terbaca. Mohon tunggu...'
+  );
+
+
+  /*
+    Langsung proses kode.
+  */
+
+  prosesKode(decodedText);
+
+}
+
+
+/* =========================================
+   QR GAGAL TERBACA
+========================================= */
+
+function onScanFailure(errorMessage){
+
+  /*
+    Jangan menampilkan error setiap frame.
+    html5-qrcode memang sering memanggil
+    callback ini ketika QR belum ditemukan.
+  */
+
+}
+
+
+/* =========================================
+   API GET
+========================================= */
+
+async function apiGet(url){
+
+  const r =
+    await fetch(url);
+
+
+  const raw =
+    await r.text();
+
+
+  try{
+
+    return JSON.parse(
+      raw.trim()
+    );
+
+  }
+
+  catch(e){
+
+    throw new Error(
+      'Respons API tidak dapat dibaca.'
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   API POST
+========================================= */
+
+async function apiPost(data){
+
+  const r =
+    await fetch(
+
+      API_URL,
+
+      {
+        method:'POST',
+
+        headers:{
+          'Content-Type':
+          'text/plain;charset=utf-8'
+        },
+
+        body:
+          JSON.stringify(data)
+
+      }
+
+    );
+
+
+  const raw =
+    await r.text();
+
+
+  try{
+
+    return JSON.parse(
+      raw.trim()
+    );
+
+  }
+
+  catch(e){
+
+    throw new Error(
+      'Respons API tidak dapat dibaca.'
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   PROSES KODE
+========================================= */
+
+async function prosesKode(kode){
+
+  if(sedangProses)
+    return;
+
+
+  kode =
+    String(kode || '')
+      .trim()
+      .toUpperCase();
+
+
+  if(!kode){
+
+    tampil(
+
+      `
+      <div class="title">
+        ⚠ KODE BELUM DIISI
+      </div>
+
+      <div>
+        Masukkan atau scan kode registrasi peserta.
+      </div>
+      `,
+
+      'warn'
+
+    );
+
+    return;
+
+  }
+
+
+  sedangProses =
+    true;
+
+
+  setGuide(
+    '🔍 MEMERIKSA KODE ' + esc(kode) + '...',
+    ''
+  );
+
+
+  try{
+
+    /* =====================================
+       1. CARI DATA PESERTA
+    ===================================== */
+
+    // Normalisasi kode manual/QR agar REG-3, REG-03, REG-003,
+    // dan REG-0003 dianggap sebagai kode yang sama.
+    function normalisasiKodeRegistrasi(v){
+      v = String(v || '').trim().toUpperCase();
+      v = v.replace(/\s+/g,'');
+      const m = v.match(/^REG[-_]?0*(\d+)$/);
+      if(m){
+        return 'REG-' + String(parseInt(m[1],10)).padStart(4,'0');
+      }
+      return v;
+    }
+
+    const kodeCari = normalisasiKodeRegistrasi(kode);
+
+    const cari =
+      await apiGet(
+        API_URL +
+        '?action=cari&kode=' +
+        encodeURIComponent(kodeCari) +
+        '&_=' +
+        Date.now()
+      );
+
+
+    if(!cari.ok){
+
+      throw new Error(
+        cari.message ||
+        'Peserta tidak ditemukan.'
+      );
+
+    }
+
+
+    const p =
+      cari.peserta;
+
+
+    /* =====================================
+       2. CEK STATUS PEMBAYARAN
+    ===================================== */
+
+    const statusBayar =
+      String(
+        p.statusPembayaran || ''
+      )
+      .trim()
+      .toUpperCase();
+
+
+    /* =====================================
+       3. BELUM LUNAS
+    ===================================== */
+
+    if(statusBayar !== 'LUNAS'){
+
+      await tutupKamera();
+
+
+      tampil(
+
+        `
+        <div class="title">
+          ❌ REGISTRASI ULANG GAGAL
+        </div>
+
+        <div
+          style="
+            font-size:16px;
+            font-weight:700;
+            margin-bottom:12px
+          ">
+
+          Silakan lakukan pembayaran terlebih dahulu.
+
+        </div>
+
+
+        <div class="row">
+
+          <span>Kode Registrasi</span>
+
+          <b>${esc(p.kode)}</b>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>Nama Peserta</span>
+
+          <b>${esc(p.nama)}</b>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>Nama Toko</span>
+
+          <b>${esc(p.toko)}</b>
+
+        </div>
+
+
+        <div class="row">
+
+          <span>Status Pembayaran</span>
+
+          <b>
+
+            <span class="status belum">
+              BELUM LUNAS
+            </span>
+
+          </b>
+
+        </div>
+
+
+        <div
+          style="
+            margin-top:14px;
+            color:#9b0000;
+            font-weight:700
+          ">
+
+          Data peserta belum dicatat sebagai
+          registrasi ulang.
+
+        </div>
+
+        `,
+
+        'err'
+
+      );
+
+
+      return;
+
+    }
+
+
+    /* =====================================
+       4. SUDAH LUNAS
+       CEK KEHADIRAN
+    ===================================== */
+
+    const statusHadir =
+      String(
+        p.statusKehadiran || ''
+      )
+      .trim()
+      .toUpperCase();
+
+
+    if(statusHadir === 'HADIR'){
+
+      await tutupKamera();
+
+
+      tampilData(
+        p,
+        'sudah'
+      );
+
+
+      return;
+
+    }
+
+
+    /* =====================================
+       5. CHECK-IN
+    ===================================== */
+
+    const check =
+      await apiPost({
+
+        action:'checkin',
+
+        kode:kodeCari
+
+      });
+
+
+    if(!check.ok){
+
+      if(
+        check.alreadyCheckin &&
+        check.peserta
+      ){
+
+        await tutupKamera();
+
+
+        tampilData(
+          check.peserta,
+          'sudah'
+        );
+
+
+        return;
+
+      }
+
+
+      throw new Error(
+        check.message ||
+        'Registrasi ulang gagal.'
+      );
+
+    }
+
+
+    /* =====================================
+       6. BERHASIL
+    ===================================== */
+
+    await tutupKamera();
+
+
+    tampilData(
+      check.peserta,
+      'berhasil'
+    );
+
+
+  }
+
+  catch(e){
+
+    await tutupKamera();
+
+
+    tampil(
+
+      `
+      <div class="title">
+        ❌ GAGAL
+      </div>
+
+      <div>
+        ${esc(e.message)}
+      </div>
+      `,
+
+      'err'
+
+    );
+
+  }
+
+  finally{
+
+    sedangProses =
+      false;
+
+  }
+
+}
+
+
+/* =========================================
+   TAMPIL DATA
+========================================= */
+
+function tampilData(p,mode){
+
+  const bayar =
+    String(
+      p.statusPembayaran ||
+      'BELUM LUNAS'
+    )
+    .toUpperCase();
+
+
+  const hadir =
+    String(
+      p.statusKehadiran ||
+      'BELUM HADIR'
+    )
+    .toUpperCase();
+
+
+  let cls =
+    'ok';
+
+
+  let title =
+    '✓ REGISTRASI ULANG BERHASIL';
+
+
+  let pesanBenefit =
+    '';
+
+
+  if(mode === 'berhasil'){
+
+    cls =
+      'ok';
+
+
+    title =
+      '✓ REGISTRASI ULANG BERHASIL';
+
+
+    pesanBenefit = `
+
+      <div class="benefit-ok">
+
+        ✓ PESERTA SUDAH TERCATAT HADIR.
+
+        <br><br>
+
+        Benefit peserta dapat diberikan
+        <b>1 KALI SAJA</b>.
+
+      </div>
+
+    `;
+
+  }
+
+
+  if(mode === 'sudah'){
+
+    cls =
+      'warn';
+
+
+    title =
+      '⚠ SUDAH REGISTRASI ULANG';
+
+
+    pesanBenefit = `
+
+      <div class="benefit-warning">
+
+        ⚠ PESERTA SUDAH HADIR
+
+        <br><br>
+
+        Peserta ini sudah melakukan
+        registrasi ulang sebelumnya.
+
+        <br><br>
+
+        <b>
+          JANGAN BERIKAN BENEFIT UNTUK
+          KEDUA KALINYA.
+        </b>
+
+      </div>
+
+    `;
+
+  }
+
+
+  tampil(
+
+    `
+
+    <div class="title">
+      ${title}
+    </div>
+
+
+    ${
+      mode === 'sudah'
+
+      ?
+
+      `<div
+        style="
+          font-size:15px;
+          font-weight:700;
+          margin-bottom:12px;
+        ">
+
+        Kode ini sudah digunakan untuk
+        registrasi ulang.
+
+      </div>`
+
+      :
+
+      `<div
+        style="
+          font-size:15px;
+          font-weight:700;
+          margin-bottom:12px;
+        ">
+
+        Data peserta berhasil ditemukan
+        dan tercatat.
+
+      </div>`
+
+    }
+
+
+    <div class="row">
+
+      <span>Kode Registrasi</span>
+
+      <b>
+        ${esc(p.kode)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Nama Peserta</span>
+
+      <b>
+        ${esc(p.nama)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Nama Toko</span>
+
+      <b>
+        ${esc(p.toko)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Alamat</span>
+
+      <b>
+        ${esc(p.alamat)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>No. WhatsApp</span>
+
+      <b>
+        ${esc(p.wa)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Email</span>
+
+      <b>
+        ${esc(p.email)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Ukuran Kaos</span>
+
+      <b>
+        ${esc(p.ukuran)}
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Status Pembayaran</span>
+
+      <b>
+
+        <span
+          class="status ${
+            bayar === 'LUNAS'
+              ? 'lunas'
+              : 'belum'
+          }">
+
+          ${esc(bayar)}
+
+        </span>
+
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Nominal Pembayaran</span>
+
+      <b>
+        ${
+          p.nominalPembayaran
+            ? rupiah(p.nominalPembayaran)
+            : '-'
+        }
+      </b>
+
+    </div>
+
+    <div class="row">
+      <span>Tier Registrasi</span>
+      <b>${esc(p.tierRegistrasi || '-')}</b>
+    </div>
+
+    <div class="row">
+      <span>Estimasi Saat Daftar</span>
+      <b>${p.estimasiHarga ? rupiah(p.estimasiHarga) : '-'}</b>
+    </div>
+
+    <div class="row">
+      <span>Tier Pembayaran</span>
+      <b>${esc(p.tierPembayaran || '-')}</b>
+    </div>
+
+
+    <div class="row">
+
+      <span>Status Kehadiran</span>
+
+      <b>
+
+        <span
+          class="status ${
+            hadir === 'HADIR'
+              ? 'hadir'
+              : 'belumhadir'
+          }">
+
+          ${esc(hadir)}
+
+        </span>
+
+      </b>
+
+    </div>
+
+
+    <div class="row">
+
+      <span>Jam Check-in</span>
+
+      <b>
+        ${esc(p.jamCheckin || '-')}
+      </b>
+
+    </div>
+
+
+    ${pesanBenefit}
+
+    `,
+
+    cls
+
+  );
+
+}
+
+
+/* =========================================
+   TAMPILKAN PESAN
+========================================= */
+
+function tampil(html,cls){
+
+  const el =
+    document.getElementById('result');
+
+
+  el.className =
+    'result ' + cls;
+
+
+  el.innerHTML =
+    html;
+
+
+  el.style.display =
+    'block';
+
+}
+
+
+/* =========================================
+   RUPIAH
+========================================= */
+
+function rupiah(v){
+
+  const n =
+    Number(
+      String(v)
+        .replace(/[^0-9.-]/g,'')
+    );
+
+
+  return isNaN(n)
+
+    ? esc(v)
+
+    : 'Rp ' +
+      n.toLocaleString('id-ID');
+
+}
+
+</script>
+
+</body>
+</html>
