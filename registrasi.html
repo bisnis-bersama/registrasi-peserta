@@ -271,7 +271,7 @@ async function loadHarga(){
     label.textContent = aktif.nama;
     value.textContent = 'Rp ' + aktif.harga.toLocaleString('id-ID');
     note.textContent =
-      'Tambahkan kode unik saat melakukan pembayaran.';
+      'Tambahkan 3 digit kode unik saat melakukan pembayaran.';
   }catch(err){
     console.error('Gagal membaca Pengaturan:', err);
     label.textContent = 'HARGA BELUM TERSEDIA';
