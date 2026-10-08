@@ -5,345 +5,190 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Registrasi Peserta - DPD TESPOIN Majalengka</title>
 <style>
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#151515}
-.page{max-width:760px;margin:auto;padding-bottom:40px}
-.hero{background:#111;color:#fff;text-align:center;padding:26px 18px 30px;position:relative;overflow:hidden}
-.hero:before,.hero:after{content:"";position:absolute;width:125px;height:125px;background:#ffc107;transform:rotate(45deg);opacity:.95}
-.hero:before{left:-100px;top:-78px}.hero:after{right:-100px;top:-78px}
-.hero-content{position:relative;z-index:2}
-.logo{width:90px;height:90px;object-fit:contain;display:block;margin:0 auto 9px}
-.hero h1{font-size:30px;line-height:1.05;margin:0;font-weight:900}
-.hero h1 span{color:#ffc107}
-.hero .sub{font-size:13px;letter-spacing:2px;color:#ddd;margin-top:10px}
-.hero .title{margin-top:20px;font-size:21px;font-weight:800}
-.wrap{padding:18px 14px}
-.card{background:#fff;border-radius:20px;padding:22px;box-shadow:0 5px 22px rgba(0,0,0,.08)}
-.info{background:#fff8dc;border:1px solid #f1d875;border-left:5px solid #ffc107;border-radius:12px;padding:14px;margin-bottom:18px;font-size:14px;line-height:1.55;color:#444}
-.price-card{background:#111;color:#fff;border-radius:17px;padding:17px 18px;margin-bottom:22px;text-align:center}
-.price-label{color:#ffc107;font-weight:900;font-size:13px;letter-spacing:1px}
-.price{font-size:30px;font-weight:900;margin:4px 0}
-.price-note{font-size:12px;color:#ccc}
-.form-title{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.form-icon{width:48px;height:48px;min-width:48px;border-radius:50%;background:#ffc107;display:flex;align-items:center;justify-content:center;font-size:23px}
-.form-title h2{font-size:22px;margin:0}
-label{display:block;font-weight:800;margin:17px 0 7px;font-size:14px}
-.req{color:#c40000}
-input,textarea,select{width:100%;padding:13px 14px;border:1px solid #d8d8d8;border-radius:11px;font-size:15px;outline:none;background:#fff;color:#222;transition:.2s}
-input:focus,textarea:focus,select:focus{border-color:#ffc107;box-shadow:0 0 0 3px rgba(255,193,7,.15)}
-textarea{min-height:90px;resize:vertical}
-.file-box{background:#fafafa;border:1px dashed #ccc;border-radius:11px;padding:10px}
-input[type=file]{padding:8px;border:0;background:transparent}
-.small{font-size:12px;color:#777;margin-top:7px;line-height:1.45}
-button{width:100%;border:0;border-radius:12px;padding:15px;margin-top:22px;background:#ffc107;color:#111;font-size:16px;font-weight:900;cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
-#hasil{display:none;margin-top:22px;border-top:2px dashed #ddd;padding-top:22px}
-.proof-head{text-align:center}.proof-head h2{font-size:19px;margin:9px 0 5px}.proof-head p{font-size:13px;color:#666;margin:0 0 15px}
-.success-badge{display:inline-block;background:#e9f8ed;color:#087b25;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:800}
-.proof-card{background:#fff;border:1px solid #ddd;border-radius:16px;padding:14px}
-.qr-box{margin:18px auto;padding:16px;background:#fff;border:1px solid #ddd;border-radius:14px;text-align:center;width:max-content;max-width:100%}
-#qrcode{width:220px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:auto}
-#qrcode img,#qrcode canvas{max-width:220px;height:auto}
-.qr-label{margin-top:10px;font-size:11px;font-weight:800;color:#555;max-width:220px}
-.detail-box{margin-top:16px;border:1px solid #ddd;border-radius:13px;overflow:hidden}
-.detail-title{background:#111;color:#ffc107;padding:12px;text-align:center;font-weight:900}
-.detail-row{display:flex;justify-content:space-between;gap:15px;padding:10px 12px;border-bottom:1px solid #eee;font-size:13px}
-.detail-row:last-child{border-bottom:0}.detail-row span{color:#666}.detail-row b{text-align:right;word-break:break-word}
-.save-note{margin-top:15px;padding:12px;border-radius:10px;background:#fff8d8;font-size:12px;line-height:1.5}
-.proof-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}.proof-actions button{margin-top:0}.btn-secondary{background:#222;color:#fff}
-.status{text-align:center;margin-top:12px;font-weight:700}.error{color:#c00}.success{color:#087b25}
-.footer{text-align:center;color:#888;font-size:11px;margin-top:16px}
-@media(max-width:520px){.hero h1{font-size:25px}.hero .title{font-size:19px}.card{padding:18px}.price{font-size:27px}.detail-row{align-items:flex-start}.wrap{padding:14px 10px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;color:#222}.wrap{max-width:620px;margin:0 auto;padding:20px}.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 5px 25px rgba(0,0,0,.08)}.header{text-align:center;margin-bottom:22px}.logo{width:90px;height:90px;object-fit:contain;margin-bottom:8px}h1{font-size:22px;margin:4px 0}.sub{color:#777;font-size:14px}label{display:block;font-weight:700;margin:15px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd;border-radius:10px;font-size:15px;outline:none}input:focus,textarea:focus,select:focus{border-color:#f5c400}textarea{min-height:90px;resize:vertical}button{width:100%;border:0;border-radius:12px;padding:14px;margin-top:20px;background:#f5c400;color:#111;font-size:16px;font-weight:800;cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}.price-box{background:#111;color:#fff;border-radius:14px;padding:16px;margin-bottom:18px;text-align:center}.price-box .tier{font-size:20px;font-weight:900;color:#f5c400}.price-box .amount{font-size:26px;font-weight:900;margin-top:4px}.price-box small{display:block;color:#ddd;margin-top:5px}.info{background:#fff8d8;border-left:4px solid #f5c400;padding:12px;border-radius:8px;margin-bottom:18px;font-size:14px}.small{font-size:12px;color:#777;margin-top:8px}#hasil{display:none;margin-top:22px;border-top:2px dashed #ddd;padding-top:22px}.status{text-align:center;margin-top:12px;font-weight:700}.error{color:#c00}.success{color:#087b25}.proof-head{text-align:center}.proof-head h2{font-size:19px;margin:8px 0 5px}.proof-head p{font-size:13px;color:#666;margin:0 0 15px}.success-badge{display:inline-block;background:#e9f8ed;color:#087b25;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:800}.qr-box{margin:18px auto;padding:16px;background:#fff;border:1px solid #ddd;border-radius:14px;text-align:center;width:max-content;max-width:100%}#qrcode{width:220px;min-height:220px;display:flex;align-items:center;justify-content:center;margin:auto}#qrcode img,#qrcode canvas{max-width:220px;height:auto}.qr-label{margin-top:10px;font-size:11px;font-weight:800;color:#555;max-width:220px}.detail-box{margin-top:16px;border:1px solid #ddd;border-radius:13px;overflow:hidden}.detail-title{background:#111;color:#f5c400;padding:12px;text-align:center;font-weight:900}.detail-row{display:flex;justify-content:space-between;gap:15px;padding:10px 12px;border-bottom:1px solid #eee;font-size:13px}.detail-row:last-child{border-bottom:0}.detail-row span{color:#666}.detail-row b{text-align:right;word-break:break-word}.save-note{margin-top:15px;padding:12px;border-radius:10px;background:#fff8d8;font-size:12px;line-height:1.5}.proof-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}.proof-actions button{margin-top:0}.btn-secondary{background:#222;color:#fff}.duplicate-box{display:none;margin-top:14px;padding:13px;border-radius:10px;background:#fff0f0;border:1px solid #e00000;color:#b00000;font-size:14px;line-height:1.5;font-weight:700}.file-info{display:none;margin-top:9px;padding:10px;border-radius:9px;background:#eef8ff;border:1px solid #cde8ff;color:#155b85;font-size:12px;line-height:1.5}@media(max-width:480px){.detail-row{align-items:flex-start}}
 </style>
 </head>
-
-<body data-version="FINAL-JPG-QR-2026-10-06">
-<header class="hero">
-  <div class="hero-content">
-    <img src="logo.png" class="logo" onerror="this.style.display='none'" alt="Logo TESPOIN">
-    <h1>DPD TESPOIN <span>MAJALENGKA</span></h1>
-    <div class="sub">TEKNISI PONSEL MAJALENGKA</div>
-    <div class="title">REGISTRASI PESERTA</div>
-  </div>
-</header>
-
-<div class="page">
-<div class="wrap">
-  <div class="card">
-    <div class="info">
-      <b>Silakan isi data dengan benar.</b><br>
-      Setelah berhasil, sistem akan memberikan <b>Kode Registrasi</b> seperti <b>REG-0001</b>.
-      Simpan kode dan QR Code karena akan digunakan saat registrasi ulang.
-    </div>
-
-    <div class="price-card">
-      <div class="price-label" id="priceLabel">MEMUAT HARGA...</div>
-      <div class="price" id="priceValue">-</div>
-      <div class="price-note" id="priceNote">Harga ditentukan otomatis berdasarkan tanggal.</div>
-    </div>
-
-    <div class="form-title"><div class="form-icon">📝</div><h2>Data Peserta</h2></div>
-
-    <form id="formRegistrasi">
-      <label>Nama Peserta <span class="req">*</span></label>
-      <input id="nama" required autocomplete="name">
-
-      <label>Nama Toko</label>
-      <input id="toko">
-
-      <label>No. WhatsApp <span class="req">*</span></label>
-      <input id="wa" type="tel" required placeholder="08xxxxxxxxxx">
-
-      <label>Alamat <span class="req">*</span></label>
-      <textarea id="alamat" required></textarea>
-
-      <label>Email</label>
-      <input id="email" type="email">
-
-      <label>Ukuran Kaos <span class="req">*</span></label>
-      <select id="ukuran" required>
-        <option value="">-- Pilih Ukuran --</option>
-        <option>S</option>
-        <option>M</option>
-        <option>L</option>
-        <option>XL</option>
-        <option>XXL</option>
-        <option>XXXL</option>
-        <option>XXXXL</option>
-      </select>
-
-      <label>Bukti Transfer</label>
-      <div class="file-box"><input id="bukti" type="file" accept="image/*,.pdf"></div>
-      <div class="small">Opsional. Jika diaktifkan di Apps Script, file akan disimpan ke Google Drive.</div>
-
-      <button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
-    </form>
-
-    <div id="hasil">
-      <div class="proof-head">
-        <div class="success-badge">✓ REGISTRASI BERHASIL</div>
-        <h2>BUKTI REGISTRASI PESERTA</h2>
-        <p>Simpan halaman ini. QR Code digunakan untuk registrasi ulang saat acara.</p>
-      </div>
-
-      <div class="qr-box">
-        <div id="qrcode"></div>
-        <div class="qr-label">SCAN QR CODE INI SAAT REGISTRASI ULANG</div>
-      </div>
-
-      <div class="detail-box">
-        <div class="detail-title">RINCIAN LENGKAP PESERTA</div>
-
-        <div class="detail-row"><span>Nama Peserta</span><b id="rNama">-</b></div>
-        <div class="detail-row"><span>Nama Toko</span><b id="rToko">-</b></div>
-        <div class="detail-row"><span>No. WhatsApp</span><b id="rWa">-</b></div>
-        <div class="detail-row"><span>Alamat</span><b id="rAlamat">-</b></div>
-        <div class="detail-row"><span>Email</span><b id="rEmail">-</b></div>
-        <div class="detail-row"><span>Ukuran Kaos</span><b id="rUkuran">-</b></div>
-        <div class="detail-row"><span>Kode Registrasi</span><b id="rKode">-</b></div>
-<div class="detail-row"><span>Tier Registrasi</span><b id="rTier">-</b></div>
-<div class="detail-row"><span>Estimasi Harga</span><b id="rEstimasi">-</b></div>
-      </div>
-
-      <div class="save-note">
-        <b>PENTING:</b> Simpan bukti registrasi dalam bentuk JPG.
-        QR Code jangan dihapus karena akan digunakan saat registrasi ulang.
-      </div>
-
-      <div class="proof-actions">
-        <button type="button" class="btn-secondary" id="btnSimpanQR">SIMPAN BUKTI JPG</button>
-      </div>
-    </div>
-
-    <div id="pesan" class="status"></div>
-  </div>
-  <div class="footer">DPD TESPOIN MAJALENGKA • REGISTRASI PESERTA</div>
+<body data-version="FINAL-JPG-QR-2026-10-07-DUPLIKAT-FIX">
+<div class="wrap"><div class="card">
+<div class="header"><img src="logo.png" class="logo" onerror="this.style.display='none'"><h1>DPD TESPOIN MAJALENGKA</h1><div class="sub">REGISTRASI PESERTA</div></div>
+<div class="info">Silakan isi data dengan benar. Setelah berhasil, sistem akan memberikan <b>Kode Registrasi</b> seperti <b>REG-0001</b>.</div><div id="hargaBox" class="price-box"><div class="tier" id="tierAktif">MEMUAT HARGA...</div><div class="amount" id="hargaAktif">-</div><small id="keteranganHarga">Harga akan ditentukan otomatis berdasarkan tanggal.</small></div>
+<form id="formRegistrasi">
+<label>Nama Peserta *</label><input id="nama" required autocomplete="name">
+<label>Nama Toko</label><input id="toko">
+<label>No. WhatsApp *</label><input id="wa" type="tel" required placeholder="08xxxxxxxxxx">
+<label>Alamat *</label><textarea id="alamat" required></textarea>
+<label>Email</label><input id="email" type="email">
+<label>Ukuran Kaos *</label><select id="ukuran" required><option value="">-- Pilih Ukuran --</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option><option>XXXXL</option></select>
+<label>Bukti Transfer</label><input id="bukti" type="file" accept="image/*,.pdf">
+<div class="small">Upload bukti transfer pembayaran. File akan disimpan ke folder <b>BUKTI TRANSFER</b> dan link-nya akan dicatat di data peserta.</div>
+<div id="fileInfo" class="file-info"></div>
+<button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
+</form>
+<div id="duplikatBox" class="duplicate-box"></div>
+<div id="hasil">
+<div class="proof-head"><div class="success-badge">✓ REGISTRASI BERHASIL</div><h2>BUKTI REGISTRASI PESERTA</h2><p>Simpan halaman ini. QR Code digunakan untuk registrasi ulang saat acara.</p></div>
+<div class="qr-box"><div id="qrcode"></div><div class="qr-label">SCAN QR CODE INI SAAT REGISTRASI ULANG</div></div>
+<div class="detail-box"><div class="detail-title">RINCIAN LENGKAP PESERTA</div>
+<div class="detail-row"><span>Nama Peserta</span><b id="rNama">-</b></div><div class="detail-row"><span>Nama Toko</span><b id="rToko">-</b></div><div class="detail-row"><span>No. WhatsApp</span><b id="rWa">-</b></div><div class="detail-row"><span>Alamat</span><b id="rAlamat">-</b></div><div class="detail-row"><span>Email</span><b id="rEmail">-</b></div><div class="detail-row"><span>Ukuran Kaos</span><b id="rUkuran">-</b></div><div class="detail-row"><span>Kode Registrasi</span><b id="rKode">-</b></div><div class="detail-row"><span>Tier / Jenis Harga</span><b id="rTier">-</b></div><div class="detail-row"><span>Estimasi Harga</span><b id="rEstimasi">-</b></div><div class="detail-row"><span>Status Pembayaran</span><b id="rStatusBayar">BELUM LUNAS</b></div>
 </div>
+<div class="save-note"><b>PENTING:</b> Simpan bukti registrasi dalam bentuk JPG. QR Code jangan dihapus karena akan digunakan saat registrasi ulang.</div>
+<div class="proof-actions"><button type="button" class="btn-secondary" id="btnSimpanQR">SIMPAN BUKTI JPG</button></div>
 </div>
-
+<div id="pesan" class="status"></div>
+</div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script>
-/*
-  GANTI dengan URL Web App Google Apps Script setelah deployment.
-  Contoh:
-  https://script.google.com/macros/s/XXXXXXXX/exec
-*/
-const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+const API_URL='https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+const MAX_FILE_SIZE=5*1024*1024;
+const form=document.getElementById('formRegistrasi');
+const btn=document.getElementById('btnDaftar');
+const pesan=document.getElementById('pesan');
+const hasil=document.getElementById('hasil');
+const duplikatBox=document.getElementById('duplikatBox');
+const buktiInput=document.getElementById('bukti');
+const fileInfo=document.getElementById('fileInfo');
 
-const form = document.getElementById('formRegistrasi');
-const btn = document.getElementById('btnDaftar');
-const pesan = document.getElementById('pesan');
-const hasil = document.getElementById('hasil');
-
-form.addEventListener('submit', async function(e){
-  e.preventDefault();
-
-  if (!API_URL || API_URL.includes('ISI_URL')) {
-    tampilPesan('URL Apps Script belum dipasang.', true);
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'MENYIMPAN...';
-  tampilPesan('');
-
-  try {
-    const file = document.getElementById('bukti').files[0];
-    let buktiBase64 = '';
-    let buktiNama = '';
-
-    if (file) {
-      // Batasi agar upload dari browser tidak terlalu besar.
-      if (file.size > 5 * 1024 * 1024) {
-        throw new Error('Ukuran bukti transfer maksimal 5 MB.');
-      }
-
-      buktiNama = file.name;
-      buktiBase64 = await fileToBase64(file);
-    }
-
-    const data = {
-      action: 'registrasi',
-      nama: document.getElementById('nama').value.trim(),
-      toko: document.getElementById('toko').value.trim(),
-      wa: document.getElementById('wa').value.trim(),
-      alamat: document.getElementById('alamat').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      ukuran: document.getElementById('ukuran').value,
-      buktiBase64: buktiBase64,
-      buktiNama: buktiNama
-    };
-
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify(data)
-    });
-
-    const raw = await response.text();
-    let result;
-
-    try {
-      // Code.gs mengirim JSON sebagai body HTML polos.
-      result = JSON.parse(raw.trim());
-    } catch (parseError) {
-      console.error('Respons API:', raw);
-      throw new Error('Data tersimpan, tetapi jawaban API tidak terbaca. Silakan deploy versi Code.gs terbaru.');
-    }
-
-    if (!result.ok) {
-      throw new Error(result.message || 'Registrasi gagal.');
-    }
-
-    tampilkanBukti(result.peserta);
-    hasil.style.display = 'block';
-
-    form.reset();
-    tampilPesan('Data peserta sudah tersimpan ke Google Sheet.', false);
-
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: 'smooth'
-    });
-
-  } catch(err) {
-    tampilPesan(err.message || 'Terjadi kesalahan.', true);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'DAFTAR SEKARANG';
-  }
+buktiInput.addEventListener('change',function(){
+ const file=this.files[0];
+ if(!file){fileInfo.style.display='none';fileInfo.textContent='';return;}
+ if(file.size>MAX_FILE_SIZE){fileInfo.style.display='block';fileInfo.style.background='#fff0f0';fileInfo.style.borderColor='#ffcccc';fileInfo.style.color='#b00000';fileInfo.innerHTML='⚠️ Ukuran file terlalu besar.<br>Maksimal 5 MB.';this.value='';return;}
+ fileInfo.style.display='block';fileInfo.style.background='#eef8ff';fileInfo.style.borderColor='#cde8ff';fileInfo.style.color='#155b85';fileInfo.innerHTML='✓ File dipilih:<br><b>'+escapeHtml(file.name)+'</b><br>'+(file.size/1024/1024).toFixed(2)+' MB';
 });
 
-function fileToBase64(file){
+form.addEventListener('submit',async function(e){
+ e.preventDefault();
+ if(!API_URL){tampilPesan('URL Apps Script belum dipasang.',true);return;}
+ btn.disabled=true;btn.textContent='MEMERIKSA DATA...';tampilPesan('');duplikatBox.style.display='none';duplikatBox.textContent='';
+ try{
+  const nama=document.getElementById('nama').value.trim();
+  const toko=document.getElementById('toko').value.trim();
+  const wa=document.getElementById('wa').value.trim();
+  const alamat=document.getElementById('alamat').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const ukuran=document.getElementById('ukuran').value;
+  if(!nama||!wa||!alamat||!ukuran)throw new Error('Mohon lengkapi semua data wajib.');
+
+  const duplikat=await cekDuplikat(wa,email);
+  if(duplikat){duplikatBox.innerHTML='⚠️ <b>DATA SUDAH TERDAFTAR</b><br>'+duplikat;duplikatBox.style.display='block';tampilPesan('Registrasi dibatalkan karena data sudah terdaftar.',true);return;}
+
+  btn.textContent='MENGECILKAN BUKTI...';
+  const file=buktiInput.files[0];let buktiBase64='';let buktiNamaFile='';
+  if(file){if(file.size>MAX_FILE_SIZE)throw new Error('Ukuran bukti transfer maksimal 5 MB.');buktiNamaFile=file.name;buktiBase64=await fileToBase64(file);}
+
+  const data={action:'registrasi',nama,toko,wa,alamat,email,ukuran,buktiBase64,buktiNamaFile,buktiNama:buktiNamaFile};
+  btn.textContent='MENYIMPAN...';
+  const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+  const raw=await response.text();let result;
+  try{result=JSON.parse(raw.trim());}catch(err){console.error(raw);throw new Error('Jawaban API tidak dapat dibaca. Pastikan Web App sudah di-deploy ke versi terbaru.');}
+
+  if(!result.ok){
+   if(result.duplicate){duplikatBox.innerHTML='⚠️ <b>DATA SUDAH TERDAFTAR</b><br>'+escapeHtml(result.message||'Data peserta sudah terdaftar.');duplikatBox.style.display='block';tampilPesan('Registrasi dibatalkan karena data sudah terdaftar.',true);return;}
+   throw new Error(result.message||'Registrasi gagal.');
+  }
+
+  tampilkanBukti(result.peserta);hasil.style.display='block';form.reset();fileInfo.style.display='none';fileInfo.textContent='';tampilPesan('Data peserta sudah tersimpan ke Google Sheet.',false);window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+ }catch(err){console.error(err);tampilPesan(err.message||'Terjadi kesalahan.',true);}finally{btn.disabled=false;btn.textContent='DAFTAR SEKARANG';}
+});
+
+async function cekDuplikat(wa,email){
+  // Pemeriksaan duplikat dilakukan oleh Code.gs saat POST registrasi.
+  // Tidak perlu GET /?action=cari di sini karena deployment lama
+  // dapat mengembalikan 'Action GET tidak dikenal'.
+  return '';
+}
+
+async function cariAPI(q){
+ try{const url=API_URL+'?action=cari&q='+encodeURIComponent(q)+'&_='+Date.now();const response=await fetch(url);const raw=await response.text();const result=JSON.parse(raw.trim());return result&&result.ok&&result.peserta?result.peserta:null;}catch(err){console.error('Cek duplikat:',err);return null;}
+}
+
+function normalisasiWa(v){let s=String(v||'').replace(/\D/g,'');if(s.startsWith('62'))s='0'+s.substring(2);if(s.startsWith('8'))s='0'+s;return s;}
+async function fileToBase64(file){
+  // Kompres gambar sebelum dikirim ke Apps Script.
+  // Ini mencegah proses MENYIMPAN terlalu lama karena Base64 membesar ~33%.
+  if(!file.type.startsWith('image/')){
+    return await readFileAsDataURL(file);
+  }
+
+  const MAX_SIDE = 1400;
+  const QUALITY = 0.78;
+
+  const dataUrl = await readFileAsDataURL(file);
+  const img = new Image();
+
+  await new Promise((resolve,reject)=>{
+    img.onload=resolve;
+    img.onerror=()=>reject(new Error('Gambar bukti transfer tidak dapat dibaca.'));
+    img.src=dataUrl;
+  });
+
+  let width=img.naturalWidth || img.width;
+  let height=img.naturalHeight || img.height;
+  const scale=Math.min(1,MAX_SIDE/Math.max(width,height));
+  width=Math.max(1,Math.round(width*scale));
+  height=Math.max(1,Math.round(height*scale));
+
+  const canvas=document.createElement('canvas');
+  canvas.width=width;
+  canvas.height=height;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,width,height);
+  ctx.drawImage(img,0,0,width,height);
+
+  return canvas.toDataURL('image/jpeg',QUALITY);
+}
+
+function readFileAsDataURL(file){
   return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error('Bukti transfer gagal dibaca.'));
-
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error('Bukti transfer gagal dibaca.'));
     reader.readAsDataURL(file);
   });
 }
 
 function tampilkanBukti(p){
-  document.getElementById('rNama').textContent = p.nama || '-';
-  document.getElementById('rToko').textContent = p.toko || '-';
-  document.getElementById('rWa').textContent = p.wa || '-';
-  document.getElementById('rAlamat').textContent = p.alamat || '-';
-  document.getElementById('rEmail').textContent = p.email || '-';
-  document.getElementById('rUkuran').textContent = p.ukuran || '-';
-  document.getElementById('rKode').textContent = p.kode || '-';
-  document.getElementById('rTier').textContent = p.tierRegistrasi || '-';
-  document.getElementById('rEstimasi').textContent = p.estimasiHarga ? formatRupiah(p.estimasiHarga) : '-';
+ document.getElementById('rNama').textContent=p.nama||'-';document.getElementById('rToko').textContent=p.toko||'-';document.getElementById('rWa').textContent=p.wa||'-';document.getElementById('rAlamat').textContent=p.alamat||'-';document.getElementById('rEmail').textContent=p.email||'-';document.getElementById('rUkuran').textContent=p.ukuran||'-';document.getElementById('rKode').textContent=p.kode||'-';document.getElementById('rTier').textContent=(p.tierRegistrasi||'-');document.getElementById('rEstimasi').textContent=p.estimasiHarga?rupiah(p.estimasiHarga):'-';document.getElementById('rStatusBayar').textContent=p.statusPembayaran||'BELUM LUNAS';
+ const qr=document.getElementById('qrcode');qr.innerHTML='';new QRCode(qr,{text:p.kode||'',width:220,height:220,correctLevel:QRCode.CorrectLevel.H});
+ document.getElementById('btnSimpanQR').onclick=async function(){try{const oldText=this.textContent;this.textContent='MEMBUAT JPG...';this.disabled=true;await new Promise(r=>setTimeout(r,150));const canvas=await html2canvas(document.getElementById('hasil'),{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});downloadDataUrl(canvas.toDataURL('image/jpeg',0.95),(p.kode||'REGISTRASI')+'-BUKTI-REGISTRASI.jpg');this.textContent=oldText;}catch(err){alert('Gagal membuat JPG: '+(err.message||err));}finally{this.disabled=false;}};
+}
+function downloadDataUrl(dataUrl,filename){const a=document.createElement('a');a.href=dataUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();}
+function tampilPesan(text,error){pesan.textContent=text||'';pesan.className='status '+(error?'error':'success');}
+function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 
-  const qr = document.getElementById('qrcode');
-  qr.innerHTML = '';
-
-  new QRCode(qr, {
-    text: p.kode,
-    width: 220,
-    height: 220,
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  document.getElementById('rKode').textContent = p.kode || '-';
-
-  document.getElementById('btnSimpanQR').onclick = async function(){
-    const target = document.getElementById('hasil');
-
-    try {
-      const oldText = this.textContent;
-      this.textContent = 'MEMBUAT JPG...';
-      this.disabled = true;
-
-      // Tunggu QR benar-benar dirender.
-      await new Promise(resolve => setTimeout(resolve, 150));
-
-      const canvas = await html2canvas(target, {
-        scale: 2,
-        backgroundColor: '#ffffff',
-        useCORS: true,
-        logging: false
-      });
-
-      downloadDataUrl(
-        canvas.toDataURL('image/jpeg', 0.95),
-        p.kode + '-BUKTI-REGISTRASI.jpg'
-      );
-
-      this.textContent = oldText;
-    } catch (err) {
-      alert('Gagal membuat JPG: ' + (err.message || err));
-    } finally {
-      this.disabled = false;
+async function loadHarga(){
+  const tierEl=document.getElementById('tierAktif');
+  const hargaEl=document.getElementById('hargaAktif');
+  const ketEl=document.getElementById('keteranganHarga');
+  try{
+    tierEl.textContent='MEMUAT HARGA...';
+    hargaEl.textContent='-';
+    const response=await fetch(API_URL+'?action=harga&_='+Date.now(),{cache:'no-store'});
+    const raw=await response.text();
+    let result;
+    try{result=JSON.parse(raw.trim());}
+    catch(e){throw new Error('Respons harga dari server tidak valid.');}
+    if(!result.ok){
+      tierEl.textContent='HARGA BELUM TERSEDIA';
+      hargaEl.textContent='-';
+      ketEl.textContent=result.message||'Silakan periksa Pengaturan.';
+      return;
     }
-  };
+    tierEl.textContent=result.tier||'TIKET PESERTA';
+    hargaEl.textContent=rupiah(result.harga||0);
+    ketEl.textContent=(result.tier==='COD')
+      ? 'Harga COD untuk pendaftaran dan pembayaran langsung di lokasi pada hari acara.'
+      : 'Estimasi harga saat ini. Harga final mengikuti tanggal pembayaran.';
+  }catch(err){
+    console.error('loadHarga:',err);
+    tierEl.textContent='GAGAL MEMUAT HARGA';
+    hargaEl.textContent='-';
+    ketEl.textContent=err.message||'Tidak dapat mengambil harga dari server.';
+  }
 }
 
-function formatRupiah(value){
-  const n = Number(String(value).replace(/[^0-9.-]/g, ''));
-  if (isNaN(n)) return value;
-  return 'Rp ' + n.toLocaleString('id-ID');
-}
-
-function downloadDataUrl(dataUrl, filename){
-  const a = document.createElement('a');
-  a.href = dataUrl;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-}
-
-function tampilPesan(text, error){
-  pesan.textContent = text || '';
-  pesan.className = 'status ' + (error ? 'error' : 'success');
-}
+loadHarga();
 </script>
 </body>
 </html>
