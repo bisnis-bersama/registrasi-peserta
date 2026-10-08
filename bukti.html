@@ -1,3 +1,932 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bukti Registrasi</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div class="nav"><div class="logo">BUKTI REGISTRASI</div><a href="index.html">Beranda</a></div></header>
-<div class="container"><div class="card" style="max-width:600px;margin:auto;text-align:center"><h1>Bukti Registrasi</h1><p class="muted">Tunjukkan halaman ini atau simpan/cetak untuk registrasi ulang.</p><div id="buktiData"></div><div id="qr" style="margin:20px"></div><button onclick="window.print()">CETAK / SIMPAN PDF</button></div></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cek Bukti Registrasi - DPD TESPOIN Majalengka</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f4f4;
+  color:#222;
+}
+
+.wrap{
+  max-width:620px;
+  margin:0 auto;
+  padding:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 5px 25px rgba(0,0,0,.08);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  object-fit:contain;
+  margin-bottom:8px;
+}
+
+h1{
+  font-size:22px;
+  margin:4px 0;
+}
+
+.sub{
+  color:#777;
+  font-size:14px;
+}
+
+.info{
+  background:#fff8d8;
+  border-left:4px solid #f5c400;
+  padding:13px;
+  border-radius:8px;
+  margin-bottom:18px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+label{
+  display:block;
+  font-weight:700;
+  margin:15px 0 7px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:15px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#f5c400;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  margin-top:18px;
+  background:#f5c400;
+  color:#111;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.status{
+  text-align:center;
+  margin-top:15px;
+  font-weight:700;
+}
+
+.error{
+  color:#c00;
+}
+
+.success{
+  color:#087b25;
+}
+
+/* HASIL */
+
+#hasil{
+  display:none;
+  margin-top:24px;
+  border-top:2px dashed #ddd;
+  padding-top:22px;
+}
+
+.proof-head{
+  text-align:center;
+}
+
+.proof-head h2{
+  font-size:19px;
+  margin:10px 0 5px;
+}
+
+.proof-head p{
+  font-size:13px;
+  color:#666;
+  margin:0 0 15px;
+}
+
+.badge{
+  display:inline-block;
+  padding:7px 13px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.badge-lunas{
+  background:#e8f8ed;
+  color:#087b25;
+}
+
+.badge-belum{
+  background:#fff1f1;
+  color:#c00;
+}
+
+.kode-box{
+  margin:18px 0;
+  background:#111;
+  color:#f5c400;
+  border-radius:14px;
+  padding:17px;
+  text-align:center;
+}
+
+.kode-label{
+  font-size:11px;
+  color:#aaa;
+  margin-bottom:6px;
+}
+
+.kode{
+  font-size:29px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.qr-box{
+  margin:18px auto;
+  padding:16px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:14px;
+  text-align:center;
+  width:max-content;
+  max-width:100%;
+}
+
+#qrcode{
+  width:220px;
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:auto;
+}
+
+#qrcode img,
+#qrcode canvas{
+  max-width:220px;
+  height:auto;
+}
+
+.qr-label{
+  margin-top:10px;
+  font-size:11px;
+  font-weight:800;
+  color:#555;
+  max-width:220px;
+}
+
+.detail-box{
+  margin-top:16px;
+  border:1px solid #ddd;
+  border-radius:13px;
+  overflow:hidden;
+}
+
+.detail-title{
+  background:#111;
+  color:#f5c400;
+  padding:12px;
+  text-align:center;
+  font-weight:900;
+}
+
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 12px;
+  border-bottom:1px solid #eee;
+  font-size:13px;
+}
+
+.detail-row:last-child{
+  border-bottom:0;
+}
+
+.detail-row span{
+  color:#666;
+}
+
+.detail-row b{
+  text-align:right;
+  word-break:break-word;
+  max-width:60%;
+}
+
+.note{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#fff8d8;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.actions button{
+  margin-top:0;
+}
+
+.btn-black{
+  background:#111;
+  color:#fff;
+}
+
+.btn-red{
+  background:#d40000;
+  color:#fff;
+}
+
+@media(max-width:480px){
+
+  .wrap{
+    padding:12px;
+  }
+
+  .card{
+    padding:18px;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
+
+  .detail-row{
+    align-items:flex-start;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="card">
+
+<div class="header">
+  <img src="logo.png"
+       class="logo"
+       onerror="this.style.display='none'">
+
+  <h1>DPD TESPOIN MAJALENGKA</h1>
+  <div class="sub">CEK BUKTI REGISTRASI</div>
+</div>
+
+<div class="info">
+  Masukkan <b>No. WhatsApp</b> atau <b>Email</b> yang digunakan
+  saat melakukan registrasi.
+</div>
+
+<form id="formCek">
+
+  <label>No. WhatsApp / Email</label>
+
+  <input
+    id="pencarian"
+    type="text"
+    placeholder="Contoh: 08123456789 atau email@gmail.com"
+    autocomplete="off"
+    required
+  >
+
+  <button id="btnCek" type="submit">
+    CEK REGISTRASI
+  </button>
+
+</form>
+
+<div id="pesan" class="status"></div>
+
+
+<!-- HASIL -->
+
+<div id="hasil">
+
+  <div class="proof-head">
+
+    <div id="statusBadge" class="badge">
+      STATUS
+    </div>
+
+    <h2>BUKTI REGISTRASI PESERTA</h2>
+
+    <p>
+      Simpan bukti ini untuk digunakan saat registrasi ulang.
+    </p>
+
+  </div>
+
+
+  <div class="kode-box">
+
+    <div class="kode-label">
+      KODE REGISTRASI
+    </div>
+
+    <div id="rKode" class="kode">
+      -
+    </div>
+
+  </div>
+
+
+  <div class="qr-box">
+
+    <div id="qrcode"></div>
+
+    <div class="qr-label">
+      SCAN QR CODE INI SAAT REGISTRASI ULANG
+    </div>
+
+  </div>
+
+
+  <div class="detail-box">
+
+    <div class="detail-title">
+      DATA PESERTA
+    </div>
+
+    <div class="detail-row">
+      <span>Nama Peserta</span>
+      <b id="rNama">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Nama Toko</span>
+      <b id="rToko">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>No. WhatsApp</span>
+      <b id="rWa">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Alamat</span>
+      <b id="rAlamat">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Email</span>
+      <b id="rEmail">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Ukuran Kaos</span>
+      <b id="rUkuran">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Status Pembayaran</span>
+      <b id="rStatus">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Nominal</span>
+      <b id="rNominal">-</b>
+    </div>
+
+    <div class="detail-row">
+      <span>Tanggal Pembayaran</span>
+      <b id="rTanggal">-</b>
+    </div>
+
+  </div>
+
+
+  <div class="note">
+
+    <b>PENTING:</b><br>
+
+    Simpan bukti registrasi ini.
+    QR Code digunakan panitia untuk registrasi ulang/check-in
+    pada saat acara.
+
+  </div>
+
+
+  <div class="actions">
+
+    <button
+      type="button"
+      id="btnJpg"
+      class="btn-black">
+      SIMPAN BUKTI JPG
+    </button>
+
+    <button
+      type="button"
+      id="btnCariLagi"
+      class="btn-red">
+      CARI PESERTA LAIN
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+<script>
+
+/* API YANG SUDAH ADA DI REGISTRASI.HTML */
+
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+
+const form = document.getElementById('formCek');
+
+const btnCek = document.getElementById('btnCek');
+
+const pesan = document.getElementById('pesan');
+
+const hasil = document.getElementById('hasil');
+
+
+
+form.addEventListener('submit', async function(e){
+
+  e.preventDefault();
+
+  const keyword =
+    document.getElementById('pencarian').value.trim();
+
+  if(!keyword){
+
+    tampilPesan(
+      'Masukkan No. WhatsApp atau Email.',
+      true
+    );
+
+    return;
+  }
+
+
+  btnCek.disabled = true;
+
+  btnCek.textContent = 'MENCARI...';
+
+  hasil.style.display = 'none';
+
+  tampilPesan('');
+
+
+  try{
+
+    /*
+      API dicoba menggunakan action=cariPeserta.
+      Parameter yang dikirim adalah keyword.
+    */
+
+    const url =
+      API_URL +
+      '?action=cariPeserta&keyword=' +
+      encodeURIComponent(keyword);
+
+
+    const response =
+      await fetch(url, {
+        method:'GET',
+        cache:'no-store'
+      });
+
+
+    const raw =
+      await response.text();
+
+
+    console.log('RESPON API:', raw);
+
+
+    let data;
+
+
+    try{
+
+      data = JSON.parse(raw.trim());
+
+    }catch(err){
+
+      throw new Error(
+        'Jawaban API bukan JSON. Periksa Code.gs.'
+      );
+
+    }
+
+
+    if(!data.ok){
+
+      throw new Error(
+        data.message ||
+        'Data peserta tidak ditemukan.'
+      );
+
+    }
+
+
+    const peserta =
+      data.peserta ||
+      data.data;
+
+
+    if(!peserta){
+
+      throw new Error(
+        'Data peserta kosong.'
+      );
+
+    }
+
+
+    tampilkanPeserta(peserta);
+
+    hasil.style.display = 'block';
+
+
+    setTimeout(function(){
+
+      hasil.scrollIntoView({
+        behavior:'smooth',
+        block:'start'
+      });
+
+    },100);
+
+
+  }catch(err){
+
+    console.error(err);
+
+    tampilPesan(
+      err.message ||
+      'Terjadi kesalahan saat mencari data.',
+      true
+    );
+
+  }finally{
+
+    btnCek.disabled = false;
+
+    btnCek.textContent =
+      'CEK REGISTRASI';
+
+  }
+
+});
+
+
+
+function tampilkanPeserta(p){
+
+  const kode =
+    p.kode ||
+    p.kodeRegistrasi ||
+    p['Kode Registrasi'] ||
+    '-';
+
+
+  document.getElementById('rKode').textContent =
+    kode;
+
+
+  document.getElementById('rNama').textContent =
+    p.nama ||
+    p.namaPeserta ||
+    p['Nama Peserta'] ||
+    '-';
+
+
+  document.getElementById('rToko').textContent =
+    p.toko ||
+    p.namaToko ||
+    p['Nama Toko'] ||
+    '-';
+
+
+  document.getElementById('rWa').textContent =
+    p.wa ||
+    p.noWa ||
+    p.noWhatsApp ||
+    p['No. WhatsApp'] ||
+    '-';
+
+
+  document.getElementById('rAlamat').textContent =
+    p.alamat ||
+    p['Alamat'] ||
+    '-';
+
+
+  document.getElementById('rEmail').textContent =
+    p.email ||
+    p['Email'] ||
+    '-';
+
+
+  document.getElementById('rUkuran').textContent =
+    p.ukuran ||
+    p.ukuranKaos ||
+    p['Ukuran Kaos'] ||
+    '-';
+
+
+  const status =
+    p.status ||
+    p.statusPembayaran ||
+    p['Status Pembayaran'] ||
+    'BELUM LUNAS';
+
+
+  document.getElementById('rStatus').textContent =
+    status;
+
+
+  document.getElementById('rNominal').textContent =
+    formatRupiah(
+      p.nominal ||
+      p['Nominal'] ||
+      0
+    );
+
+  document.getElementById('rTierRegistrasi').textContent =
+    p.tierRegistrasi || p['Tier Registrasi'] || '-';
+  document.getElementById('rEstimasi').textContent =
+    p.estimasiHarga ? formatRupiah(p.estimasiHarga) : '-';
+  document.getElementById('rTierPembayaran').textContent =
+    p.tierPembayaran || p['Tier Pembayaran'] || '-';
+
+
+  document.getElementById('rTanggal').textContent =
+    p.tanggalPembayaran ||
+    p['Tanggal Pembayaran'] ||
+    '-';
+
+
+  const badge =
+    document.getElementById('statusBadge');
+
+
+  badge.textContent =
+    status;
+
+
+  badge.className =
+    'badge ' +
+    (
+      String(status).toUpperCase().includes('LUNAS')
+      ? 'badge-lunas'
+      : 'badge-belum'
+    );
+
+
+  /* QR */
+
+  const qr =
+    document.getElementById('qrcode');
+
+
+  qr.innerHTML = '';
+
+
+  if(kode && kode !== '-'){
+
+    new QRCode(qr, {
+
+      text: String(kode),
+
+      width:220,
+
+      height:220,
+
+      correctLevel:
+        QRCode.CorrectLevel.H
+
+    });
+
+  }
+
+}
+
+
+
+/* SIMPAN JPG */
+
+document.getElementById('btnJpg')
+.addEventListener('click', async function(){
+
+  const btn = this;
+
+  const oldText =
+    btn.textContent;
+
+  try{
+
+    btn.disabled = true;
+
+    btn.textContent =
+      'MEMBUAT JPG...';
+
+
+    const target =
+      document.getElementById('hasil');
+
+
+    await new Promise(
+      resolve => setTimeout(resolve,300)
+    );
+
+
+    const canvas =
+      await html2canvas(target, {
+
+        scale:2,
+
+        backgroundColor:'#ffffff',
+
+        useCORS:true,
+
+        logging:false
+
+      });
+
+
+    const kode =
+      document.getElementById('rKode')
+      .textContent
+      .trim();
+
+
+    const a =
+      document.createElement('a');
+
+
+    a.href =
+      canvas.toDataURL(
+        'image/jpeg',
+        0.95
+      );
+
+
+    a.download =
+      (kode || 'BUKTI') +
+      '-BUKTI-REGISTRASI.jpg';
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+  }catch(err){
+
+    alert(
+      'Gagal membuat JPG: ' +
+      (err.message || err)
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      oldText;
+
+  }
+
+});
+
+
+
+/* CARI LAGI */
+
+document.getElementById('btnCariLagi')
+.addEventListener('click',function(){
+
+  hasil.style.display =
+    'none';
+
+  document.getElementById(
+    'pencarian'
+  ).value = '';
+
+  document.getElementById(
+    'pencarian'
+  ).focus();
+
+  tampilPesan('');
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
+});
+
+
+
+function formatRupiah(value){
+
+  if(
+    value === undefined ||
+    value === null ||
+    value === '' ||
+    value === '-'
+  ){
+
+    return '-';
+
+  }
+
+
+  const n =
+    Number(
+      String(value)
+      .replace(/[^0-9.-]/g,'')
+    );
+
+
+  if(isNaN(n)){
+
+    return value;
+
+  }
+
+
+  return 'Rp ' +
+    n.toLocaleString('id-ID');
+
+}
+
+
+
+function tampilPesan(text,error){
+
+  pesan.textContent =
+    text || '';
+
+  pesan.className =
+    'status ' +
+    (
+      error
+      ? 'error'
+      : 'success'
+    );
+
+}
+
+</script>
+
+</body>
+</html>

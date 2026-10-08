@@ -1,3 +1,1693 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Data Peserta</title><link rel="stylesheet" href="style.css"></head><body>
-<header><div class="nav"><div class="logo">SEMUA PESERTA</div><nav><a href="index.html">Index</a><a href="lunas.html">Sudah Lunas</a><a href="registrasi-ulang.html">Registrasi Ulang</a></nav></div></header>
-<div class="container"><div class="card"><h1>Peserta Sudah Registrasi</h1><p class="muted">Template tabel untuk data yang nantinya berasal dari Spreadsheet.</p><table><thead><tr><th>Kode</th><th>Nama</th><th>Toko</th><th>WA</th><th>Status</th></tr></thead><tbody id="tabelPeserta"></tbody></table></div></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Data Peserta - DPD TESPOIN Majalengka</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6f8;
+  color:#222;
+}
+
+.header{
+  background:#111;
+  color:#fff;
+  padding:22px 20px;
+}
+
+.header h1{
+  margin:0;
+  font-size:26px;
+  font-weight:800;
+}
+
+.header p{
+  margin:7px 0 0;
+  color:#ccc;
+  font-size:14px;
+}
+
+.container{
+  max-width:1400px;
+  margin:auto;
+  padding:20px;
+}
+
+/* =========================
+   STATISTIK
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:#fff;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
+  border-left:5px solid #111;
+}
+
+.stat .label{
+  font-size:12px;
+  color:#777;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.stat .value{
+  font-size:30px;
+  font-weight:900;
+}
+
+.stat.belum{
+  border-left-color:#dc3545;
+}
+
+.stat.lunas{
+  border-left-color:#198754;
+}
+
+.stat.hadir{
+  border-left-color:#0d6efd;
+}
+
+/* =========================
+   CONTROL
+========================= */
+
+.controls{
+  background:#fff;
+  padding:15px;
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  margin-bottom:15px;
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.tab{
+  border:1px solid #ddd;
+  background:#fff;
+  padding:10px 15px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:13px;
+}
+
+.tab.active{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.search{
+  width:100%;
+  padding:13px 15px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  outline:none;
+  font-size:14px;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+  margin-bottom:15px;
+  padding:11px 14px;
+  border-radius:9px;
+  background:#eef2f5;
+  font-size:13px;
+  display:none;
+}
+
+.status.show{
+  display:block;
+}
+
+.status.error{
+  background:#ffe5e8;
+  color:#b42318;
+}
+
+.status.success{
+  background:#e7f7ed;
+  color:#146c43;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1100px;
+}
+
+thead{
+  background:#111;
+  color:#fff;
+}
+
+th{
+  padding:13px 12px;
+  text-align:left;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  font-size:13px;
+  vertical-align:middle;
+}
+
+tbody tr:hover{
+  background:#fafafa;
+}
+
+.empty{
+  text-align:center;
+  padding:35px;
+  color:#777;
+}
+
+/* =========================
+   BADGE
+========================= */
+
+.badge{
+  display:inline-block;
+  padding:6px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.badge-lunas{
+  background:#d1fae5;
+  color:#065f46;
+}
+
+.badge-belum{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge-hadir{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+.badge-belum-hadir{
+  background:#f1f5f9;
+  color:#475569;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.btn{
+  border:0;
+  padding:8px 11px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:800;
+}
+
+.btn-proof{
+  background:#111;
+  color:#fff;
+}
+
+.btn-refresh{
+  background:#198754;
+  color:#fff;
+  margin-bottom:12px;
+}
+
+.btn-lunas{
+  flex:1;
+  background:#198754;
+  color:#fff;
+  padding:12px;
+}
+
+.btn-close{
+  background:#ddd;
+  color:#222;
+  padding:12px 18px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:9999;
+  padding:20px;
+  overflow:auto;
+}
+
+.modal.show{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-box{
+  width:100%;
+  max-width:650px;
+  background:#fff;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+
+.modal-head{
+  background:#111;
+  color:#fff;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-head h2{
+  margin:0;
+  font-size:18px;
+}
+
+.close{
+  background:none;
+  border:0;
+  color:#fff;
+  font-size:26px;
+  cursor:pointer;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.detail{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:9px;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.detail b{
+  color:#555;
+}
+
+.detail span{
+  word-break:break-word;
+}
+
+.proof-title{
+  font-size:14px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.proof-box{
+  border:1px dashed #bbb;
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+  background:#fafafa;
+}
+
+.proof-box img{
+  max-width:100%;
+  max-height:500px;
+  border-radius:8px;
+  display:block;
+  margin:auto;
+}
+
+.no-proof{
+  color:#888;
+  padding:25px 10px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:800px){
+
+  .container{
+    padding:12px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .stat .value{
+    font-size:25px;
+  }
+
+  .header{
+    padding:18px 15px;
+  }
+
+  .header h1{
+    font-size:21px;
+  }
+
+  .detail{
+    grid-template-columns:110px 1fr;
+  }
+}
+
+@media(max-width:450px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stat .label{
+    font-size:10px;
+  }
+
+  .stat .value{
+    font-size:23px;
+  }
+
+  .tab{
+    padding:8px 10px;
+    font-size:11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>DATA PESERTA</h1>
+  <p>DPD TESPOIN MAJALENGKA — Data peserta, pembayaran & kehadiran</p>
+</div>
+
+<div class="container">
+
+  <button class="btn btn-refresh" onclick="load()">
+    ↻ MUAT ULANG DATA
+  </button>
+
+  <div id="status" class="status"></div>
+
+  <div class="stats">
+
+    <div class="stat total">
+      <div class="label">TOTAL PESERTA</div>
+      <div class="value" id="totalPeserta">0</div>
+    </div>
+
+    <div class="stat belum">
+      <div class="label">BELUM LUNAS</div>
+      <div class="value" id="belumLunas">0</div>
+    </div>
+
+    <div class="stat lunas">
+      <div class="label">SUDAH LUNAS</div>
+      <div class="value" id="sudahLunas">0</div>
+    </div>
+
+    <div class="stat hadir">
+      <div class="label">SUDAH HADIR</div>
+      <div class="value" id="sudahHadir">0</div>
+    </div>
+
+  </div>
+
+  <div class="controls">
+
+    <div class="tabs">
+
+      <button class="tab active"
+        onclick="setTab('SEMUA',this)">
+        SEMUA
+      </button>
+
+      <button class="tab"
+        onclick="setTab('BELUM LUNAS',this)">
+        BELUM LUNAS
+      </button>
+
+      <button class="tab"
+        onclick="setTab('SUDAH LUNAS',this)">
+        SUDAH LUNAS
+      </button>
+
+      <button class="tab"
+        onclick="setTab('SUDAH HADIR',this)">
+        SUDAH HADIR
+      </button>
+
+    </div>
+
+    <input
+      type="text"
+      id="search"
+      class="search"
+      placeholder="Cari nama, kode, toko, WhatsApp, email..."
+      oninput="render()"
+    >
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>NO</th>
+          <th>KODE</th>
+          <th>NAMA PESERTA</th>
+          <th>NAMA TOKO</th>
+          <th>WHATSAPP</th>
+          <th>UKURAN KAOS</th>
+          <th>TIER BAYAR</th>
+          <th>NOMINAL</th>
+          <th>PEMBAYARAN</th>
+          <th>KEHADIRAN</th>
+          <th>JAM CHECK-IN</th>
+          <th>AKSI</th>
+        </tr>
+      </thead>
+
+      <tbody id="tbody">
+        <tr>
+          <td colspan="12" class="empty">
+            Memuat data...
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL DETAIL
+========================= -->
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>BUKTI PEMBAYARAN</h2>
+
+      <button class="close" onclick="closeModal()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="detail">
+
+        <b>Kode</b>
+        <span id="mKode">-</span>
+
+        <b>Nama</b>
+        <span id="mNama">-</span>
+
+        <b>Nama Toko</b>
+        <span id="mToko">-</span>
+
+        <b>WhatsApp</b>
+        <span id="mWa">-</span>
+
+        <b>Alamat</b>
+        <span id="mAlamat">-</span>
+
+        <b>Email</b>
+        <span id="mEmail">-</span>
+
+        <b>Ukuran Kaos</b>
+        <span id="mUkuran">-</span>
+
+        <b>Status</b>
+        <span id="mStatus">-</span>
+
+        <b>Nominal</b>
+        <span id="mNominal">-</span>
+        <b>Tier Registrasi</b>
+        <span id="mTierRegistrasi">-</span>
+
+        <b>Estimasi Saat Daftar</b>
+        <span id="mEstimasi">-</span>
+
+        <b>Tier Pembayaran</b>
+        <span id="mTierPembayaran">-</span>
+
+        <b>Tanggal Verifikasi</b>
+        <span id="mTanggalVerifikasi">-</span>
+
+        <b>Status Kehadiran</b>
+        <span id="mKehadiran">-</span>
+
+        <b>Jam Check-in</b>
+        <span id="mCheckin">-</span>
+
+      </div>
+
+      <div class="proof-title">
+        FOTO BUKTI TRANSFER
+      </div>
+
+      <div class="proof-box" id="proofBox">
+
+        <div class="no-proof">
+          Belum ada bukti transfer.
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="btn btn-lunas"
+          id="btnConfirm"
+          onclick="confirmLunas()"
+        >
+          ✓ KONFIRMASI LUNAS
+        </button>
+        <button
+          class="btn"
+          id="btnCod"
+          onclick="confirmCOD()"
+          style="background:#f59e0b;color:#111"
+        >
+          💵 CATAT PEMBAYARAN COD
+        </button>
+
+        <button
+          class="btn btn-close"
+          onclick="closeModal()"
+        >
+          TUTUP
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
+
+let peserta = [];
+let currentTab = 'SEMUA';
+let selectedPeserta = null;
+
+
+/* =========================
+   HELPER
+========================= */
+
+function clean(value){
+  return String(value ?? '').trim();
+}
+
+function upper(value){
+  return clean(value).toUpperCase();
+}
+
+function esc(value){
+
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+function escAttr(value){
+
+  return String(value ?? '')
+    .replace(/\\/g,'\\\\')
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+function showStatus(message,type=''){
+
+  const el =
+    document.getElementById('status');
+
+  el.textContent = message;
+
+  el.className =
+    'status show ' + type;
+}
+
+
+/* =========================
+   LOAD DATA
+========================= */
+
+async function load(){
+
+  const tbody =
+    document.getElementById('tbody');
+
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="12" class="empty">
+        Memuat data peserta...
+      </td>
+    </tr>
+  `;
+
+  showStatus(
+    'Mengambil data peserta...'
+  );
+
+  try{
+
+    const url =
+      API_URL +
+      '?action=peserta&_=' +
+      Date.now();
+
+    const response =
+      await fetch(url,{
+        method:'GET',
+        cache:'no-store'
+      });
+
+    if(!response.ok){
+      throw new Error(
+        'HTTP ' + response.status
+      );
+    }
+
+    const text =
+      await response.text();
+
+    let data;
+
+    try{
+
+      data = JSON.parse(text);
+
+    }catch(e){
+
+      console.error(
+        'Response bukan JSON:',
+        text
+      );
+
+      throw new Error(
+        'Response API bukan JSON.'
+      );
+    }
+
+    if(!data || data.ok === false){
+
+      throw new Error(
+        data && data.message
+          ? data.message
+          : 'API mengembalikan error.'
+      );
+
+    }
+
+    peserta =
+      Array.isArray(data.peserta)
+        ? data.peserta
+        : [];
+
+    console.log(
+      'DATA PESERTA:',
+      peserta
+    );
+
+    updateStats();
+
+    render();
+
+    showStatus(
+      'Data berhasil dimuat: ' +
+      peserta.length +
+      ' peserta.',
+      'success'
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    peserta = [];
+
+    updateStats();
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="12" class="empty">
+
+          <b>Gagal memuat data peserta.</b>
+
+          <br><br>
+
+          ${esc(error.message)}
+
+          <br><br>
+
+          Silakan tekan
+          <b>MUAT ULANG DATA</b>.
+
+        </td>
+      </tr>
+    `;
+
+    showStatus(
+      'Gagal mengambil data dari server: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================
+   STATISTIK
+========================= */
+
+function updateStats(){
+
+  const total =
+    peserta.length;
+
+  const belum =
+    peserta.filter(p =>
+      upper(p.statusPembayaran)
+      !== 'LUNAS'
+    ).length;
+
+  const lunas =
+    peserta.filter(p =>
+      upper(p.statusPembayaran)
+      === 'LUNAS'
+    ).length;
+
+  const hadir =
+    peserta.filter(p =>
+      upper(p.statusKehadiran)
+      === 'HADIR'
+    ).length;
+
+  document.getElementById(
+    'totalPeserta'
+  ).textContent = total;
+
+  document.getElementById(
+    'belumLunas'
+  ).textContent = belum;
+
+  document.getElementById(
+    'sudahLunas'
+  ).textContent = lunas;
+
+  document.getElementById(
+    'sudahHadir'
+  ).textContent = hadir;
+
+}
+
+
+/* =========================
+   TAB
+========================= */
+
+function setTab(tab,button){
+
+  currentTab = tab;
+
+  document
+    .querySelectorAll('.tab')
+    .forEach(function(el){
+
+      el.classList.remove('active');
+
+    });
+
+  if(button){
+    button.classList.add('active');
+  }
+
+  render();
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function getFiltered(){
+
+  const keyword =
+    clean(
+      document.getElementById(
+        'search'
+      ).value
+    ).toLowerCase();
+
+  return peserta.filter(function(p){
+
+    const pembayaran =
+      upper(p.statusPembayaran);
+
+    const kehadiran =
+      upper(p.statusKehadiran);
+
+
+    if(
+      currentTab === 'BELUM LUNAS' &&
+      pembayaran === 'LUNAS'
+    ){
+      return false;
+    }
+
+
+    if(
+      currentTab === 'SUDAH LUNAS' &&
+      pembayaran !== 'LUNAS'
+    ){
+      return false;
+    }
+
+
+    if(
+      currentTab === 'SUDAH HADIR' &&
+      kehadiran !== 'HADIR'
+    ){
+      return false;
+    }
+
+
+    if(!keyword){
+      return true;
+    }
+
+
+    const gabungan = [
+
+      p.kode,
+
+      p.nama,
+
+      p.toko,
+
+      p.wa,
+
+      p.alamat,
+
+      p.email,
+
+      p.ukuran,
+
+      p.statusPembayaran,
+
+      p.tierRegistrasi,
+
+      p.tierPembayaran,
+
+      p.metodePembayaran,
+
+      p.statusKehadiran
+
+    ]
+    .map(clean)
+    .join(' ')
+    .toLowerCase();
+
+
+    return gabungan.includes(
+      keyword
+    );
+
+  });
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function render(){
+
+  const tbody =
+    document.getElementById(
+      'tbody'
+    );
+
+  const data =
+    getFiltered();
+
+
+  if(!data.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="12"
+            class="empty">
+          Tidak ada data peserta.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    data.map(function(p,index){
+
+      /*
+       * SESUAI CODE.GS
+       */
+
+      const kode =
+        clean(p.kode || '-');
+
+      const nama =
+        clean(p.nama || '-');
+
+      const toko =
+        clean(p.toko || '-');
+
+      const wa =
+        clean(p.wa || '-');
+
+      const ukuran =
+        clean(p.ukuran || '-');
+
+      const pembayaran =
+        upper(
+          p.statusPembayaran
+        );
+
+      const kehadiran =
+        upper(
+          p.statusKehadiran
+        );
+
+      const jamCheckin =
+        clean(
+          p.jamCheckin || '-'
+        );
+
+
+      const pembayaranHtml =
+        pembayaran === 'LUNAS'
+
+        ? `
+          <span class="badge badge-lunas">
+            LUNAS
+          </span>
+        `
+
+        : `
+          <span class="badge badge-belum">
+            BELUM LUNAS
+          </span>
+        `;
+
+
+      const hadirHtml =
+        kehadiran === 'HADIR'
+
+        ? `
+          <span class="badge badge-hadir">
+            SUDAH HADIR
+          </span>
+        `
+
+        : `
+          <span class="badge badge-belum-hadir">
+            BELUM HADIR
+          </span>
+        `;
+
+
+      return `
+
+        <tr>
+
+          <td>
+            ${index + 1}
+          </td>
+
+          <td>
+            <b>
+              ${esc(kode)}
+            </b>
+          </td>
+
+          <td>
+            <b>
+              ${esc(nama)}
+            </b>
+          </td>
+
+          <td>
+            ${esc(toko)}
+          </td>
+
+          <td>
+            ${esc(wa)}
+          </td>
+
+          <td>
+            ${esc(ukuran)}
+          </td>
+
+          <td>
+            <b>${esc(p.tierPembayaran || p.tierRegistrasi || '-')}</b>
+          </td>
+
+          <td>
+            ${p.nominalPembayaran ? formatRupiah(p.nominalPembayaran) : (p.estimasiHarga ? 'Estimasi '+formatRupiah(p.estimasiHarga) : '-')}
+          </td>
+
+          <td>
+            ${pembayaranHtml}
+          </td>
+
+          <td>
+            ${hadirHtml}
+          </td>
+
+          <td>
+            ${esc(jamCheckin)}
+          </td>
+
+          <td>
+
+            <button
+              class="btn btn-proof"
+              onclick="openReview('${escAttr(kode)}')"
+            >
+              LIHAT BUKTI
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join('');
+
+}
+
+
+/* =========================
+   OPEN DETAIL
+========================= */
+
+function openReview(kode){
+
+  const p =
+    peserta.find(function(x){
+
+      return clean(x.kode)
+        === clean(kode);
+
+    });
+
+
+  if(!p){
+
+    alert(
+      'Data peserta tidak ditemukan.'
+    );
+
+    return;
+  }
+
+
+  selectedPeserta = p;
+
+
+  /* DATA UTAMA */
+
+  document.getElementById(
+    'mKode'
+  ).textContent =
+    clean(p.kode || '-');
+
+
+  document.getElementById(
+    'mNama'
+  ).textContent =
+    clean(p.nama || '-');
+
+
+  document.getElementById(
+    'mToko'
+  ).textContent =
+    clean(p.toko || '-');
+
+
+  document.getElementById(
+    'mWa'
+  ).textContent =
+    clean(p.wa || '-');
+
+
+  document.getElementById(
+    'mAlamat'
+  ).textContent =
+    clean(p.alamat || '-');
+
+
+  document.getElementById(
+    'mEmail'
+  ).textContent =
+    clean(p.email || '-');
+
+
+  document.getElementById(
+    'mUkuran'
+  ).textContent =
+    clean(p.ukuran || '-');
+
+
+  const pembayaran =
+    upper(
+      p.statusPembayaran
+    );
+
+
+  document.getElementById(
+    'mStatus'
+  ).textContent =
+    pembayaran ||
+    'BELUM LUNAS';
+
+
+  const nominal =
+    p.nominalPembayaran;
+
+
+  document.getElementById(
+    'mNominal'
+  ).textContent =
+    nominal
+      ? formatRupiah(nominal)
+      : '-';
+
+  const tr = document.getElementById('mTierRegistrasi');
+  if(tr) tr.textContent = clean(p.tierRegistrasi || '-');
+  const es = document.getElementById('mEstimasi');
+  if(es) es.textContent = p.estimasiHarga ? formatRupiah(p.estimasiHarga) : '-';
+  const tp = document.getElementById('mTierPembayaran');
+  if(tp) tp.textContent = clean(p.tierPembayaran || '-');
+
+
+  document.getElementById(
+    'mTanggalVerifikasi'
+  ).textContent =
+    clean(
+      p.tanggalVerifikasi || '-'
+    );
+
+
+  document.getElementById(
+    'mKehadiran'
+  ).textContent =
+    clean(
+      p.statusKehadiran ||
+      'BELUM HADIR'
+    );
+
+
+  document.getElementById(
+    'mCheckin'
+  ).textContent =
+    clean(
+      p.jamCheckin || '-'
+    );
+
+
+  /* =========================
+     BUKTI TRANSFER
+  ========================= */
+
+  const bukti =
+    clean(
+      p.buktiTransfer ||
+      ''
+    );
+
+
+  const proofBox =
+    document.getElementById(
+      'proofBox'
+    );
+
+
+  if(bukti){
+
+    const imageUrl =
+      convertDriveImageUrl(
+        bukti
+      );
+
+
+    proofBox.innerHTML = `
+
+      <a
+        href="${escAttr(bukti)}"
+        target="_blank"
+        rel="noopener"
+      >
+
+        <img
+          src="${escAttr(imageUrl)}"
+          alt="Bukti Transfer"
+          onerror="
+            this.style.display='none';
+            document.getElementById('proofError').style.display='block';
+          "
+        >
+
+      </a>
+
+
+      <div
+        id="proofError"
+        style="
+          display:none;
+          padding:20px;
+          color:#b42318;
+        "
+      >
+
+        Bukti tidak dapat ditampilkan
+        sebagai gambar.
+
+        <br><br>
+
+        <a
+          href="${escAttr(bukti)}"
+          target="_blank"
+          rel="noopener"
+        >
+          BUKA BUKTI TRANSFER
+        </a>
+
+      </div>
+
+
+      <div style="margin-top:10px">
+
+        <a
+          href="${escAttr(bukti)}"
+          target="_blank"
+          rel="noopener"
+        >
+          Buka bukti di tab baru
+        </a>
+
+      </div>
+
+    `;
+
+  }else{
+
+    proofBox.innerHTML = `
+
+      <div class="no-proof">
+
+        ⚠️ BUKTI TRANSFER
+        BELUM TERSEDIA
+
+        <br><br>
+
+        Belum ada file bukti transfer
+        yang tersimpan.
+
+      </div>
+
+    `;
+
+  }
+
+
+  /* =========================
+     TOMBOL LUNAS
+  ========================= */
+
+  const btn =
+    document.getElementById(
+      'btnConfirm'
+    );
+
+
+  if(pembayaran === 'LUNAS'){
+
+    btn.style.display =
+      'none';
+
+  }else{
+
+    btn.style.display =
+      'block';
+
+  }
+
+  const btnCod=document.getElementById('btnCod');
+  if(btnCod) btnCod.style.display=(pembayaran==='LUNAS'?'none':'block');
+
+
+  document
+    .getElementById('modal')
+    .classList.add('show');
+
+}
+
+
+/* =========================
+   DRIVE IMAGE
+========================= */
+
+function convertDriveImageUrl(url){
+
+  const value =
+    clean(url);
+
+  if(!value){
+    return '';
+  }
+
+
+  let fileId = '';
+
+
+  /*
+   * /file/d/FILE_ID/view
+   */
+
+  let match =
+    value.match(
+      /\/file\/d\/([a-zA-Z0-9_-]+)/
+    );
+
+
+  if(match && match[1]){
+
+    fileId =
+      match[1];
+
+  }
+
+
+  /*
+   * ?id=FILE_ID
+   */
+
+  if(!fileId){
+
+    match =
+      value.match(
+        /[?&]id=([a-zA-Z0-9_-]+)/
+      );
+
+
+    if(match && match[1]){
+
+      fileId =
+        match[1];
+
+    }
+
+  }
+
+
+  if(fileId){
+
+    return (
+      'https://drive.google.com/thumbnail?id=' +
+      encodeURIComponent(fileId) +
+      '&sz=w1200'
+    );
+
+  }
+
+
+  return value;
+}
+
+
+/* =========================
+   KONFIRMASI LUNAS
+========================= */
+
+async function confirmLunas(){
+  if(!selectedPeserta){alert('Peserta belum dipilih.');return;}
+  const kode=clean(selectedPeserta.kode);
+  const bukti=clean(selectedPeserta.buktiTransfer);
+  if(!kode){alert('Kode registrasi tidak tersedia.');return;}
+  if(!bukti){alert('Bukti transfer belum tersedia.\n\nSilakan cek bukti transfer terlebih dahulu.');return;}
+
+  const ok=confirm(
+    'Sistem akan menentukan harga berdasarkan TANGGAL PEMBAYARAN HARI INI.\n\n'+
+    'Nama: '+clean(selectedPeserta.nama)+'\nKode: '+kode+
+    '\n\nLanjutkan verifikasi pembayaran?'
+  );
+  if(!ok)return;
+
+  const btn=document.getElementById('btnConfirm');
+  btn.disabled=true;btn.textContent='MEMPROSES...';
+
+  try{
+    const response=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'verifikasiLunas',kode:kode})
+    });
+    const text=await response.text();
+    let data;
+    try{data=JSON.parse(text.trim())}catch(e){throw new Error('Response server bukan JSON.')}
+    if(!data||data.ok===false)throw new Error(data.message||'Gagal mengonfirmasi pembayaran.');
+
+    const p=data.peserta||{};
+    alert('Pembayaran berhasil dikonfirmasi LUNAS.\n\n'+
+      'Kode: '+kode+'\nNama: '+clean(selectedPeserta.nama)+
+      '\nTier Pembayaran: '+clean(p.tierPembayaran||'-')+
+      '\nNominal: '+formatRupiah(p.nominalPembayaran||0));
+
+    closeModal();
+    await load();
+  }catch(error){
+    console.error(error);
+    alert('Gagal konfirmasi LUNAS:\n\n'+error.message);
+  }finally{
+    btn.disabled=false;btn.textContent='✓ KONFIRMASI LUNAS';
+  }
+}
+
+async function confirmCOD(){
+  if(!selectedPeserta){alert('Peserta belum dipilih.');return;}
+  const kode=clean(selectedPeserta.kode);
+  if(!kode){alert('Kode registrasi tidak tersedia.');return;}
+  const ok=confirm(
+    'CATAT PEMBAYARAN COD?\n\n'+
+    'Harga COD diambil otomatis dari Pengaturan dan hanya berlaku pada hari acara.\n\n'+
+    'Nama: '+clean(selectedPeserta.nama)+'\nKode: '+kode
+  );
+  if(!ok)return;
+
+  const btn=document.getElementById('btnCod');
+  btn.disabled=true;btn.textContent='MEMPROSES COD...';
+  try{
+    const r=await fetch(API_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'pembayaranCOD',kode:kode})
+    });
+    const t=await r.text();let d;
+    try{d=JSON.parse(t.trim())}catch(e){throw new Error('Response server bukan JSON.')}
+    if(!d.ok)throw new Error(d.message||'Gagal mencatat COD.');
+    const p=d.peserta||{};
+    alert('COD berhasil dicatat.\n\n'+
+      'Tier: COD\nNominal: '+formatRupiah(p.nominalPembayaran||0));
+    closeModal();await load();
+  }catch(e){alert('Gagal mencatat COD:\n\n'+e.message)}
+  finally{btn.disabled=false;btn.textContent='💵 CATAT PEMBAYARAN COD'}
+}
+
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+function closeModal(){
+
+  document
+    .getElementById('modal')
+    .classList.remove('show');
+
+  selectedPeserta = null;
+
+}
+
+
+/* =========================
+   FORMAT RUPIAH
+========================= */
+
+function formatRupiah(value){
+
+  const number =
+    Number(
+      String(value)
+        .replace(/[^\d]/g,'')
+    );
+
+
+  if(!number){
+    return 'Rp 0';
+  }
+
+
+  return (
+    'Rp ' +
+    number.toLocaleString(
+      'id-ID'
+    )
+  );
+
+}
+
+
+/* =========================
+   MODAL CLICK OUTSIDE
+========================= */
+
+document
+  .getElementById('modal')
+  .addEventListener(
+    'click',
+    function(e){
+
+      if(e.target === this){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   ESC
+========================= */
+
+document.addEventListener(
+  'keydown',
+  function(e){
+
+    if(e.key === 'Escape'){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+load();
+
+</script>
+
+</body>
+</html>
