@@ -248,22 +248,30 @@ function formatTanggal(value){
   if(value === undefined || value === null || String(value).trim() === '') return '-';
   const s = String(value).trim();
 
-  // Sudah berupa tanggal biasa dari pengaturan
-  if(/^\d{1,2}\s+[A-Za-zÀ-ÿ]+\s+\d{4}$/.test(s)) return s;
-
-  // Format YYYY-MM-DD
+  // Nilai tanggal dari Google Sheets bisa datang sebagai YYYY-MM-DD.
+  // Jangan memakai new Date("YYYY-MM-DD") karena timezone browser dapat
+  // menggeser tanggal satu hari.
   let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(m){
     const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
     return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`;
   }
 
-  // Date ISO dari Google Apps Script
-  m = s.match(/^(\d{4})-(\d{2})-(\d{2})T/);
-  if(m){
-    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-    return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`;
+  // Apps Script kadang mengirim objek Date sebagai ISO UTC.
+  // Tampilkan berdasarkan zona waktu Indonesia/Jakarta agar 17:00 UTC
+  // tetap terbaca sebagai tanggal hari berikutnya di WIB.
+  if(/^\d{4}-\d{2}-\d{2}T/.test(s) || /Z$/.test(s)){
+    const d = new Date(s);
+    if(!isNaN(d.getTime())){
+      return new Intl.DateTimeFormat('id-ID', {
+        timeZone:'Asia/Jakarta',
+        day:'numeric', month:'long', year:'numeric'
+      }).format(d);
+    }
   }
+
+  // Jika sudah berupa teks tanggal, jangan diubah.
+  if(/^\d{1,2}\s+[A-Za-zÀ-ÿ]+\s+\d{4}$/.test(s)) return s;
 
   return s;
 }
