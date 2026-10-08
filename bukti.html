@@ -424,28 +424,8 @@ button:disabled{
     </div>
 
     <div class="detail-row">
-      <span>Tier Registrasi</span>
-      <b id="rTierRegistrasi">-</b>
-    </div>
-
-    <div class="detail-row">
-      <span>Estimasi Harga</span>
-      <b id="rEstimasi">-</b>
-    </div>
-
-    <div class="detail-row">
-      <span>Tier Pembayaran</span>
-      <b id="rTierPembayaran">-</b>
-    </div>
-
-    <div class="detail-row">
-      <span>Nominal Pembayaran</span>
+      <span>Nominal</span>
       <b id="rNominal">-</b>
-    </div>
-
-    <div class="detail-row">
-      <span>Metode Pembayaran</span>
-      <b id="rMetode">-</b>
     </div>
 
     <div class="detail-row">
@@ -548,51 +528,66 @@ form.addEventListener('submit', async function(e){
       Parameter yang dikirim adalah keyword.
     */
 
-    let data = null;
-    let lastMessage = 'Data peserta tidak ditemukan.';
+    const url =
+      API_URL +
+      '?action=cariPeserta&keyword=' +
+      encodeURIComponent(keyword);
 
-    const endpoints = [
-      API_URL + '?action=caribukti&keyword=' + encodeURIComponent(keyword),
-      API_URL + '?action=cariPeserta&keyword=' + encodeURIComponent(keyword)
-    ];
 
-    for(const url of endpoints){
-      try{
-        const response = await fetch(url, {
-          method:'GET',
-          cache:'no-store'
-        });
+    const response =
+      await fetch(url, {
+        method:'GET',
+        cache:'no-store'
+      });
 
-        const raw = await response.text();
-        console.log('RESPON API:', raw);
 
-        const parsed = JSON.parse(raw.trim());
+    const raw =
+      await response.text();
 
-        if(parsed && parsed.ok){
-          data = parsed;
-          break;
-        }
 
-        if(parsed && parsed.message){
-          lastMessage = parsed.message;
-        }
-      }catch(err){
-        console.warn('Endpoint gagal:', url, err);
-      }
+    console.log('RESPON API:', raw);
+
+
+    let data;
+
+
+    try{
+
+      data = JSON.parse(raw.trim());
+
+    }catch(err){
+
+      throw new Error(
+        'Jawaban API bukan JSON. Periksa Code.gs.'
+      );
+
     }
 
-    if(!data){
-      throw new Error(lastMessage);
+
+    if(!data.ok){
+
+      throw new Error(
+        data.message ||
+        'Data peserta tidak ditemukan.'
+      );
+
     }
+
 
     const peserta =
       data.peserta ||
-      data.data ||
-      data.result;
+      data.data;
+
 
     if(!peserta){
-      throw new Error('Data peserta kosong.');
+
+      throw new Error(
+        'Data peserta kosong.'
+      );
+
     }
+
+
     tampilkanPeserta(peserta);
 
     hasil.style.display = 'block';
@@ -698,9 +693,7 @@ function tampilkanPeserta(p){
 
   document.getElementById('rNominal').textContent =
     formatRupiah(
-      p.nominalPembayaran ||
       p.nominal ||
-      p['Nominal Pembayaran'] ||
       p['Nominal'] ||
       0
     );
@@ -713,20 +706,9 @@ function tampilkanPeserta(p){
     p.tierPembayaran || p['Tier Pembayaran'] || '-';
 
 
-  const metode =
-    p.metodePembayaran ||
-    p.metode ||
-    p['Metode Pembayaran'] ||
-    '-';
-
-  const metodeEl = document.getElementById('rMetode');
-  if(metodeEl) metodeEl.textContent = metode;
-
   document.getElementById('rTanggal').textContent =
     p.tanggalPembayaran ||
-    p.waktuPembayaran ||
     p['Tanggal Pembayaran'] ||
-    p['Waktu Pembayaran'] ||
     '-';
 
 

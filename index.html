@@ -108,36 +108,36 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f1f1f1;color:var(--teks)
 
   <div class="title">
     <div class="icon-title">📅</div>
-    <h2 id="judulAcara">ROADSHOW SERTIFIKASI BNSP TESPOIN</h2>
+    <h2 id="judulAcara">INFORMASI ACARA</h2>
   </div>
 
   <div id="deskripsi" class="desc">
-    Roadshow Sertifikasi Profesi BNSP TESPOIN DPD Majalengka.
+    -
   </div>
 
   <div class="item">
     <div class="icon">📅</div>
-    <div><div class="label">Tanggal</div><div id="tanggal" class="value">Akan ditentukan</div></div>
+    <div><div class="label">Tanggal</div><div id="tanggal" class="value">-</div></div>
   </div>
 
   <div class="item">
     <div class="icon">🕐</div>
-    <div><div class="label">Waktu</div><div id="waktu" class="value">10.00 WIB - selesai</div></div>
+    <div><div class="label">Waktu</div><div id="waktu" class="value">-</div></div>
   </div>
 
   <div class="item">
     <div class="icon">📍</div>
-    <div><div class="label">Lokasi</div><div id="lokasi" class="value">Gedung Islamic Center Majalengka</div></div>
+    <div><div class="label">Lokasi</div><div id="lokasi" class="value">-</div></div>
   </div>
 
   <div class="item">
     <div class="icon">🎟️</div>
-    <div><div class="label">Tiket</div><div id="harga" class="value">Rp 150.000</div></div>
+    <div><div class="label">Tiket</div><div id="harga" class="value">-</div></div>
   </div>
 
   <div class="item">
     <div class="icon">👥</div>
-    <div><div class="label">Kuota</div><div id="kuota" class="value">300 Peserta</div></div>
+    <div><div class="label">Kuota</div><div id="kuota" class="value">-</div></div>
   </div>
 
   <a href="registrasi.html" id="btnDaftar" class="btn">DAFTAR SEKARANG</a>
@@ -170,77 +170,62 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f1f1f1;color:var(--teks)
 </main>
 
 <script>
-function tampilkanPengaturan(data){
-  if(!data) return;
+const API_URL='https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
 
-  document.getElementById('judulAcara').textContent =
-    data.judulAcara || 'INFORMASI ACARA';
-
-  document.getElementById('deskripsi').textContent =
-    data.deskripsi || '';
-
-  document.getElementById('tanggal').textContent =
-    data.tanggal || '-';
-
-  document.getElementById('waktu').textContent =
-    data.waktu || '-';
-
-  document.getElementById('lokasi').textContent =
-    data.lokasi || '-';
-
-  if(data.hargaTiket !== undefined && data.hargaTiket !== null && data.hargaTiket !== ''){
-    const n = Number(String(data.hargaTiket).replace(/[^0-9]/g,''));
-    document.getElementById('harga').textContent =
-      n ? 'Rp ' + n.toLocaleString('id-ID') : '-';
-  }else{
-    document.getElementById('harga').textContent = '-';
-  }
-
-  document.getElementById('kuota').textContent =
-    data.kuota || '-';
-
-  const box = document.getElementById('benefit');
-
-  const items = String(data.benefit || '')
-    .split(/[,;\n]+/)
-    .map(x => x.trim())
-    .filter(Boolean);
-
-  if(items.length){
-    box.innerHTML = items.map(x => `
-      <div class="benefit">
-        <span class="check">✓</span>
-        <span>${escapeHtml(x)}</span>
-      </div>
-    `).join('');
-  }
-
-  const status = String(data.statusPendaftaran || 'DIBUKA').toUpperCase();
-  const badge = document.getElementById('status');
-  const text = document.getElementById('statusText');
-  const btn = document.getElementById('btnDaftar');
-
-  if(status === 'DITUTUP'){
-    badge.classList.add('tutup');
-    text.textContent = 'PENDAFTARAN DITUTUP';
-    btn.classList.add('disabled');
-    btn.textContent = 'PENDAFTARAN DITUTUP';
-  }else{
-    badge.classList.remove('tutup');
-    text.textContent = 'PENDAFTARAN DIBUKA';
-    btn.classList.remove('disabled');
-    btn.textContent = 'DAFTAR SEKARANG';
-  }
+function rupiah(v){
+  const n=Number(String(v??'').replace(/[^\d]/g,''))||0;
+  return 'Rp '+n.toLocaleString('id-ID');
 }
-
+function fmtDate(v){
+  if(!v)return '-';
+  const s=String(v);
+  if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+    const [y,m,d]=s.split('-');
+    return d+'/'+m+'/'+y;
+  }
+  return s;
+}
 function escapeHtml(s){
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
+  return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 }
+function tampilkanPengaturan(data){
+  if(!data)return;
+  document.getElementById('judulAcara').textContent=data.judul||'INFORMASI ACARA';
+  document.getElementById('deskripsi').textContent=data.deskripsi||'-';
+  document.getElementById('tanggal').textContent=fmtDate(data.tanggalAcara||data.tanggal);
+  document.getElementById('waktu').textContent=data.waktu||'-';
+  document.getElementById('lokasi').textContent=data.lokasi||'-';
+
+  const harga=[];
+  if(Number(data.tier1Harga)>0) harga.push('TIER 1: '+rupiah(data.tier1Harga)+' ('+fmtDate(data.tier1Mulai)+' - '+fmtDate(data.tier1Selesai)+')');
+  if(Number(data.tier2Harga)>0) harga.push('TIER 2: '+rupiah(data.tier2Harga)+' ('+fmtDate(data.tier2Mulai)+' - '+fmtDate(data.tier2Selesai)+')');
+  if(Number(data.tier3Harga)>0) harga.push('TIER 3: '+rupiah(data.tier3Harga)+' ('+fmtDate(data.tier3Mulai)+' - '+fmtDate(data.tier3Selesai)+')');
+  if(Number(data.codHarga)>0) harga.push('COD HARI ACARA: '+rupiah(data.codHarga));
+  document.getElementById('harga').innerHTML=harga.length?harga.map(escapeHtml).join('<br>'):'-';
+
+  const q=document.getElementById('kuota');
+  if(q) q.parentElement.style.display='none';
+
+  const box=document.getElementById('benefit');
+  const items=String(data.benefit||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);
+  box.innerHTML=items.length?items.map(x=>'<div class="benefit"><span class="check">✓</span><span>'+escapeHtml(x)+'</span></div>').join(''):'<div class="benefit"><span class="check">-</span><span>Benefit belum diatur.</span></div>';
+
+  const status=String(data.statusPendaftaran||'DIBUKA').toUpperCase();
+  const badge=document.getElementById('status'), text=document.getElementById('statusText'), btn=document.getElementById('btnDaftar');
+  if(status==='DITUTUP'){
+    badge.classList.add('tutup');text.textContent='PENDAFTARAN DITUTUP';btn.classList.add('disabled');btn.textContent='PENDAFTARAN DITUTUP';
+  }else{
+    badge.classList.remove('tutup');text.textContent='PENDAFTARAN DIBUKA';btn.classList.remove('disabled');btn.textContent='DAFTAR SEKARANG';
+  }
+}
+async function loadPengaturan(){
+  try{
+    const r=await fetch(API_URL+'?action=pengaturan&_='+Date.now(),{cache:'no-store'});
+    const d=await r.json();
+    if(d.ok)tampilkanPengaturan(d.pengaturan||{});
+  }catch(e){console.error('Pengaturan:',e);}
+}
+loadPengaturan();
 </script>
 
 </body>

@@ -477,6 +477,18 @@ function normalPeserta(p) {
       p.jamCheckin ||
       "",
 
+    tierRegistrasi:
+      p.tierRegistrasi || "",
+
+    estimasiHarga:
+      Number(p.estimasiHarga) || 0,
+
+    tierPembayaran:
+      p.tierPembayaran || "",
+
+    hargaFinal:
+      Number(p.hargaFinal) || 0,
+
 
     statusBenefit:
       p.statusBenefit ||
@@ -715,20 +727,6 @@ async function verifikasiLunasAPI(
     );
 
 
-  if (
-    !nominal ||
-    nominal <= 0
-  ) {
-
-    return {
-      ok: false,
-      message:
-        "Nominal pembayaran belum benar."
-    };
-
-  }
-
-
   const namaPetugas =
     petugas ||
     getPetugasLogin();
@@ -808,20 +806,6 @@ async function pembayaranCODAPI(
       ok: false,
       message:
         "Kode registrasi tidak boleh kosong."
-    };
-
-  }
-
-
-  if (
-    !nominal ||
-    nominal <= 0
-  ) {
-
-    return {
-      ok: false,
-      message:
-        "Masukkan nominal pembayaran COD."
     };
 
   }

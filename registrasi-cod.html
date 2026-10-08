@@ -18,7 +18,7 @@
 <label>No. WhatsApp *</label><input id="wa" type="tel" required placeholder="08xxxxxxxxxx">
 <label>Alamat *</label><textarea id="alamat" required></textarea>
 <label>Email</label><input id="email" type="email">
-<label>Ukuran Kaos *</label><select id="ukuran" required><option value="">-- Pilih Ukuran --</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option><option>XXXXL</option></select>
+<label>Ukuran Kaos *</label><select id="ukuran" required><option value="">-- Pilih Ukuran --</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option><option value="XXXXL">XXXXL / 4XL</option></select>
 <label style="display:none">Bukti Transfer</label><input id="bukti" type="file" style="display:none">
 <div id="fileInfo" class="file-info"></div>
 <button id="btnDaftar" type="submit">DAFTAR SEKARANG</button>
@@ -75,7 +75,7 @@ form.addEventListener('submit',async function(e){
   const file=buktiInput.files[0];let buktiBase64='';let buktiNamaFile='';
   if(file){if(file.size>MAX_FILE_SIZE)throw new Error('Ukuran bukti transfer maksimal 5 MB.');buktiNamaFile=file.name;buktiBase64=await fileToBase64(file);}
 
-  const data={action:'registrasiCOD',nama,toko,wa,alamat,email,ukuran,petugas:petugasAktif};
+  const data={action:'registrasiCOD',nama,toko,wa,alamat,email,ukuran,petugas:''};
   btn.textContent='MENYIMPAN...';
   const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
   const raw=await response.text();let result;
@@ -153,8 +153,43 @@ function tampilkanBukti(p){
  document.getElementById('btnSimpanQR').onclick=async function(){try{const oldText=this.textContent;this.textContent='MEMBUAT JPG...';this.disabled=true;await new Promise(r=>setTimeout(r,150));const canvas=await html2canvas(document.getElementById('hasil'),{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});downloadDataUrl(canvas.toDataURL('image/jpeg',0.95),(p.kode||'REGISTRASI')+'-BUKTI-REGISTRASI.jpg');this.textContent=oldText;}catch(err){alert('Gagal membuat JPG: '+(err.message||err));}finally{this.disabled=false;}};
 }
 function downloadDataUrl(dataUrl,filename){const a=document.createElement('a');a.href=dataUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();}
+function rupiah(value){
+  const n=Number(String(value ?? '').replace(/[^\d]/g,''))||0;
+  return 'Rp '+n.toLocaleString('id-ID');
+}
 function tampilPesan(text,error){pesan.textContent=text||'';pesan.className='status '+(error?'error':'success');}
 function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+
+async function loadHarga(){
+  const tierEl=document.getElementById('tierAktif');
+  const hargaEl=document.getElementById('hargaAktif');
+  const ketEl=document.getElementById('keteranganHarga');
+  try{
+    tierEl.textContent='MEMUAT HARGA...';
+    hargaEl.textContent='-';
+    const response=await fetch(API_URL+'?action=harga&_='+Date.now(),{cache:'no-store'});
+    const raw=await response.text();
+    let result;
+    try{result=JSON.parse(raw.trim());}
+    catch(e){throw new Error('Respons harga dari server tidak valid.');}
+    if(!result.ok){
+      tierEl.textContent='HARGA BELUM TERSEDIA';
+      hargaEl.textContent='-';
+      ketEl.textContent=result.message||'Silakan periksa Pengaturan.';
+      return;
+    }
+    tierEl.textContent=result.tier||'TIKET PESERTA';
+    hargaEl.textContent=rupiah(result.harga||0);
+    ketEl.textContent=(result.tier==='COD')
+      ? 'Harga COD untuk pendaftaran dan pembayaran langsung di lokasi pada hari acara.'
+      : 'Estimasi harga saat ini. Harga final mengikuti tanggal pembayaran.';
+  }catch(err){
+    console.error('loadHarga:',err);
+    tierEl.textContent='GAGAL MEMUAT HARGA';
+    hargaEl.textContent='-';
+    ketEl.textContent=err.message||'Tidak dapat mengambil harga dari server.';
+  }
+}
 
 loadHarga();
 </script>

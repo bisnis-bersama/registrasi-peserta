@@ -41,6 +41,8 @@ function doGet(e) {
         return peserta_(true);
       case 'pengaturan':
         return ambilPengaturan_();
+      case 'harga':
+        return getHargaAktifPublic_();
       default:
         return json_({ok:false,message:'Action GET tidak dikenal',action:action});
     }
