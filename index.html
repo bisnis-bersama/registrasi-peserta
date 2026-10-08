@@ -5,416 +5,52 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>DPD TESPOIN MAJALENGKA</title>
 <style>
-:root{
-  --navy:#071a33;
-  --navy2:#0d3158;
-  --red:#e21b23;
-  --red2:#ff3b30;
-  --gold:#ffca28;
-  --gold2:#ff9800;
-  --white:#fff;
-  --soft:#f4f7fb;
-  --text:#172033;
-  --muted:#667085;
-  --line:#e5eaf1;
-  --shadow:0 14px 40px rgba(7,26,51,.12);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  background:linear-gradient(180deg,#071a33 0,#0b2949 300px,#f4f7fb 620px);
-  color:var(--text);min-height:100vh
-}
-.hero{
-  position:relative;overflow:hidden;color:#fff;
-  padding:22px 14px 28px;
-  background:
-    radial-gradient(circle at 10% 10%,rgba(226,27,35,.55),transparent 28%),
-    radial-gradient(circle at 90% 20%,rgba(255,202,40,.20),transparent 25%),
-    linear-gradient(135deg,#041426,#0b3158 62%,#081d38);
-  border-bottom:4px solid var(--red);
-}
-.hero:before,.hero:after{
-  content:"";position:absolute;pointer-events:none;opacity:.65
-}
-.hero:before{
-  width:240px;height:240px;right:-120px;top:-150px;
-  background:var(--red);transform:rotate(35deg)
-}
-.hero:after{
-  width:190px;height:190px;left:-130px;bottom:-150px;
-  background:var(--gold);transform:rotate(35deg);opacity:.18
-}
-.hero-content{position:relative;z-index:2;max-width:980px;margin:auto;text-align:center}
-.hero-label{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:7px 13px;border:1px solid rgba(255,255,255,.18);
-  border-radius:999px;background:rgba(255,255,255,.08);
-  font-size:11px;font-weight:800;letter-spacing:1.4px;
-  text-transform:uppercase;margin-bottom:13px
-}
-.hero-label span{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
-.hero-title{
-  font-size:clamp(22px,4vw,34px);font-weight:950;
-  text-transform:uppercase;letter-spacing:.3px;line-height:1.05;
-  margin:0 0 15px;text-shadow:0 3px 12px rgba(0,0,0,.3)
-}
-.hero-title span{color:var(--gold)}
-.banner-wrap{max-width:980px;margin:0 auto;padding:0 12px;position:relative;z-index:5}
-.banner{
-  background:#071a33;border-radius:22px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 20px 55px rgba(0,0,0,.28)
-}
-.banner img{width:100%;height:auto;display:block}
-.container{max-width:980px;margin:auto;padding:18px 12px 45px}
-.card{
-  background:rgba(255,255,255,.97);border-radius:22px;padding:22px 18px;
-  box-shadow:var(--shadow);border:1px solid rgba(7,26,51,.07);
-  margin-bottom:18px;overflow:hidden
-}
-.status{
-  display:inline-flex;align-items:center;gap:8px;padding:8px 13px;
-  border-radius:999px;background:#e9f8ee;color:#087b28;
-  font-size:11px;font-weight:900;letter-spacing:.5px;margin-bottom:18px
-}
-.status.tutup{background:#ffe8e8;color:#b00000}
-.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
-.title{display:flex;align-items:center;gap:13px;margin-bottom:18px}
-.icon-title{
-  width:50px;height:50px;min-width:50px;border-radius:15px;
-  background:linear-gradient(135deg,var(--red),#a90f16);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:23px;
-  box-shadow:0 8px 18px rgba(226,27,35,.22)
-}
-.title h2{font-size:22px;font-weight:950;line-height:1.15;color:var(--navy)}
-.desc{
-  background:linear-gradient(135deg,#fff5f5,#fff9e8);
-  border:1px solid #f2e1d5;border-left:5px solid var(--red);
-  border-radius:13px;padding:14px;margin-bottom:18px;
-  color:#596273;line-height:1.55;font-size:14px
-}
-.item{
-  display:flex;gap:13px;margin:12px 0;padding:13px 0;
-  border-bottom:1px solid var(--line)
-}
-.item:last-of-type{border-bottom:0}
-.icon{
-  width:44px;height:44px;min-width:44px;border-radius:13px;
-  background:#eef4fa;color:var(--navy2);display:flex;
-  align-items:center;justify-content:center;font-size:20px
-}
-.label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#7a8494;margin-bottom:4px}
-.value{font-size:15px;color:var(--text);font-weight:650;line-height:1.5;word-break:break-word}
-.btn{
-  display:block;width:100%;padding:15px;margin-top:20px;border-radius:14px;
-  text-align:center;text-decoration:none;font-weight:950;font-size:15px;
-  background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;
-  box-shadow:0 9px 22px rgba(226,27,35,.25);transition:.2s;
-  border:1px solid rgba(0,0,0,.05)
-}
-.btn:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(226,27,35,.3)}
-.btn.dark{
-  background:linear-gradient(135deg,var(--navy),var(--navy2));
-  color:#fff;margin-top:10px;box-shadow:0 8px 18px rgba(7,26,51,.18)
-}
-.btn.disabled{background:#d8dde5;color:#7b8492;pointer-events:none;box-shadow:none}
-.benefits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.benefit{
-  display:flex;align-items:flex-start;gap:9px;
-  background:#f8fafc;border:1px solid #e8edf3;border-radius:13px;
-  padding:12px;font-size:13px;line-height:1.4;transition:.2s
-}
-.benefit:hover{border-color:#f0b9bd;background:#fff7f7;transform:translateY(-1px)}
-.check{color:var(--red);font-weight:950;font-size:17px}
-.footer{text-align:center;color:#8791a1;font-size:11px;margin-top:6px}
-.admin-login{
-  display:inline-block;margin-top:12px;padding:8px 15px;border:1px solid #dce2ea;
-  border-radius:999px;color:#6b7280;background:#fff;text-decoration:none;font-size:11px
-}
-.admin-login:hover{color:var(--red);border-color:#e9a1a5}
-@media(max-width:600px){
-  .hero{padding:18px 10px 23px}
-  .hero-label{font-size:9px;letter-spacing:1px}
-  .hero-title{font-size:22px}
-  .banner-wrap{padding:0 9px}
-  .banner{border-radius:17px}
-  .container{padding:14px 9px 34px}
-  .card{padding:18px 14px;border-radius:18px}
-  .title h2{font-size:19px}
-  .icon-title{width:45px;height:45px;min-width:45px;font-size:20px;border-radius:13px}
-  .item{gap:10px}.icon{width:42px;height:42px;min-width:42px;font-size:18px}
-  .value{font-size:14px}.btn{font-size:14px;padding:14px}
-}
-@media(max-width:380px){.benefits{grid-template-columns:1fr}.hero-title{font-size:20px}}
-@media(min-width:601px){
-  .benefits{grid-template-columns:repeat(3,minmax(0,1fr))}
+:root{--navy:#071a33;--navy2:#0d3158;--red:#e21b23;--red2:#ff3b30;--gold:#ffca28;--gold2:#ff9800;--white:#fff;--soft:#f4f7fb;--text:#172033;--muted:#667085;--line:#e5eaf1;--shadow:0 14px 40px rgba(7,26,51,.12)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#071a33 0,#0b2949 300px,#f4f7fb 620px);color:var(--text);min-height:100vh}
+.hero{position:relative;overflow:hidden;color:#fff;padding:22px 14px 28px;background:radial-gradient(circle at 10% 10%,rgba(226,27,35,.55),transparent 28%),radial-gradient(circle at 90% 20%,rgba(255,202,40,.20),transparent 25%),linear-gradient(135deg,#041426,#0b3158 62%,#081d38);border-bottom:4px solid var(--red)}
+.hero:before,.hero:after{content:"";position:absolute;pointer-events:none;opacity:.65}.hero:before{width:240px;height:240px;right:-120px;top:-150px;background:var(--red);transform:rotate(35deg)}.hero:after{width:190px;height:190px;left:-130px;bottom:-150px;background:var(--gold);transform:rotate(35deg);opacity:.18}
+.hero-content{position:relative;z-index:2;max-width:980px;margin:auto;text-align:center}.hero-label{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:13px}.hero-label span{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.hero-title{font-size:clamp(22px,4vw,34px);font-weight:950;text-transform:uppercase;letter-spacing:.3px;line-height:1.05;margin:0 0 15px;text-shadow:0 3px 12px rgba(0,0,0,.3)}.hero-title span{color:var(--gold)}
+.banner-wrap{max-width:980px;margin:0 auto;padding:0 12px;position:relative;z-index:5}.banner{background:#071a33;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 55px rgba(0,0,0,.28)}.banner img{width:100%;height:auto;display:block}
+.container{max-width:980px;margin:auto;padding:18px 12px 45px}.card{background:rgba(255,255,255,.97);border-radius:22px;padding:22px 18px;box-shadow:var(--shadow);border:1px solid rgba(7,26,51,.07);margin-bottom:18px;overflow:hidden}.status{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:#e9f8ee;color:#087b28;font-size:11px;font-weight:900;letter-spacing:.5px;margin-bottom:18px}.status.tutup{background:#ffe8e8;color:#b00000}.dot{width:8px;height:8px;border-radius:50%;background:currentColor}.title{display:flex;align-items:center;gap:13px;margin-bottom:18px}.icon-title{width:50px;height:50px;min-width:50px;border-radius:15px;background:linear-gradient(135deg,var(--red),#a90f16);color:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;box-shadow:0 8px 18px rgba(226,27,35,.22)}.title h2{font-size:22px;font-weight:950;line-height:1.15;color:var(--navy)}
+.desc{background:linear-gradient(135deg,#fff5f5,#fff9e8);border:1px solid #f2e1d5;border-left:5px solid var(--red);border-radius:13px;padding:14px;margin-bottom:18px;color:#596273;line-height:1.55;font-size:14px}.item{display:flex;gap:13px;margin:12px 0;padding:13px 0;border-bottom:1px solid var(--line)}.item:last-of-type{border-bottom:0}.icon{width:44px;height:44px;min-width:44px;border-radius:13px;background:#eef4fa;color:var(--navy2);display:flex;align-items:center;justify-content:center;font-size:20px}.label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#7a8494;margin-bottom:4px}.value{font-size:15px;color:var(--text);font-weight:650;line-height:1.5;word-break:break-word}
+.btn{display:block;width:100%;padding:15px;margin-top:20px;border-radius:14px;text-align:center;text-decoration:none;font-weight:950;font-size:15px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;box-shadow:0 9px 22px rgba(226,27,35,.25);transition:.2s;border:1px solid rgba(0,0,0,.05)}.btn:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(226,27,35,.3)}.btn.dark{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;margin-top:10px;box-shadow:0 8px 18px rgba(7,26,51,.18)}.btn.disabled{background:#d8dde5;color:#7b8492;pointer-events:none;box-shadow:none}
+.benefits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.benefit{display:flex;align-items:flex-start;gap:9px;background:#f8fafc;border:1px solid #e8edf3;border-radius:13px;padding:12px;font-size:13px;line-height:1.4;transition:.2s}.benefit:hover{border-color:#f0b9bd;background:#fff7f7;transform:translateY(-1px)}.check{color:var(--red);font-weight:950;font-size:17px}.footer{text-align:center;color:#8791a1;font-size:11px;margin-top:6px}.admin-login{display:inline-block;margin-top:12px;padding:8px 15px;border:1px solid #dce2ea;border-radius:999px;color:#6b7280;background:#fff;text-decoration:none;font-size:11px}.admin-login:hover{color:var(--red);border-color:#e9a1a5}
+@media(max-width:600px){.hero{padding:18px 10px 23px}.hero-label{font-size:9px;letter-spacing:1px}.hero-title{font-size:22px}.banner-wrap{padding:0 9px}.banner{border-radius:17px}.container{padding:14px 9px 34px}.card{padding:18px 14px;border-radius:18px}.title h2{font-size:19px}.icon-title{width:45px;height:45px;min-width:45px;font-size:20px;border-radius:13px}.item{gap:10px}.icon{width:42px;height:42px;min-width:42px;font-size:18px}.value{font-size:14px}.btn{font-size:14px;padding:14px}}
+@media(max-width:380px){.benefits{grid-template-columns:1fr}.hero-title{font-size:20px}}@media(min-width:601px){.benefits{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 </style>
 </head>
-
 <body>
-
-<header class="hero">
-  <div class="hero-content">
-    <div class="hero-label"><span></span> DPW JAWA BARAT • DPD TESPOIN MAJALENGKA</div>
-    <div class="hero-title">ROADSHOW <span>DPW JABAR</span> GOES TO MAJALENGKA</div>
-  </div>
-</header>
-
-<div class="banner-wrap">
-  <div class="banner">
-    <img src="judul.png" alt="Judul Roadshow DPW Jabar Goes to Majalengka">
-  </div>
-</div>
-
+<header class="hero"><div class="hero-content"><div class="hero-label"><span></span> DPW JAWA BARAT • DPD TESPOIN MAJALENGKA</div><div class="hero-title">ROADSHOW <span>DPW JABAR</span> GOES TO MAJALENGKA</div></div></header>
+<div class="banner-wrap"><div class="banner"><img src="judul.png" alt="Judul Roadshow DPW Jabar Goes to Majalengka"></div></div>
 <main class="container">
-
 <section class="card">
-
-  <div id="status" class="status">
-    <span class="dot"></span>
-    <span id="statusText">PENDAFTARAN DIBUKA</span>
-  </div>
-
-  <div class="title">
-    <div class="icon-title">📅</div>
-    <h2 id="judulAcara">ROADSHOW SERTIFIKASI BNSP TESPOIN</h2>
-  </div>
-
-  <div id="deskripsi" class="desc">
-    Roadshow Sertifikasi Profesi BNSP TESPOIN DPD Majalengka.
-  </div>
-
-  <div class="item">
-    <div class="icon">📅</div>
-    <div><div class="label">Tanggal</div><div id="tanggal" class="value">Akan ditentukan</div></div>
-  </div>
-
-  <div class="item">
-    <div class="icon">🕐</div>
-    <div><div class="label">Waktu</div><div id="waktu" class="value">10.00 WIB - selesai</div></div>
-  </div>
-
-  <div class="item">
-    <div class="icon">📍</div>
-    <div><div class="label">Lokasi</div><div id="lokasi" class="value">Gedung Islamic Center Majalengka</div></div>
-  </div>
-
-  <div class="item">
-    <div class="icon">🎟️</div>
-    <div><div class="label">Tiket</div><div id="harga" class="value">Memuat...</div></div>
-  </div>
-
-  <div class="item" id="kuotaItem">
-    <div class="icon">👥</div>
-    <div><div class="label">Kuota</div><div id="kuota" class="value">-</div></div>
-  </div>
-
-  <a href="registrasi.html" id="btnDaftar" class="btn">DAFTAR SEKARANG</a>
-  <a href="bukti.html" class="btn dark">CEK BUKTI / KODE REGISTRASI</a>
-
+<div id="status" class="status"><span class="dot"></span><span id="statusText">PENDAFTARAN DIBUKA</span></div>
+<div class="title"><div class="icon-title">📅</div><h2 id="judulAcara">ROADSHOW SERTIFIKASI BNSP TESPOIN</h2></div>
+<div id="deskripsi" class="desc">Roadshow Sertifikasi Profesi BNSP TESPOIN DPD Majalengka.</div>
+<div class="item"><div class="icon">📅</div><div><div class="label">Tanggal</div><div id="tanggal" class="value">Akan ditentukan</div></div></div>
+<div class="item"><div class="icon">🕐</div><div><div class="label">Waktu</div><div id="waktu" class="value">10.00 WIB - selesai</div></div></div>
+<div class="item"><div class="icon">📍</div><div><div class="label">Lokasi</div><div id="lokasi" class="value">Gedung Islamic Center Majalengka</div></div></div>
+<div class="item"><div class="icon">🎟️</div><div><div class="label">Tiket</div><div id="harga" class="value">Memuat...</div></div></div>
+<div class="item" id="kuotaItem"><div class="icon">👥</div><div><div class="label">Kuota</div><div id="kuota" class="value">-</div></div></div>
+<a href="registrasi.html" id="btnDaftar" class="btn">DAFTAR SEKARANG</a><a href="bukti.html" class="btn dark">CEK BUKTI / KODE REGISTRASI</a>
 </section>
-
-<section class="card" style="margin-top:18px">
-  <div class="title">
-    <div class="icon-title">🎁</div>
-    <h2>Benefit Peserta</h2>
-  </div>
-
-  <div id="benefit" class="benefits">
-    <div class="benefit"><span class="check">✓</span><span>Kaos Peserta</span></div>
-    <div class="benefit"><span class="check">✓</span><span>Makan 1 kali</span></div>
-    <div class="benefit"><span class="check">✓</span><span>Coffee Break 1 kali</span></div>
-    <div class="benefit"><span class="check">✓</span><span>Sertifikat Seminar</span></div>
-    <div class="benefit"><span class="check">✓</span><span>Doorprize</span></div>
-    <div class="benefit"><span class="check">✓</span><span>Aktivasi Tools</span></div>
-  </div>
-</section>
-
-<footer class="footer">
-  DPD TESPOIN MAJALENGKA • TEKNISI PONSEL MAJALENGKA
-  <br>
-  <a href="login.html" class="admin-login">🔐 Login Admin</a>
-</footer>
-
+<section class="card" style="margin-top:18px"><div class="title"><div class="icon-title">🎁</div><h2>Benefit Peserta</h2></div><div id="benefit" class="benefits"><div class="benefit"><span class="check">✓</span><span>Kaos Peserta</span></div><div class="benefit"><span class="check">✓</span><span>Makan 1 kali</span></div><div class="benefit"><span class="check">✓</span><span>Coffee Break 1 kali</span></div><div class="benefit"><span class="check">✓</span><span>Sertifikat Seminar</span></div><div class="benefit"><span class="check">✓</span><span>Doorprize</span></div><div class="benefit"><span class="check">✓</span><span>Aktivasi Tools</span></div></div></section>
+<footer class="footer">DPD TESPOIN MAJALENGKA • TEKNISI PONSEL MAJALENGKA<br><a href="login.html" class="admin-login">🔐 Login Admin</a></footer>
 </main>
-
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbxPM09axMCDYVMpMjGya5aoCDIhcs5MrcdeP0AlGB2BSzH8a2NigppNmAjV3lSH0-XH/exec';
-
-function formatTanggal(value){
-  if(value === undefined || value === null || String(value).trim() === '') return '-';
-  const s = String(value).trim();
-
-  // Nilai tanggal dari Google Sheets bisa datang sebagai YYYY-MM-DD.
-  // Jangan memakai new Date("YYYY-MM-DD") karena timezone browser dapat
-  // menggeser tanggal satu hari.
-  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(m){
-    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-    return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`;
-  }
-
-  // Apps Script kadang mengirim objek Date sebagai ISO UTC.
-  // Tampilkan berdasarkan zona waktu Indonesia/Jakarta agar 17:00 UTC
-  // tetap terbaca sebagai tanggal hari berikutnya di WIB.
-  if(/^\d{4}-\d{2}-\d{2}T/.test(s) || /Z$/.test(s)){
-    const d = new Date(s);
-    if(!isNaN(d.getTime())){
-      return new Intl.DateTimeFormat('id-ID', {
-        timeZone:'Asia/Jakarta',
-        day:'numeric', month:'long', year:'numeric'
-      }).format(d);
-    }
-  }
-
-  // Jika sudah berupa teks tanggal, jangan diubah.
-  if(/^\d{1,2}\s+[A-Za-zÀ-ÿ]+\s+\d{4}$/.test(s)) return s;
-
-  return s;
-}
-
-function formatRupiah(value){
-  if(value === undefined || value === null || String(value).trim() === '') return '-';
-  const raw = String(value).replace(/[^0-9]/g,'');
-  if(!raw) return '-';
-  return 'Rp ' + Number(raw).toLocaleString('id-ID');
-}
-
-function nilaiAngka(value){
-  const n = Number(String(value ?? '').replace(/[^0-9]/g,''));
-  return Number.isFinite(n) && n > 0 ? n : 0;
-}
-
-function parseTanggalKey(value){
-  const s = String(value ?? '').trim();
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if(!m) return null;
-  return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
-}
-
-function ambilHargaTiket(data){
-  // Prioritas utama mengikuti struktur PENGATURAN saat ini: tier 1/2/3.
-  // Jika periode tier tersedia, pilih tier yang sedang aktif.
-  const sekarang = new Date();
-  const tiers = [
-    {harga:data.tier1Harga, mulai:data.tier1Mulai, selesai:data.tier1Selesai},
-    {harga:data.tier2Harga, mulai:data.tier2Mulai, selesai:data.tier2Selesai},
-    {harga:data.tier3Harga, mulai:data.tier3Mulai, selesai:data.tier3Selesai}
-  ];
-
-  for(const tier of tiers){
-    const harga = nilaiAngka(tier.harga);
-    if(!harga) continue;
-    const mulai = parseTanggalKey(tier.mulai);
-    const selesai = parseTanggalKey(tier.selesai);
-    if(mulai && selesai){
-      const akhir = new Date(selesai);
-      akhir.setHours(23,59,59,999);
-      if(sekarang >= mulai && sekarang <= akhir) return harga;
-    }
-  }
-
-  // Fallback agar tetap kompatibel dengan pengaturan lama.
-  return nilaiAngka(data.tiket) || nilaiAngka(data.hargaTiket) || nilaiAngka(data.harga) ||
-         nilaiAngka(data.tier1Harga) || nilaiAngka(data.tier2Harga) || nilaiAngka(data.tier3Harga);
-}
-
-function tampilkanPengaturan(data){
-  if(!data) return;
-
-  document.getElementById('judulAcara').textContent =
-    data.judul || data.judulAcara || 'INFORMASI ACARA';
-
-  document.getElementById('deskripsi').textContent =
-    data.deskripsi || '';
-
-  document.getElementById('tanggal').textContent =
-    formatTanggal((data.tanggalAcara || data.tanggal));
-
-  document.getElementById('waktu').textContent =
-    data.waktu || '-';
-
-  document.getElementById('lokasi').textContent =
-    data.lokasi || '-';
-
-  const hargaTiket = ambilHargaTiket(data);
-  document.getElementById('harga').textContent = formatRupiah(hargaTiket);
-
-  const kuotaItem = document.getElementById('kuotaItem');
-  if(data.kuota !== undefined && data.kuota !== null && String(data.kuota).trim() !== ''){
-    document.getElementById('kuota').textContent = data.kuota;
-    kuotaItem.style.display = '';
-  }else{
-    kuotaItem.style.display = 'none';
-  }
-
-  const box = document.getElementById('benefit');
-
-  const items = String(data.benefit || '')
-    .split(/[,;\n]+/)
-    .map(x => x.trim())
-    .filter(Boolean);
-
-  if(items.length){
-    box.innerHTML = items.map(x => `
-      <div class="benefit">
-        <span class="check">✓</span>
-        <span>${escapeHtml(x)}</span>
-      </div>
-    `).join('');
-  }
-
-  const status = String(data.statusPendaftaran || 'DIBUKA').toUpperCase();
-  const badge = document.getElementById('status');
-  const text = document.getElementById('statusText');
-  const btn = document.getElementById('btnDaftar');
-
-  if(status === 'DITUTUP'){
-    badge.classList.add('tutup');
-    text.textContent = 'PENDAFTARAN DITUTUP';
-    btn.classList.add('disabled');
-    btn.textContent = 'PENDAFTARAN DITUTUP';
-  }else{
-    badge.classList.remove('tutup');
-    text.textContent = 'PENDAFTARAN DIBUKA';
-    btn.classList.remove('disabled');
-    btn.textContent = 'DAFTAR SEKARANG';
-  }
-}
-
-async function muatPengaturan(){
-  try{
-    const r = await fetch(API_URL + '?action=pengaturan&_=' + Date.now(), {cache:'no-store'});
-    const raw = await r.text();
-    const result = JSON.parse(raw.trim());
-
-    if(!result || result.ok === false){
-      throw new Error(result?.message || 'Gagal mengambil pengaturan.');
-    }
-
-    // Backend yang digunakan dapat mengembalikan {pengaturan:{...}}
-    // atau langsung object pengaturan. Keduanya didukung.
-    const data = result.pengaturan || result.data || result;
-    tampilkanPengaturan(data);
-  }catch(err){
-    console.error('Gagal memuat pengaturan:', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', muatPengaturan);
-
-function escapeHtml(s){
-  return String(s)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
+function formatTanggal(value){if(value===undefined||value===null||String(value).trim()==='')return '-';const s=String(value).trim();if(/^\d{1,2}\s+[A-Za-zÀ-ÿ]+\s+\d{4}$/.test(s))return s;let m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m){const bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`}m=s.match(/^(\d{4})-(\d{2})-(\d{2})T/);if(m){const bulan=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];return `${Number(m[3])} ${bulan[Number(m[2])-1]} ${m[1]}`}return s}
+function formatRupiah(value){if(value===undefined||value===null||String(value).trim()==='')return '-';const raw=String(value).replace(/[^0-9]/g,'');if(!raw)return '-';return 'Rp '+Number(raw).toLocaleString('id-ID')}
+function nilaiAngka(value){const n=Number(String(value??'').replace(/[^0-9]/g,''));return Number.isFinite(n)&&n>0?n:0}
+function parseTanggalKey(value){const s=String(value??'').trim();const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return null;return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]))}
+function ambilHargaTiket(data){const sekarang=new Date();const tiers=[{harga:data.tier1Harga,mulai:data.tier1Mulai,selesai:data.tier1Selesai},{harga:data.tier2Harga,mulai:data.tier2Mulai,selesai:data.tier2Selesai},{harga:data.tier3Harga,mulai:data.tier3Mulai,selesai:data.tier3Selesai}];for(const tier of tiers){const harga=nilaiAngka(tier.harga);if(!harga)continue;const mulai=parseTanggalKey(tier.mulai);const selesai=parseTanggalKey(tier.selesai);if(mulai&&selesai){const akhir=new Date(selesai);akhir.setHours(23,59,59,999);if(sekarang>=mulai&&sekarang<=akhir)return harga}}return nilaiAngka(data.tiket)||nilaiAngka(data.hargaTiket)||nilaiAngka(data.harga)||nilaiAngka(data.tier1Harga)||nilaiAngka(data.tier2Harga)||nilaiAngka(data.tier3Harga)}
+function tampilkanPengaturan(data){if(!data)return;document.getElementById('judulAcara').textContent=data.judul||data.judulAcara||'INFORMASI ACARA';document.getElementById('deskripsi').textContent=data.deskripsi||'';document.getElementById('tanggal').textContent=formatTanggal(data.tanggal||data.tanggalAcara);document.getElementById('waktu').textContent=data.waktu||'-';document.getElementById('lokasi').textContent=data.lokasi||'-';const hargaTiket=ambilHargaTiket(data);document.getElementById('harga').textContent=formatRupiah(hargaTiket);const kuotaItem=document.getElementById('kuotaItem');if(data.kuota!==undefined&&data.kuota!==null&&String(data.kuota).trim()!==''){document.getElementById('kuota').textContent=data.kuota;kuotaItem.style.display=''}else{kuotaItem.style.display='none'}const box=document.getElementById('benefit');const items=String(data.benefit||'').split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);if(items.length){box.innerHTML=items.map(x=>`<div class="benefit"><span class="check">✓</span><span>${escapeHtml(x)}</span></div>`).join('')}const status=String(data.statusPendaftaran||'DIBUKA').toUpperCase();const badge=document.getElementById('status');const text=document.getElementById('statusText');const btn=document.getElementById('btnDaftar');if(status==='DITUTUP'){badge.classList.add('tutup');text.textContent='PENDAFTARAN DITUTUP';btn.classList.add('disabled');btn.textContent='PENDAFTARAN DITUTUP'}else{badge.classList.remove('tutup');text.textContent='PENDAFTARAN DIBUKA';btn.classList.remove('disabled');btn.textContent='DAFTAR SEKARANG'}}
+async function muatPengaturan(){try{const r=await fetch(API_URL+'?action=pengaturan&_='+Date.now(),{cache:'no-store',redirect:'follow'});const raw=await r.text();console.log('RESPONS PENGATURAN:',raw);let result;try{result=JSON.parse(raw.trim())}catch(e){throw new Error('Respons API bukan JSON. Periksa deployment Apps Script.')}if(!result||result.ok===false)throw new Error(result?.message||'Gagal mengambil pengaturan.');let data=result.pengaturan||result.data||result;if(data&&data.pengaturan&&typeof data.pengaturan==='object')data=data.pengaturan;console.log('DATA PENGATURAN:',data);tampilkanPengaturan(data)}catch(err){console.error('Gagal memuat pengaturan:',err)}}
+document.addEventListener('DOMContentLoaded',muatPengaturan);
+function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
 </script>
-
 </body>
 </html>
